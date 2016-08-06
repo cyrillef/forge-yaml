@@ -788,12 +788,10 @@ definitions:
   post_object_signed:
     description: Object Signed Object json response
     type: object
+    required: [signedUrl, expiration]
     properties:
-      required: [signedUrl, expiration]
-      properties:
-        signedUrl: {description: URL created for downloading the object, type: string}
-        expiration: {description: Value for expiration in minutes, type: integer,
-          format: int32}
+      signedUrl: {description: URL created for downloading the object, type: string}
+      expiration: {description: Value for expiration in minutes, type: integer, format: int32}
 responses:
   post_buckets_OK:
     description: OK, Bucket successfully created.

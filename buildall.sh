@@ -29,8 +29,8 @@ done
 echo "Flattering definitions (yaml & json)..."
 for entry in ${_yamls[@]}; do
 	filename="`([[ $entry =~ .*\/v([0-9]+)\/(.*)\.yaml ]] && echo ${BASH_REMATCH[2]})`"
-#	node yaml-tools.js flattern $entry > output/${filename}.yaml
-#	node yaml-tools.js flattern $entry --json > output/${filename}.json
+	node yaml-tools.js flattern $entry > output/${filename}.yaml
+	node yaml-tools.js flattern $entry --json > output/${filename}.json
 done
 
 echo "Generating SDKs..." # php, ruby, csharp, forgejs
