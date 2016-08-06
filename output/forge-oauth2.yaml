@@ -1,0 +1,359 @@
+swagger: '2.0'
+info:
+  title: Forge-oauth2
+  version: 1.0.0
+  x-summary: Asynchronous Node.js library for the Autodesk Forge oAuth2 implementation
+  description: 'OAuth, specifically OAuth2, is the open standard used across the Forge
+    Platform for token-based authentication and authorization.
+
+
+    In this section, you will find the following resources:
+
+
+    How to register an app on the platform
+
+    Explanations of basic concepts, such as client ID and secret, tokens, scopes,
+    and two-legged versus three-legged authentication
+
+    Step-by-step tutorials that walk you through a few common workflows
+
+    Documentation on each of the OAuth REST endpoints
+
+    '
+  contact: {name: 'Autodesk, Inc.', url: 'https://developer.autodesk.com/en/docs/oauth/v2/',
+    email: forge.help@autodesk.com}
+  x-support: http://stackoverflow.com/questions/tagged/autodesk-forge+oauth
+  termsOfService: http://www.autodesk.com/company/legal-notices-trademarks/terms-of-service-autodesk360-web-services/autodesk-web-services-api-beta-terms-of-service
+schemes: [https]
+host: developer.api.autodesk.com
+basePath: /
+consumes: [application/json]
+produces: [application/json]
+tags:
+- {name: Three-Legged, description: Forge 3-legged oAuth context}
+- {name: Two-Legged, description: Forge 2-legged oAuth context}
+- {name: Informational, description: Forge oAuth Information endpoints}
+securityDefinitions:
+  oauth2_access_code:
+    type: oauth2
+    authorizationUrl: https://developer.api.autodesk.com/authentication/v1/authorize
+    tokenUrl: https://developer.api.autodesk.com/authentication/v1/gettoken
+    x-refreshTokenUrl: https://developer.api.autodesk.com/authentication/v1/refreshtoken
+    flow: accessCode
+    scopes: {'data:read': The application will be able to read the end user’s data
+        within the Autodesk ecosystem., 'data:write': 'The application will be able
+        to create, update, and delete data on behalf of the end user within the Autodesk
+        ecosystem.', 'data:create': The application will be able to create data on
+        behalf of the end user within the Autodesk ecosystem., 'data:search': The
+        application will be able to search the end user’s data within the Autodesk
+        ecosystem., 'bucket:create': The application will be able to create an OSS
+        bucket it will own., 'bucket:read': The application will be able to read the
+        metadata and list contents for OSS buckets that it has access to., 'bucket:update': The
+        application will be able to set permissions and entitlements for OSS buckets
+        that it has permission to modify., 'bucket:delete': The application will be
+        able to delete a bucket that it has permission to delete., 'code:all': 'The
+        application will be able to author and execute code on behalf of the end user
+        (e.g., scripts processed by the Design Automation API).', 'account:read': 'For
+        Product APIs, the application will be able to read the account data the end
+        user has entitlements to.', 'account:write': 'For Product APIs, the application
+        will be able to update the account data the end user has entitlements to.',
+      'user-profile:read': The application will be able to read the end user’s profile
+        data.}
+    x-authentication_context: user context required
+  oauth2_application:
+    type: oauth2
+    tokenUrl: https://developer.api.autodesk.com/authentication/v1/authenticate
+    flow: application
+    scopes: {'data:read': The application will be able to read the end user’s data
+        within the Autodesk ecosystem., 'data:write': 'The application will be able
+        to create, update, and delete data on behalf of the end user within the Autodesk
+        ecosystem.', 'data:create': The application will be able to create data on
+        behalf of the end user within the Autodesk ecosystem., 'data:search': The
+        application will be able to search the end user’s data within the Autodesk
+        ecosystem., 'bucket:create': The application will be able to create an OSS
+        bucket it will own., 'bucket:read': The application will be able to read the
+        metadata and list contents for OSS buckets that it has access to., 'bucket:update': The
+        application will be able to set permissions and entitlements for OSS buckets
+        that it has permission to modify., 'bucket:delete': The application will be
+        able to delete a bucket that it has permission to delete., 'code:all': 'The
+        application will be able to author and execute code on behalf of the end user
+        (e.g., scripts processed by the Design Automation API).', 'account:read': 'For
+        Product APIs, the application will be able to read the account data the end
+        user has entitlements to.', 'account:write': 'For Product APIs, the application
+        will be able to update the account data the end user has entitlements to.',
+      'user-profile:read': The application will be able to read the end user’s profile
+        data.}
+    x-authentication_context: application context required
+paths:
+  /authentication/v1/authenticate:
+    post:
+      summary: POST authenticate
+      operationId: authenticate
+      description: 'Get a two-legged access token by providing your app''s client
+        ID and secret.
+
+        '
+      consumes: [application/x-www-form-urlencoded]
+      parameters:
+      - {$ref: '#/parameters/client_id'}
+      - {$ref: '#/parameters/client_secret'}
+      - {$ref: '#/parameters/client_credentials'}
+      - {$ref: '#/parameters/scope'}
+      responses:
+        '200': {$ref: '#/responses/Bearer_OK'}
+        '400': {$ref: '#/responses/BAD_REQUEST'}
+        '401': {$ref: '#/responses/UNAUTHORIZED'}
+        '403': {$ref: '#/responses/FORBIDDEN'}
+        '415': {$ref: '#/responses/UNSUPPORTED_MEDIA_TYPE'}
+        '429': {$ref: '#/responses/TOO_MANY_REQUEST'}
+        '500': {$ref: '#/responses/INTERNAL_SERVER_ERROR'}
+      security: []
+      x-ads_command_line_example: 'curl -v ''https://developer.api.autodesk.com/authentication/v1/authenticate''
+        -X ''POST'' -H ''Content-Type: application/x-www-form-urlencoded'' -d ''client_id=obQDn8P0GanGFQha4ngKKVWcxwyvFAGE&client_secret=eUruM8HRyc7BAQ1e&grant_type=client_credentials&scope=data:read'''
+      tags: [Two-Legged]
+  /authentication/v1/authorize:
+    get:
+      summary: GET authorize
+      operationId: authorize
+      description: 'This is the browser URL to redirect an end user to in order to
+        acquire the user’s consent for your app to access the specified resources.
+
+        Note: You do not call this URL directly in your server code. See the Get a
+        3-Legged Token tutorial for more information on how to use this endpoint.
+
+        '
+      consumes: [application/x-www-form-urlencoded]
+      parameters:
+      - {$ref: '#/parameters/client_id'}
+      - {$ref: '#/parameters/response_type'}
+      - {$ref: '#/parameters/redirect_uri'}
+      - {$ref: '#/parameters/scope'}
+      - {$ref: '#/parameters/state'}
+      responses:
+        '200': {$ref: '#/responses/Authorize_OK'}
+      security: []
+      x-ads_command_line_example: https://developer.api.autodesk.com/authentication/v1/authorize?response_type=code&client_id=obQDn8P0GanGFQha4ngKKVWcxwyvFAGE&redirect_uri=http%3A%2F%2Fsampleapp.com%2Foauth2%2Fcallback&scope=data:read
+      tags: [Three-Legged]
+  /authentication/v1/gettoken:
+    post:
+      summary: POST gettoken
+      operationId: gettoken
+      description: 'Exchange an authorization code extracted from a GET authorize
+        callback for a three-legged access token.
+
+        '
+      consumes: [application/x-www-form-urlencoded]
+      parameters:
+      - {$ref: '#/parameters/client_id'}
+      - {$ref: '#/parameters/client_secret'}
+      - {$ref: '#/parameters/authorization_code'}
+      - {$ref: '#/parameters/code'}
+      - {$ref: '#/parameters/redirect_uri'}
+      responses:
+        '200': {$ref: '#/responses/Bearer_OK'}
+        '400': {$ref: '#/responses/BAD_REQUEST'}
+        '401': {$ref: '#/responses/UNAUTHORIZED'}
+        '403': {$ref: '#/responses/FORBIDDEN'}
+        '415': {$ref: '#/responses/UNSUPPORTED_MEDIA_TYPE'}
+        '429': {$ref: '#/responses/TOO_MANY_REQUEST'}
+        '500': {$ref: '#/responses/INTERNAL_SERVER_ERROR'}
+      security: []
+      x-ads_command_line_example: 'curl -v ''https://developer.api.autodesk.com/authentication/v1/gettoken''
+        -X ''POST'' -H ''Content-Type: application/x-www-form-urlencoded'' -d ''client_id=obQDn8P0GanGFQha4ngKKVWcxwyvFAGE&client_secret=eUruM8HRyc7BAQ1e&grant_type=authorization_code&code=wroM1vFA4E-Aj241-quh_LVjm7UldawnNgYEHQ8I&redirect_uri=http://sampleapp.com/oauth/callback'''
+      tags: [Three-Legged]
+  /authentication/v1/refreshtoken:
+    post:
+      summary: POST refreshtoken
+      operationId: refreshtoken
+      description: 'Acquire a new access token by using the refresh token provided
+        by the POST gettoken endpoint.
+
+        See the Field Guide for more information about refresh tokens.
+
+        '
+      consumes: [application/x-www-form-urlencoded]
+      parameters:
+      - {$ref: '#/parameters/client_id'}
+      - {$ref: '#/parameters/client_secret'}
+      - {$ref: '#/parameters/grant_type_refresh_token'}
+      - {$ref: '#/parameters/refresh_token'}
+      - {$ref: '#/parameters/scope_refresh_token'}
+      responses:
+        '200': {$ref: '#/responses/Bearer_OK'}
+        '400': {$ref: '#/responses/BAD_REQUEST'}
+        '401': {$ref: '#/responses/UNAUTHORIZED'}
+        '403': {$ref: '#/responses/FORBIDDEN'}
+        '415': {$ref: '#/responses/UNSUPPORTED_MEDIA_TYPE'}
+        '429': {$ref: '#/responses/TOO_MANY_REQUEST'}
+        '500': {$ref: '#/responses/INTERNAL_SERVER_ERROR'}
+      security: []
+      x-ads_command_line_example: 'curl -v ''https://developer.api.autodesk.com/authentication/v1/refreshtoken''
+        -X ''POST'' -H ''Content-Type: application/x-www-form-urlencoded'' -d ''client_id=obQDn8P0GanGFQha4ngKKVWcxwyvFAGE&client_secret=eUruM8HRyc7BAQ1e&grant_type=refresh_token&refresh_token=48uh9YnUKI153nagQSfePWegHK9itSM6LHqXg1BX0B'''
+      tags: [Three-Legged]
+  /userprofile/v1/users/@me:
+    get:
+      summary: GET users/@me
+      operationId: about-me
+      description: GET users/@me
+      consumes: []
+      parameters: []
+      responses:
+        '200': {$ref: '#/responses/UserProfile_OK'}
+        '401': {$ref: '#/responses/ACCESS_TOKEN_UNAUTHORIZED'}
+        '429': {$ref: '#/responses/TOO_MANY_REQUEST'}
+        '500': {$ref: '#/responses/INTERNAL_SERVER_ERROR'}
+      security:
+      - oauth2_access_code: []
+      x-ads_command_line_example: 'curl -v ''https://developer.api.autodesk.com/userprofile/v1/users/@me''
+        -X ''GET'' -H ''Authorization: Bearer 4viS1MuwMU0X4XVpMyISPb2cla2q'''
+      tags: [Informational]
+parameters:
+  client_id: {name: client_id, in: formData, description: Client ID of the app, required: true,
+    type: string}
+  client_secret: {name: client_secret, in: formData, description: Client secret of
+      the app, required: true, type: string}
+  client_credentials: {name: grant_type, in: formData, description: Must be ``client_credentials``,
+    required: true, type: string, default: client_credentials}
+  authorization_code: {name: grant_type, in: formData, description: Must be ``authorization_code``,
+    required: true, type: string, default: authorization_code}
+  grant_type_refresh_token: {name: grant_type, in: formData, description: Must be
+      ``refresh_token``, required: true, type: string, default: refresh_token}
+  refresh_token: {name: refresh_token, in: formData, description: 'The refresh token
+      used to acquire a new access token
+
+      ', required: true, type: string}
+  scope_refresh_token: {name: scope, in: formData, description: 'Space-separated list
+      of required scopes
+
+      If this parameter is omitted, the returned access token will have the same scopes
+      as the original access token.
+
+      If this parameter is specified, it must represent a subset of the scopes present
+      in the original access token.
+
+      Note: A URL-encoded space is %20.
+
+      ', required: false, type: string}
+  scope: {name: scope, in: formData, description: 'Space-separated list of required
+      scopes Note: A URL-encoded space is* ``%20``.
+
+      See the* `Scopes </en/docs/oauth/v2/overview/scopes>` *page for more information
+      on when scopes are required.
+
+      ', required: false, type: string}
+  response_type: {name: response_type, in: formData, description: Must be code, required: true,
+    type: string, default: code}
+  code: {name: code, in: formData, description: 'The autorization code captured from
+      the code query parameter when the GET authorize redirected back to the callback
+      URL
+
+      ', required: true, type: string}
+  state: {name: state, in: formData, description: 'A URL-encoded payload containing
+      arbitrary data that the authentication flow will pass back verbatim in a state
+      query parameter to the callback URL
+
+      ', required: false, type: string}
+  redirect_uri: {name: redirect_uri, in: formData, description: 'URL-encoded callback
+      URL that the end user will be redirected to after completing the authorization
+      flow
+
+      Note: This must match the pattern of the callback URL field of the app’s registration
+      in the My Apps section. The pattern may include wildcards after the hostname,
+      allowing different redirect_uri values to be specified in different parts of
+      your app.
+
+      ', required: true, type: string}
+definitions:
+  Bearer:
+    type: object
+    properties:
+      token_type: {description: Will always be Bearer, type: string, format: string}
+      expires_in: {description: Access token expiration time (in seconds), type: integer,
+        format: int32}
+      access_token: {description: The access token, type: string, format: string}
+      refresh_token: {description: The refresh token, type: string, format: string}
+    required: [token_type, expires_in, access_token]
+  UserProfile:
+    type: object
+    properties:
+      userId: {description: The backend user ID of the profile, type: string, format: string}
+      userName: {description: The username chosen by the user, type: string, format: string}
+      emailId: {description: The user’s email address, type: string, format: string}
+      firstName: {description: The user’s first name, type: string, format: string}
+      lastName: {description: The user’s last name, type: string, format: string}
+      emailVerified: {description: 'true if the user’s email address has been verified
+          false if the user’s email address has not been verified
+
+          ', type: boolean}
+      2FaEnabled: {description: 'true if the user has enabled two-factor authentication
+          false if the user has not enabled two-factor authentication
+
+          ', type: boolean}
+      profileImages: {description: A flat JSON object of attribute-value pairs in
+          which the attributes specify available profile image sizes in the format
+          sizeX<pixels> (where <pixels> is an integer that represents both height
+          and width in pixels of square profile images) and the values are URLs for
+          downloading the images via HTTP, type: object}
+    required: [userId, userName, emailId, firstName, lastName, emailVerified, 2FaEnabled,
+      profileImages]
+  oAuthError:
+    type: object
+    properties:
+      errorMessage: {type: string}
+      errorCode: {type: integer, format: int64}
+      errorResponse: {type: string}
+    required: [errorMessage, errorCode, errorResponse]
+responses:
+  OK: {description: 'OK, Success'}
+  Authorize_OK: {description: The response is an HTML payload consisting of the authorization
+      flow for the end user.}
+  Bearer_OK:
+    description: OK - Successful request. access token returned.
+    schema: {$ref: '#/definitions/Bearer'}
+  UserProfile_OK:
+    description: Successful request; user profile returned.
+    schema: {$ref: '#/definitions/UserProfile'}
+  BAD_REQUEST:
+    description: 'Bad Request * AUTH-004: One or more requested scopes are invalid.
+      * AUTH-008: The request is missing one or more required parameters. * AUTH-009:
+      Unsupported ``grant_type`` specified. The ``grant_type`` must be ``client_credentials``.
+      * AUTH-011: Grant types ``authorization_code`` and ``refresh_token`` are invalid
+      for this endpoint.
+
+      '
+    schema: {$ref: '#/definitions/oAuthError'}
+  UNAUTHORIZED:
+    description: 'Unauthorized * AUTH-003: The ``client_id`` and ``client_secret``
+      combination is not valid.
+
+      '
+    schema: {$ref: '#/definitions/oAuthError'}
+  ACCESS_TOKEN_UNAUTHORIZED:
+    description: 'Unauthorized * AUTH-006: The access token is invalid.
+
+      '
+    schema: {$ref: '#/definitions/oAuthError'}
+  FORBIDDEN:
+    description: 'Forbidden * AUTH-002: The ``client_id`` is not authorized to access
+      this endpoint.
+
+      '
+    schema: {$ref: '#/definitions/oAuthError'}
+  UNSUPPORTED_MEDIA_TYPE:
+    description: 'Unsupported Media Type * AUTH-007: The ``Content-Type`` header is
+      missing or specifies a value other than ``application/x-www-form-urlencoded``.
+
+      '
+    schema: {$ref: '#/definitions/oAuthError'}
+  TOO_MANY_REQUEST:
+    description: 'Too Many Requests * ERR-001: Rate limit exceeded; wait some time
+      before retrying.
+
+      '
+    schema: {$ref: '#/definitions/oAuthError'}
+  INTERNAL_SERVER_ERROR:
+    description: 'Internal Server Error * ERR-003: Generic internal server error.
+
+      '
+    schema: {$ref: '#/definitions/oAuthError'}
+

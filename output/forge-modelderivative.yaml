@@ -1,0 +1,1055 @@
+swagger: '2.0'
+info:
+  title: Forge-Model-Derivative
+  version: 2.0.0
+  x-summary: Asynchronous Javascript/Node.js library for the Autodesk Forge Model
+    Derivative API
+  description: 'The Model Derivative API enables users to represent and share their
+    designs in different formats, as well as to extract valuable metadata. (Its translation
+    functionality was previously bundled as part of the “View and Data API”.)
+
+
+    The API offers the following features:
+
+
+    * Quickly translate the design into different formats, such as STL and OBJ.
+
+    * Translate designs into SVF format for extracting data and for rendering files
+    in the Viewer.
+
+    * Extract object heirarchy trees, properties, and geometries of selected parts
+    of a design.
+
+    * Create different-sized thumbnails from design files.
+
+
+    ![](https://developer.doc.autodesk.com/bPlouYTd/7/_images/MD-overview-diagram.png)
+
+
+    Get started by taking a look at our Step-by-Step Tutorials to see typical Model
+    Derivative API workflows. The API Basics and Field Guide sections will help you
+    understand the high-level concepts, and the API Reference section will give you
+    the information you need to refine and create your own custom flows.
+
+    '
+  contact: {name: 'Autodesk, Inc.', url: 'https://developer.autodesk.com/en/docs/model-derivative/v2/',
+    email: forge.help@autodesk.com}
+  x-support: http://stackoverflow.com/questions/tagged/autodesk-model-derivative
+  termsOfService: http://www.autodesk.com/company/legal-notices-trademarks/terms-of-service-autodesk360-web-services/autodesk-web-services-api-beta-terms-of-service
+host: developer.api.autodesk.com
+schemes: [https]
+basePath: /
+consumes: [application/json]
+produces: [application/json]
+tags:
+- {name: Derivatives, description: Forge Model Derivative APIs}
+securityDefinitions:
+  oauth2_access_code:
+    type: oauth2
+    authorizationUrl: https://developer.api.autodesk.com/authentication/v1/authorize
+    tokenUrl: https://developer.api.autodesk.com/authentication/v1/gettoken
+    x-refreshTokenUrl: https://developer.api.autodesk.com/authentication/v1/refreshtoken
+    flow: accessCode
+    scopes: {'data:read': The application will be able to read the end user’s data
+        within the Autodesk ecosystem., 'data:write': 'The application will be able
+        to create, update, and delete data on behalf of the end user within the Autodesk
+        ecosystem.', 'data:create': The application will be able to create data on
+        behalf of the end user within the Autodesk ecosystem., 'data:search': The
+        application will be able to search the end user’s data within the Autodesk
+        ecosystem., 'bucket:create': The application will be able to create an OSS
+        bucket it will own., 'bucket:read': The application will be able to read the
+        metadata and list contents for OSS buckets that it has access to., 'bucket:update': The
+        application will be able to set permissions and entitlements for OSS buckets
+        that it has permission to modify., 'bucket:delete': The application will be
+        able to delete a bucket that it has permission to delete., 'code:all': 'The
+        application will be able to author and execute code on behalf of the end user
+        (e.g., scripts processed by the Design Automation API).', 'account:read': 'For
+        Product APIs, the application will be able to read the account data the end
+        user has entitlements to.', 'account:write': 'For Product APIs, the application
+        will be able to update the account data the end user has entitlements to.',
+      'user-profile:read': The application will be able to read the end user’s profile
+        data.}
+    x-authentication_context: user context required
+  oauth2_application:
+    type: oauth2
+    tokenUrl: https://developer.api.autodesk.com/authentication/v1/authenticate
+    flow: application
+    scopes: {'data:read': The application will be able to read the end user’s data
+        within the Autodesk ecosystem., 'data:write': 'The application will be able
+        to create, update, and delete data on behalf of the end user within the Autodesk
+        ecosystem.', 'data:create': The application will be able to create data on
+        behalf of the end user within the Autodesk ecosystem., 'data:search': The
+        application will be able to search the end user’s data within the Autodesk
+        ecosystem., 'bucket:create': The application will be able to create an OSS
+        bucket it will own., 'bucket:read': The application will be able to read the
+        metadata and list contents for OSS buckets that it has access to., 'bucket:update': The
+        application will be able to set permissions and entitlements for OSS buckets
+        that it has permission to modify., 'bucket:delete': The application will be
+        able to delete a bucket that it has permission to delete., 'code:all': 'The
+        application will be able to author and execute code on behalf of the end user
+        (e.g., scripts processed by the Design Automation API).', 'account:read': 'For
+        Product APIs, the application will be able to read the account data the end
+        user has entitlements to.', 'account:write': 'For Product APIs, the application
+        will be able to update the account data the end user has entitlements to.',
+      'user-profile:read': The application will be able to read the end user’s profile
+        data.}
+    x-authentication_context: application context required
+paths:
+  /modelderivative/v2/designdata/formats:
+    x-summary: Design Data
+    x-description: DesignData related operations
+    get:
+      operationId: get_formats
+      description: 'Returns an up-to-date list of Forge-supported translations, that
+        you can use to identify which types of derivatives are supported for each
+        source file type. You can set this endpoint to only return the list of supported
+        translations if they have been updated since a specified date.
+
+
+        See the [Supported Translation Formats table](https://developer.autodesk.com/en/docs/model-derivative/v2/overview/supported-translations)
+        for more details about supported translations.
+
+
+        Note that we are constantly adding new file formats to the list of Forge translations.
+
+        '
+      parameters:
+      - {$ref: '#/parameters/If_Modified_Since'}
+      - {$ref: '#/parameters/Accept_Encoding'}
+      responses:
+        '200': {$ref: '#/responses/formats'}
+        '304': {$ref: '#/responses/NOT_MODIFIED'}
+        '400': {$ref: '#/responses/BAD_REQUEST'}
+        '401': {$ref: '#/responses/UNAUTHORIZED'}
+        '403': {$ref: '#/responses/FORBIDDEN'}
+        '404': {$ref: '#/responses/NOT_FOUND'}
+        '500': {$ref: '#/responses/INTERNAL_SERVICE_ERROR'}
+        '502': {$ref: '#/responses/BAD_GATEWAY'}
+        '504': {$ref: '#/responses/GATEWAY_TIMEOUT'}
+      security:
+      - oauth2_access_code: ['data:read']
+      - oauth2_application: ['data:read']
+      x-ads_command_line_example: 'curl -X "GET" -H "Authorization: Bearer ztcaB2R0f92bsV6iV0bSDgwmSVaW"
+        -v "https://developer.api.autodesk.com/modelderivative/v2/designdata/formats"'
+      x-ads_rate_limit: 30 calls per minute
+      tags: [Derivatives]
+  /modelderivative/v2/designdata/{urn}/manifest:
+    x-summary: Design Data
+    x-description: DesignData related operations
+    get:
+      operationId: get_manifest
+      description: 'Returns information about derivatives that correspond to a specific
+        source file, including derviative URNs and statuses.
+
+
+        The URNs of the derivatives are used to download the generated derivatives
+        when calling the [GET {urn}/manifest/{derivativeurn}](https://developer.autodesk.com/en/docs/model-derivative/v2/reference/http/urn-manifest-derivativeurn-GET)
+        endpoint.
+
+
+        The statuses are used to verify whether the translation of requested output
+        files is complete.
+
+
+        Note that different output files might complete their translation processes
+        at different times, and therefore may have different `status` values.
+
+
+        When translating a source file a second time, the previously created manifest
+        is not deleted; it appends the information (only new translations) to the
+        manifest.
+
+        '
+      parameters:
+      - {$ref: '#/parameters/urn'}
+      - {$ref: '#/parameters/Accept_Encoding'}
+      responses:
+        '200': {$ref: '#/responses/manifest'}
+        '400': {$ref: '#/responses/BAD_REQUEST_MANIFEST'}
+        '401': {$ref: '#/responses/UNAUTHORIZED'}
+        '403': {$ref: '#/responses/FORBIDDEN'}
+        '404': {$ref: '#/responses/NOT_FOUND'}
+        '500': {$ref: '#/responses/INTERNAL_SERVICE_ERROR'}
+        '502': {$ref: '#/responses/BAD_GATEWAY'}
+        '504': {$ref: '#/responses/GATEWAY_TIMEOUT'}
+      security:
+      - oauth2_access_code: ['data:read']
+      - oauth2_application: ['data:read']
+      x-ads_command_line_example: 'curl -X "GET" -H "Authorization: Bearer PtnrvrtSRpWwUi3407QhgvqdUVKL"
+        -v "https://developer.api.autodesk.com/modelderivative/v2/designdata/dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6bW9kZWxkZXJpdmF0aXZlL0E1LnppcA/manifest"'
+      tags: [Derivatives]
+    delete:
+      operationId: delete_manifest
+      description: 'Deletes the manifest and all its translated output files (derivatives).
+        However, it does not delete the design source file.
+
+        '
+      parameters:
+      - {$ref: '#/parameters/urn'}
+      consumes: []
+      responses:
+        '200': {$ref: '#/responses/delete-manifest-result'}
+        '400': {$ref: '#/responses/BAD_REQUEST_DELETE_MANIFEST'}
+        '401': {$ref: '#/responses/UNAUTHORIZED'}
+        '403': {$ref: '#/responses/FORBIDDEN'}
+        '404': {$ref: '#/responses/NOT_FOUND'}
+        '500': {$ref: '#/responses/INTERNAL_SERVICE_ERROR'}
+        '502': {$ref: '#/responses/BAD_GATEWAY'}
+        '504': {$ref: '#/responses/GATEWAY_TIMEOUT'}
+      security:
+      - oauth2_access_code: ['data:read', 'data:write']
+      - oauth2_application: ['data:read', 'data:write']
+      x-ads_command_line_example: 'curl -X "DELETE" -H "Authorization: Bearer PtnrvrtSRpWwUi3407QhgvqdUVKL"
+        -v "https://developer.api.autodesk.com/modelderivative/v2/designdata/dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6bW9kZWxkZXJpdmF0aXZlL0E1LnppcA/manifest"'
+      tags: [Derivatives]
+  /modelderivative/v2/designdata/{urn}/manifest/{derivativeUrn}:
+    x-summary: Design Data
+    x-description: DesignData related operations
+    get:
+      operationId: get_derivative_manifest
+      description: 'Downloads a selected derivative. To download the file, you need
+        to specify the file’s URN, which you retrieve by calling the [GET {urn}/manifest](https://developer.autodesk.com/en/docs/model-derivative/v2/reference/http/urn-manifest-GET)
+        endpoint.
+
+
+        Note that the Model Derivative API uses 2 types of URNs. The **design URN**
+        is generated when you upload the source design file to Forge, and is used
+        when calling most of the Model Derivative endpoints. A **derivative URN**
+        is generated for each translated output file format, and is used for downloading
+        the output design files.
+
+
+        You can set the range of bytes that are returned when downloading the derivative,
+        using the range header.
+
+        '
+      parameters:
+      - {$ref: '#/parameters/urn'}
+      - {$ref: '#/parameters/derivativeUrn'}
+      - {$ref: '#/parameters/Range'}
+      produces: [application/octet-stream]
+      responses:
+        '200': {$ref: '#/responses/manifestDerived'}
+        '206': {$ref: '#/responses/PARTIAL_CONTENT'}
+        '400': {$ref: '#/responses/BAD_REQUEST_MANIFEST_DERIVE'}
+        '401': {$ref: '#/responses/UNAUTHORIZED'}
+        '403': {$ref: '#/responses/FORBIDDEN'}
+        '404': {$ref: '#/responses/NOT_FOUND'}
+        '500': {$ref: '#/responses/INTERNAL_SERVICE_ERROR'}
+        '502': {$ref: '#/responses/BAD_GATEWAY'}
+        '504': {$ref: '#/responses/GATEWAY_TIMEOUT'}
+      security:
+      - oauth2_access_code: ['data:read']
+      - oauth2_application: ['data:read']
+      x-ads_command_line_example: 'curl -X "GET" -H "Authorization: Bearer ztcaB2R0f92bsV6iV0bSDgwmSVaW"
+        -v "https://developer.api.autodesk.com/modelderivative/v2/designdata/dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6bW9kZWxkZXJpdmF0aXZlL0E1LnppcA/manifest/urn%3Aadsk.viewing%3Afs.file%3AdXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6bW9kZWxkZXJpdmF0aXZlL0E1LnppcA%2Foutput%2F1%2FA5.svf"'
+      tags: [Derivatives]
+  /modelderivative/v2/designdata/{urn}/thumbnail:
+    x-summary: Design Data
+    x-description: DesignData related operations
+    get:
+      operationId: get_thumbnail
+      description: 'Returns the thumbnail for the source file.
+
+        '
+      parameters:
+      - {$ref: '#/parameters/urn'}
+      - {$ref: '#/parameters/width'}
+      - {$ref: '#/parameters/height'}
+      produces: [application/octet-stream]
+      responses:
+        '200': {$ref: '#/responses/thumbnail'}
+        '400': {$ref: '#/responses/BAD_REQUEST_MANIFEST'}
+        '401': {$ref: '#/responses/UNAUTHORIZED'}
+        '403': {$ref: '#/responses/FORBIDDEN'}
+        '404': {$ref: '#/responses/NOT_FOUND'}
+        '500': {$ref: '#/responses/INTERNAL_SERVICE_ERROR'}
+        '502': {$ref: '#/responses/BAD_GATEWAY'}
+        '504': {$ref: '#/responses/GATEWAY_TIMEOUT'}
+      security:
+      - oauth2_access_code: ['data:read']
+      - oauth2_application: ['data:read']
+      x-ads_command_line_example: 'curl -X "GET" -H "Authorization: Bearer PtnrvrtSRpWwUi3407QhgvqdUVKL"
+        -v "https://developer.api.autodesk.com/modelderivative/v2/designdata/dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6bW9kZWxkZXJpdmF0aXZlL0E1LnppcA/thumbnail"'
+      tags: [Derivatives]
+  /modelderivative/v2/designdata/{urn}/metadata:
+    x-summary: Geometry Extraction
+    x-description: Forge geometry extraction operations
+    get:
+      operationId: get_metadata
+      description: 'Returns a list of model view (metadata) IDs for a design model.
+        The metadata ID enables end users to select an object tree and properties
+        for a specific model view.
+
+
+        Although most design apps (e.g., Fusion and Inventor) only allow a single
+        model view (object tree and set of properties), some apps (e.g., Revit) allow
+        users to design models with multiple model views (e.g., HVAC, architecture,
+        perspective).
+
+
+        Note that you can only retrieve metadata from an input file that has been
+        translated into an SVF file.
+
+        '
+      parameters:
+      - {$ref: '#/parameters/urn'}
+      - {$ref: '#/parameters/Accept_Encoding'}
+      responses:
+        '200': {$ref: '#/responses/metadata'}
+        '400': {$ref: '#/responses/BAD_REQUEST_METADATA'}
+        '401': {$ref: '#/responses/UNAUTHORIZED'}
+        '403': {$ref: '#/responses/FORBIDDEN'}
+        '404': {$ref: '#/responses/NOT_FOUND'}
+        '500': {$ref: '#/responses/INTERNAL_SERVICE_ERROR'}
+        '502': {$ref: '#/responses/BAD_GATEWAY'}
+        '504': {$ref: '#/responses/GATEWAY_TIMEOUT'}
+      security:
+      - oauth2_access_code: ['data:read']
+      - oauth2_application: ['data:read']
+      x-ads_command_line_example: 'curl -X "GET" -H "Authorization: Bearer PtnrvrtSRpWwUi3407QhgvqdUVKL"
+        -v "https://developer.api.autodesk.com/modelderivative/v2/designdata/dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6bW9kZWxkZXJpdmF0aXZlL0E1LnppcA/metadata"'
+      tags: [Derivatives]
+  /modelderivative/v2/designdata/{urn}/metadata/{guid}:
+    x-summary: Geometry Extraction
+    x-description: Forge geometry extraction operations
+    get:
+      operationId: get_modelview_metadata
+      description: 'Returns an object tree, i.e., a hierarchical list of objects for
+        a model view.
+
+
+        To call this endpoint you first need to call the [GET {urn}/metadata](https://developer.autodesk.com/en/docs/model-derivative/v2/reference/http/urn-metadata-GET)
+        endpoint, to determine which model view (object tree and set of properties)
+        to use.
+
+
+        Although most design apps (e.g., Fusion and Inventor) only allow a single
+        model view, some apps (e.g., Revit) allow users to design models with multiple
+        model views (e.g., HVAC, architecture, perspective).
+
+
+        Note that you can only retrieve metadata from an input file that has been
+        translated into an SVF file.
+
+        '
+      parameters:
+      - {$ref: '#/parameters/urn'}
+      - {$ref: '#/parameters/guid'}
+      - {$ref: '#/parameters/Accept_Encoding'}
+      responses:
+        '200': {$ref: '#/responses/metadata'}
+        '202': {$ref: '#/responses/ACCEPTED'}
+        '400': {$ref: '#/responses/BAD_REQUEST'}
+        '401': {$ref: '#/responses/UNAUTHORIZED'}
+        '403': {$ref: '#/responses/FORBIDDEN'}
+        '404': {$ref: '#/responses/NOT_FOUND'}
+        '500': {$ref: '#/responses/INTERNAL_SERVICE_ERROR'}
+        '502': {$ref: '#/responses/BAD_GATEWAY'}
+        '504': {$ref: '#/responses/GATEWAY_TIMEOUT'}
+      security:
+      - oauth2_access_code: ['data:read']
+      - oauth2_application: ['data:read']
+      x-ads_command_line_example: 'curl -X "GET" -H "Authorization: Bearer PtnrvrtSRpWwUi3407QhgvqdUVKL"
+        -v "https://developer.api.autodesk.com/modelderivative/v2/designdata/dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6bW9kZWxkZXJpdmF0aXZlL0E1LnppcA/metadata/4f981e94-8241-4eaf-b08b-cd337c6b8b1f"'
+      tags: [Derivatives]
+  /modelderivative/v2/designdata/{urn}/metadata/{guid}/properties:
+    x-summary: Geometry Extraction
+    x-description: Forge geometry extraction operations
+    get:
+      operationId: get_modelview_properties
+      description: 'Returns a list of properties for each object in an object tree.
+        Properties are returned according to object ID and do not follow a hierarchical
+        structure.
+
+
+        The following image displays a typical list of properties for a Revit object:
+
+
+        ![](https://developer.doc.autodesk.com/bPlouYTd/7/_images/Properties.png)
+
+
+        To call this endpoint you need to first call the [GET {urn}/metadata](https://developer.autodesk.com/en/docs/model-derivative/v2/reference/http/urn-metadata-GET)
+        endpoint, which returns a list of model view (metadata) IDs for a design input
+        model. Select a model view (metadata) ID to use when calling the Get Properties
+        endpoint.
+
+
+        Note that you can only get properties from a design input file that was previously
+        translated into an SVF file.
+
+        '
+      parameters:
+      - {$ref: '#/parameters/urn'}
+      - {$ref: '#/parameters/guid'}
+      - {$ref: '#/parameters/Accept_Encoding'}
+      responses:
+        '200': {$ref: '#/responses/metadata'}
+        '202': {$ref: '#/responses/ACCEPTED'}
+        '400': {$ref: '#/responses/BAD_REQUEST'}
+        '401': {$ref: '#/responses/UNAUTHORIZED'}
+        '403': {$ref: '#/responses/FORBIDDEN'}
+        '404': {$ref: '#/responses/NOT_FOUND'}
+        '500': {$ref: '#/responses/INTERNAL_SERVICE_ERROR'}
+        '502': {$ref: '#/responses/BAD_GATEWAY'}
+        '504': {$ref: '#/responses/GATEWAY_TIMEOUT'}
+      security:
+      - oauth2_access_code: ['data:read']
+      - oauth2_application: ['data:read']
+      x-ads_command_line_example: 'curl -X "GET" -H "Authorization: Bearer PtnrvrtSRpWwUi3407QhgvqdUVKL"
+        -v "https://developer.api.autodesk.com/modelderivative/v2/designdata/dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6bW9kZWxkZXJpdmF0aXZlL0E1LnppcA/metadata/4f981e94-8241-4eaf-b08b-cd337c6b8b1f/properties"'
+      tags: [Derivatives]
+  /modelderivative/v2/designdata/job:
+    post:
+      operationId: translate
+      description: 'Translate a source file from one format to another.
+
+
+        Derivatives are stored in a manifest that is updated each time this endpoint
+        is used on a source file.
+
+
+        Note that this endpoint is asynchronous and initiates a process that runs
+        in the background, rather than keeping an open HTTP connection until completion.
+        Use the [GET {urn}/manifest](https://developer.autodesk.com/en/docs/model-derivative/v2/reference/http/urn-manifest-GET)
+        endpoint to poll for the job’s completion.
+
+        '
+      parameters:
+      - {$ref: '#/parameters/x-ads-force'}
+      - name: job
+        in: body
+        required: true
+        schema: {$ref: '#/definitions/jobPayload'}
+      responses:
+        '200': {$ref: '#/responses/job'}
+        '201': {$ref: '#/responses/CREATED_JOB'}
+        '400': {$ref: '#/responses/BAD_REQUEST_JOB'}
+        '401': {$ref: '#/responses/UNAUTHORIZED'}
+        '403': {$ref: '#/responses/FORBIDDEN'}
+        '404': {$ref: '#/responses/NOT_FOUND'}
+        '406': {$ref: '#/responses/NOT_ACCEPTABLE'}
+        '429': {$ref: '#/responses/TOO_MANY_REQUEST'}
+        '500': {$ref: '#/responses/INTERNAL_SERVICE_ERROR'}
+        '502': {$ref: '#/responses/BAD_GATEWAY'}
+        '504': {$ref: '#/responses/GATEWAY_TIMEOUT'}
+      security:
+      - oauth2_access_code: ['data:read', 'data:write', 'data:create']
+      - oauth2_application: ['data:read', 'data:write', 'data:create']
+      x-ads_command_line_example: 'curl -X ''POST'' -H ''Content-Type: application/json;
+        charset=utf-8'' -H ''Authorization: Bearer PtnrvrtSRpWwUi3407QhgvqdUVKL''
+        -v ''https://developer.api.autodesk.com/modelderivative/v2/designdata/job''
+        -d ''{"input":{"urn": "dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6bW9kZWxkZXJpdmF0aXZlL0E1LnppcA","compressedUrn":true,"rootFilename":"A5.iam"},"output":{"formats":[{"type":"svf","views":["2d","3d"]}]}}'''
+      tags: [Derivatives]
+parameters:
+  If_Modified_Since: {name: If-Modified-Since, in: header, description: 'The supported
+      formats are only returned if they were modified since the specified date. An
+      invalid date returns the latest supported format list. If the supported formats
+      have not been modified since the specified date, the endpoint returns a `NOT
+      MODIFIED` (304) response.
+
+      ', required: false, type: string, format: date}
+  Accept_Encoding: {name: Accept-Encoding, in: header, description: 'If specified
+      with `gzip` or `*`, content will be compressed and returned in a GZIP format.
+
+      ', required: false, type: string}
+  Range: {name: Range, in: header, description: 'This is the standard RFC 2616 range
+      request header. It only supports one range specifier per request:
+
+      1. Range:bytes=0-63 (returns the first 64 bytes)
+
+      2. Range:bytes=64-127 (returns the second set of 64 bytes)
+
+      3. Range:bytes=1022- (returns all the bytes from offset 1022 to the end)
+
+      4. If the range header is not specified, the whole content is returned.
+
+      ', required: false, type: integer, format: int32}
+  urn: {name: urn, in: path, description: 'The Base64 (URL Safe) encoded design URN
+
+      ', required: true, type: string}
+  derivativeUrn: {name: derivativeUrn, in: path, description: 'The URL-encoded URN
+      of the derivatives. The URN is retrieved from the GET :urn/manifest endpoint.
+
+      ', required: true, type: string}
+  guid: {name: guid, in: path, description: 'Unique model view ID. Call [GET {urn}/metadata](https://developer.autodesk.com/en/docs/model-derivative/v2/reference/http/urn-metadata-GET)
+      to get the ID
+
+      ', required: true, type: string}
+  x-ads-force: {name: x-ads-force, in: header, description: '`true`: the endpoint
+      replaces previously translated output file types with the newly generated derivatives
+
+
+      `false` (default): previously created derivatives are not replaced
+
+      ', required: false, type: boolean, default: false}
+  width: {name: width, in: query, description: 'The desired width of the thumbnail.
+      Possible values are 100, 200 and 400.
+
+      ', required: false, type: integer, format: int32}
+  height: {name: height, in: query, description: 'The desired height of the thumbnail.
+      Possible values are 100, 200 and 400.
+
+      ', required: false, type: integer, format: int32}
+definitions:
+  InputStream: {description: application/octet_stream body support, type: string,
+    format: binary}
+  message:
+    description: Message defintion
+    type: object
+    required: [type, code, message]
+    properties:
+      type: {type: string}
+      code: {type: string}
+      message:
+        type: array
+        items: {type: string}
+  messages:
+    description: Translation service message
+    type: array
+    items: {$ref: '#/definitions/message'}
+  manifest-children:
+    description: Children Manifest
+    type: object
+    required: [type, role, mime]
+    properties:
+      type:
+        description: Type of this JSON object
+        type: string
+        enum: [resource, manifest, geometry, view]
+      role:
+        description: Output file type
+        type: string
+        enum: [2d, 3d, graphics, manifest, thumbnail]
+      name: {description: Output file type, type: string}
+      hasThumbnail: {description: 'Indicates if a thumbnail has been generated
+
+          ', type: boolean}
+      mime: {description: MIME type of the generated file, type: string}
+      urn: {description: Output file URN; used as a file identifier, type: string}
+      progress: {description: Translation progress for requested entity, type: string}
+      status:
+        description: 'Status of the requested entity; possible values are: `pending`,
+          `success`, `inprogress`, `failed`, `timeout` and `partialsuccess`
+
+          '
+        type: string
+        enum: [pending, inprogress, success, failed, timeout, partialsuccess]
+      resolution:
+        description: Available thumbnail resolution
+        type: array
+        items: {type: string}
+      modelGUID: {type: string}
+      objectIds:
+        type: array
+        items: {type: integer, format: int32}
+      messages: {$ref: '#/definitions/messages'}
+  manifest-derivative:
+    description: Requested output files for the source file URN
+    type: object
+    required: [name, hasThumbnail, status, progress, children]
+    properties:
+      name: {description: Output file type, type: string}
+      hasThumbnail: {description: Indicates if a thumbnail has been generated, type: boolean}
+      outputType:
+        type: string
+        enum: [stl, step, iges, obj, svf, thumbnail]
+      progress: {description: Translation progress for requested entity, type: string}
+      status:
+        description: 'Status of the requested entity; possible values are: `pending`,
+          `success`, `inprogress`, `failed`, `timeout` and `partialsuccess`
+
+          '
+        type: string
+        enum: [pending, inprogress, success, failed, timeout, partialsuccess]
+      children:
+        type: array
+        items: {$ref: '#/definitions/manifest-children'}
+  metadata-metadata:
+    description: metadata definition
+    type: object
+    required: [name, guid]
+    properties:
+      name: {description: Name of the model view, type: string}
+      guid: {description: Unique identifier for the model view, type: string}
+  metadata-object:
+    description: metadata object definition
+    type: object
+    required: [objectid, name]
+    properties:
+      objectid: {description: Unique ID for the object, type: integer, format: int32}
+      name: {description: Name of the object, type: string}
+      objects:
+        description: Optional collection of “children” objects within the hierarchy
+        type: array
+        items: {type: string}
+  metadata-collection:
+    description: metadata collection definition
+    type: object
+    required: [objectid, name]
+    properties:
+      objectid: {description: Unique ID for the object, type: integer, format: int32}
+      name: {description: Name of the object, type: string}
+      properties: {description: Represents the object’s “properties”, type: object}
+  jobSvfOutputPayload:
+    type: object
+    required: [type]
+    properties:
+      type:
+        description: The requested output types. Possible values include `svf`, `thumbnai`,
+          `stl`, `step`, `iges`, or `obj`. For a list of supported types, call the
+          [GET formats](https://developer.autodesk.com/en/docs/model-derivative/v2/reference/http/formats-GET)
+          endpoint.
+        type: string
+        enum: [svf, thumbnail, stl, step, iges, obj]
+      views:
+        type: array
+        items:
+          description: Required options for SVF type. Possible values are `2d` and
+            `3d`.
+          type: string
+          enum: [2d, 3d]
+  jobThumbnailOutputPayload:
+    type: object
+    required: [type]
+    properties:
+      type:
+        description: The requested output types. Possible values include `svf`, `thumbnai`,
+          `stl`, `step`, `iges`, or `obj`. For a list of supported types, call the
+          [GET formats](https://developer.autodesk.com/en/docs/model-derivative/v2/reference/http/formats-GET)
+          endpoint.
+        type: string
+        enum: [svf, thumbnail, stl, step, iges, obj]
+      advanced:
+        description: Advanced options for `thumbnail` type.
+        type: object
+        properties:
+          width: {description: 'Set the width. Possible values are `100`, `200` and
+              `400`.', type: integer, format: int32}
+          height: {description: 'Set the height. Possible values are `100`, `200`
+              and `400`.', type: integer, format: int32}
+  jobStlOutputPayload:
+    type: object
+    required: [type]
+    properties:
+      type:
+        description: The requested output types. Possible values include `svf`, `thumbnai`,
+          `stl`, `step`, `iges`, or `obj`. For a list of supported types, call the
+          [GET formats](https://developer.autodesk.com/en/docs/model-derivative/v2/reference/http/formats-GET)
+          endpoint.
+        type: string
+        enum: [svf, thumbnail, stl, step, iges, obj]
+      advanced:
+        description: Advanced options for `stl` type.
+        type: object
+        properties:
+          format:
+            description: Default format is `binary`. Possible values are `binary`
+              or `ascii`.
+            type: string
+            enum: [binary, ascii]
+            default: binary
+          exportColor: {description: 'Color is exported by default. If set to `true`,
+              color is exported. If set to `false`, color is not exported.', type: boolean,
+            default: true}
+          exportFileStructure:
+            description: '`single` (default): creates one STL file for all the input
+              files (assembly file)
+
+
+              `multiple`: creates a separate STL file for each object
+
+              '
+            type: string
+            enum: [single, multiple]
+            default: single
+  jobStepOutputPayload:
+    type: object
+    required: [type]
+    properties:
+      type:
+        description: The requested output types. Possible values include `svf`, `thumbnai`,
+          `stl`, `step`, `iges`, or `obj`. For a list of supported types, call the
+          [GET formats](https://developer.autodesk.com/en/docs/model-derivative/v2/reference/http/formats-GET)
+          endpoint.
+        type: string
+        enum: [svf, thumbnail, stl, step, iges, obj]
+      advanced:
+        description: Advanced options for `step` type.
+        type: object
+        properties:
+          applicationProtocol:
+            description: 'A STEP file can be generated with the following Application
+              Protocols: `203` for configuration controlled design, `214` for core
+              data for automotive mechanical design processes, `242` for managed model
+              based 3D engineering. By default, `214` will be exported.
+
+              '
+            type: string
+            enum: ['203', '214', '242']
+            default: '214'
+          tolerance: {description: Possible values are between `0` and `1`. By default
+              it is set at 0.001., type: number, format: float, default: 0.001}
+  jobIgesOutputPayload:
+    type: object
+    required: [type]
+    properties:
+      type:
+        description: The requested output types. Possible values include `svf`, `thumbnai`,
+          `stl`, `step`, `iges`, or `obj`. For a list of supported types, call the
+          [GET formats](https://developer.autodesk.com/en/docs/model-derivative/v2/reference/http/formats-GET)
+          endpoint.
+        type: string
+        enum: [svf, thumbnail, stl, step, iges, obj]
+      advanced:
+        description: Advanced options for `iges` type.
+        type: object
+        properties:
+          tolerance: {description: Possible values are between `0` and `1`. By default
+              it is set at 0.001., type: number, format: float, default: 0.001}
+          surfaceType:
+            description: Possible values are `bounded`, `trimmed` and `wireframe`.
+              By default it is set to bounded surface.
+            type: string
+            enum: [bounded, trimmed, wireframe]
+            default: bounded
+          sheetType:
+            description: Export the sheet body to IGES. `open`, `shell`, `surface`
+              or `wireframe`. By default, it is set to `surface`.
+            type: string
+            enum: [open, surface, shell, wireframe]
+            default: surface
+          solidType:
+            description: Export the solid body to IGES `solid`, `surface` or `wireframe`.
+              By default, it is set to `solid`.
+            type: string
+            enum: [solid, surface, wireframe]
+            default: solid
+  jobObjOutputPayload:
+    type: object
+    required: [type]
+    properties:
+      type:
+        description: The requested output types. Possible values include `svf`, `thumbnai`,
+          `stl`, `step`, `iges`, or `obj`. For a list of supported types, call the
+          [GET formats](https://developer.autodesk.com/en/docs/model-derivative/v2/reference/http/formats-GET)
+          endpoint.
+        type: string
+        enum: [svf, thumbnail, stl, step, iges, obj]
+      advanced:
+        description: Advanced options for `obj` type.
+        type: object
+        properties:
+          exportFileStructure:
+            description: '`single` (default): creates one OBJ file for all the input
+              files (assembly file)
+
+
+              `multiple`: creates a separate OBJ file for each object
+
+              '
+            type: string
+            enum: [single, multiple]
+            default: single
+          modelGuid: {description: Required for geometry extractions. The model view
+              ID (guid)., type: string}
+          objectIds:
+            description: 'Required for geometry extractions. List object ids to be
+              translated. -1 will extract the entire model.
+
+              '
+            type: array
+            items: {type: string}
+  jobPayloadItem:
+    description: Output description object, depends of the type
+    type: object
+    allOf:
+    - {$ref: '#/definitions/jobSvfOutputPayload'}
+    - {$ref: '#/definitions/jobThumbnailOutputPayload'}
+    - {$ref: '#/definitions/jobStlOutputPayload'}
+    - {$ref: '#/definitions/jobStepOutputPayload'}
+    - {$ref: '#/definitions/jobIgesOutputPayload'}
+    - {$ref: '#/definitions/jobObjOutputPayload'}
+  jobPayload:
+    type: object
+    required: [input, output]
+    properties:
+      input:
+        description: Group of inputs
+        type: object
+        required: [urn]
+        properties:
+          urn: {description: 'The design URN; returned when uploading the file to
+              Forge The URN needs to be [Base64 (URL Safe) encoded](https://developer.autodesk.com/en/docs/model-derivative/v2/reference/http/job-POST/#id3).
+
+              ', type: string}
+          compressedUrn: {description: 'Set this to `true` if the source file is compressed.
+              If set to `true`, you need to define the `rootFilename`.', type: boolean,
+            default: false}
+          rootFilename: {description: The root filename of the compressed file. Mandatory
+              if the `compressedUrn` is set to `true`., type: string}
+      output:
+        description: Group of outputs
+        type: object
+        required: [formats]
+        properties:
+          formats:
+            type: array
+            description: Group of requested formats/types. User can request multiple
+              formats.
+            items: {$ref: '#/definitions/jobPayloadItem'}
+  job:
+    type: object
+    required: [result, urn, acceptedJobs]
+    properties:
+      result: {description: reporting success status, type: string}
+      urn: {description: the urn identifier of the source file, type: string}
+      acceptedJobs:
+        description: list of the requested outputs
+        type: object
+        required: [output]
+        properties:
+          output: {description: identical to the request body. For more information
+              please see the request body structure above., type: object}
+responses:
+  delete-manifest-result:
+    description: OK, Manifest and derivatives are deleted. Note that this code is
+      also returned if the manifest does not exist.
+    schema:
+      title: result
+      type: object
+      required: [result]
+      properties:
+        result: {type: string}
+    headers:
+      x-ads-app-identifier: {description: 'The service identifier, including version
+          number.', type: string}
+      x-ads-startup-time: {description: The service startup time, type: string}
+      x-ads-duration: {description: The request duration in milliseconds, type: integer,
+        format: int32}
+      x-ads-exception-id: {description: Provides debugging ID for troubleshooting,
+        type: string}
+      x-ads-troubleshooting: {description: Provides information about the server failure,
+        type: string}
+  formats:
+    description: OK, Success
+    schema:
+      title: formats
+      type: object
+      required: [formats]
+      properties:
+        formats:
+          type: object
+          properties:
+            svf:
+              type: array
+              items: {type: string}
+            thumbnail:
+              type: array
+              items: {type: string}
+            stl:
+              type: array
+              items: {type: string}
+            step:
+              type: array
+              items: {type: string}
+            iges:
+              type: array
+              items: {type: string}
+            obj:
+              type: array
+              items: {type: string}
+    headers:
+      X-Last-Modified: {description: Indicates the date and time the supported formats
+          were last modified., type: string, format: time}
+      x-ads-app-identifier: {description: 'The service identifier, including version
+          number.', type: string}
+      x-ads-startup-time: {description: The service startup time, type: string}
+      x-ads-duration: {description: The request duration in milliseconds, type: integer,
+        format: int32}
+      x-ads-exception-id: {description: Provides debugging ID for troubleshooting,
+        type: string}
+      x-ads-troubleshooting: {description: Provides information about the server failure,
+        type: string}
+  manifest:
+    description: OK, Success
+    schema:
+      title: manifest
+      type: object
+      required: [urn, type, progress, status, hasThumbnail, derivatives]
+      properties:
+        urn: {description: The Base64 (URL safe) encoded source file URN, type: string}
+        type: {description: Type of this JSON object, type: string}
+        progress: {description: 'Overall progress for all translation jobs in the
+            manifest. Possible values are: `complete` or `##%`
+
+            ', type: string}
+        status: {description: 'Overall status for translation jobs in the “manifest”.
+            Possible values are: `pending`, `success`, `inprogress`, `failed` and
+            `timeout`
+
+            ', type: string}
+        hasThumbnail: {description: Indicates if a thumbnail has been generated for
+            the source file URN, type: boolean}
+        region: {description: 'Region
+
+            ', type: string}
+        derivatives:
+          description: Requested output files for the source file URN
+          type: array
+          items: {$ref: '#/definitions/manifest-derivative'}
+    headers:
+      x-ads-app-identifier: {description: 'The service identifier, including version
+          number.', type: string}
+      x-ads-startup-time: {description: The service startup time, type: string}
+      x-ads-duration: {description: The request duration in milliseconds, type: integer,
+        format: int32}
+      x-ads-exception-id: {description: Provides debugging ID for troubleshooting,
+        type: string}
+      x-ads-troubleshooting: {description: Provides information about the server failure,
+        type: string}
+  manifestDerived:
+    description: OK, Success
+    headers:
+      x-ads-app-identifier: {description: 'The service identifier, including version
+          number.', type: string}
+      x-ads-startup-time: {description: The service startup time, type: string}
+      x-ads-duration: {description: The request duration in milliseconds, type: integer,
+        format: int32}
+      x-ads-exception-id: {description: Provides debugging ID for troubleshooting,
+        type: string}
+      x-ads-troubleshooting: {description: Provides information about the server failure,
+        type: string}
+      Content-Type: {description: application/octet-stream, type: string, default: application/octet-stream}
+      Etag: {description: Determines whether there is a change in the content of the
+          request resource., type: string}
+  metadata:
+    description: OK, Success
+    schema:
+      title: metadata
+      type: object
+      required: [data]
+      properties:
+        data:
+          description: ''
+          type: object
+          required: [type]
+          properties:
+            type: {type: string, default: metadata}
+            metadata:
+              type: array
+              items: {$ref: '#/definitions/metadata-metadata'}
+            objects:
+              description: Collection of “objects”
+              type: array
+              items: {$ref: '#/definitions/metadata-object'}
+            collection:
+              description: Array of objects with their “properties” as a non-hierarchical
+                list.
+              type: array
+              items: {$ref: '#/definitions/metadata-collection'}
+    headers:
+      x-ads-app-identifier: {description: 'The service identifier, including version
+          number.', type: string}
+      x-ads-startup-time: {description: The service startup time, type: string}
+      x-ads-duration: {description: The request duration in milliseconds, type: integer,
+        format: int32}
+      x-ads-exception-id: {description: Provides debugging ID for troubleshooting,
+        type: string}
+      x-ads-troubleshooting: {description: Provides information about the server failure,
+        type: string}
+  job:
+    description: OK, Success. Note that you still need to check whether the asynchronous
+      job is complete by calling the [GET {urn}/manifest](https://developer.autodesk.com/en/docs/model-derivative/v2/reference/http/urn-manifest-GET)
+      endpoint.
+    schema: {$ref: '#/definitions/job'}
+    headers:
+      x-ads-app-identifier: {description: 'The service identifier, including version
+          number.', type: string}
+      x-ads-startup-time: {description: The service startup time, type: string}
+      x-ads-duration: {description: The request duration in milliseconds, type: integer,
+        format: int32}
+      x-ads-exception-id: {description: Provides debugging ID for troubleshooting,
+        type: string}
+      x-ads-troubleshooting: {description: Provides information about the server failure,
+        type: string}
+  thumbnail:
+    description: OK, Success
+    schema: {$ref: '#/definitions/InputStream'}
+    headers:
+      x-ads-name: {description: Filename of the thumbnail. Filename extension is PNG.,
+        type: string}
+      x-ads-size: {description: 'Thumbnail size. Possible values are 100x100, 200x200,
+          or 400x400.', type: string}
+      x-ads-app-identifier: {description: 'The service identifier, including version
+          number.', type: string}
+      x-ads-startup-time: {description: The service startup time, type: string}
+      x-ads-duration: {description: The request duration in milliseconds, type: integer,
+        format: int32}
+      x-ads-exception-id: {description: Provides debugging ID for troubleshooting,
+        type: string}
+      x-ads-troubleshooting: {description: Provides information about the server failure,
+        type: string}
+  CREATED_JOB:
+    description: The requested file type has been previously generated and has not
+      been replaced by the new source file.
+    schema: {$ref: '#/definitions/job'}
+    headers:
+      x-ads-app-identifier: {description: 'The service identifier, including version
+          number.', type: string}
+      x-ads-startup-time: {description: The service startup time, type: string}
+      x-ads-duration: {description: The request duration in milliseconds, type: integer,
+        format: int32}
+      x-ads-exception-id: {description: Provides debugging ID for troubleshooting,
+        type: string}
+      x-ads-troubleshooting: {description: Provides information about the server failure,
+        type: string}
+  ACCEPTED:
+    description: ACCEPTED, Request accepted but processing not complete. Call this
+      endpoint iteratively until a 200 is returned.
+    schema:
+      title: result
+      type: object
+      required: [result]
+      properties:
+        result: {type: string}
+  PARTIAL_CONTENT: {description: 'PARTIAL CONTENT, Partial content of the derivative
+      is returned.'}
+  NOT_MODIFIED: {description: 'NOT MODIFIED, The supported formats have not been modified
+      since the specified date.'}
+  BAD_REQUEST: {description: 'BAD REQUEST, Invalid request'}
+  BAD_REQUEST_MANIFEST: {description: 'BAD REQUEST, The request is invalid. E.g.,
+      the payload was not formatted correctly.'}
+  BAD_REQUEST_DELETE_MANIFEST:
+    description: BAD REQUEST, Invalid request. E.g. input URN format is invalid.
+    schema:
+      title: diagnostics
+      type: object
+      required: [diagnostics]
+      properties:
+        diagnostics: {description: reason for failure, type: string}
+  BAD_REQUEST_MANIFEST_DERIVE: {description: 'BAD REQUEST, Invalid request. E.g.,
+      the input URN format is invalid, or the range header is specified but not formatted
+      correctly.'}
+  BAD_REQUEST_METADATA: {description: 'BAD REQUEST, Invalid request. E.g. input URN
+      format is invalid.'}
+  BAD_REQUEST_JOB:
+    description: BAD REQUEST, Invalid request. E.g. input URN format is invalid.
+    schema:
+      title: diagnostics
+      type: object
+      required: [diagnostics]
+      properties:
+        diagnostics: {description: reason for failure, type: string}
+  UNAUTHORIZED: {description: 'UNAUTHORIZED, Invalid authorization header'}
+  FORBIDDEN: {description: 'FORBIDDEN, Access denied regardless of authorization status.'}
+  NOT_FOUND: {description: 'NOT FOUND, Endpoint does not exist.'}
+  NOT_ACCEPTABLE: {description: 'NOT ACCEPTABLE, The request is not acceptable. E.g.,
+      the output type is not supported.'}
+  TOO_MANY_REQUEST: {description: 'TOO MANY REQUEST, Request rate has exceeded the
+      limit.'}
+  INTERNAL_SERVICE_ERROR: {description: 'INTERNAL SERVICE ERROR, Unexpected service
+      interruption'}
+  BAD_GATEWAY: {description: 'BAD GATEWAY, Connection problem'}
+  GATEWAY_TIMEOUT: {description: 'GATEWAY TIMEOUT, Connection problem'}
+

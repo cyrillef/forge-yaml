@@ -1,0 +1,984 @@
+swagger: '2.0'
+
+info:
+  title: Forge-OSS
+  version: "2.0.0"
+  x-summary: Asynchronous Javascript/Node.js library for the Autodesk Forge OSS API
+  description: |
+    The Data Management API provides a unified and consistent way to access data across A360, Fusion 360, and the Object Storage Service.
+
+    With this API, you can accomplish a number of workflows, including accessing a Fusion model in A360 and getting an ordered structure of items, IDs, and properties for generating a bill of materials in a 3rd-party process. Or, you might want to superimpose a Fusion model and a building model to use in the [Viewer](https://developer.autodesk.com/en/docs/viewer/v2).
+
+    The Data Management API is composed of the following services:
+
+    |  |  |
+    |-----|-----|
+    | Project Service | Navigate to a project from an A360 Hub. The project acts as an “anchor” point for data available through the API. |
+    | Data Service | Navigate and manage the A360 metadata in terms of folders, items, and versions, as well as the relationships between these entities. An item could be a file or a Fusion 360 design. Each item can have multiple versions. |
+    | Schema Service | This allows your application to understand the structure and semantics of extended data types, like Fusion designs. |
+    | Object Storage Service (OSS) | This allows your application to download and upload raw files (such as PDF, XLS, DWG, or RVT) that are managed by the Data Service. |
+    
+    You may have any number of logically separated apps that utilize one or more of these functionalities, and any of these apps are interoperable with other APIs on the Forge Platform.
+
+    ![](https://developer.doc.autodesk.com/bPlouYTd/7/_images/dms_overview.png)
+  contact:
+    name: "Autodesk, Inc."
+    url: "https://developer.autodesk.com/en/docs/data/v2/"
+    email: "forge.help@autodesk.com"
+  #x-support: "http://forums.autodesk.com/t5/view-and-data-api/bd-p/95"
+  x-support: "http://stackoverflow.com/questions/tagged/autodesk-data-management"
+  termsOfService: "http://www.autodesk.com/company/legal-notices-trademarks/terms-of-service-autodesk360-web-services/autodesk-web-services-api-beta-terms-of-service"
+  #license:
+  #  name:
+  #  url:
+  
+host: developer.api.autodesk.com
+schemes:
+  - https
+basePath: /
+consumes:
+  - application/json
+produces:
+  - application/json
+tags:
+  - name: Buckets
+    description: Forge OSS Buckets APIs
+  - name: Objects
+    description: Forge OSS Objects APIs
+    
+securityDefinitions:
+  oauth2_access_code:
+    type: oauth2
+    authorizationUrl: https://developer.api.autodesk.com/authentication/v1/authorize
+    tokenUrl: https://developer.api.autodesk.com/authentication/v1/gettoken
+    x-refreshTokenUrl: https://developer.api.autodesk.com/authentication/v1/refreshtoken
+    flow: accessCode
+    scopes:
+      data:read: The application will be able to read the end user’s data within the Autodesk ecosystem.
+      data:write: The application will be able to create, update, and delete data on behalf of the end user within the Autodesk ecosystem.
+      data:create: The application will be able to create data on behalf of the end user within the Autodesk ecosystem.
+      data:search: The application will be able to search the end user’s data within the Autodesk ecosystem.
+      bucket:create: The application will be able to create an OSS bucket it will own.
+      bucket:read: The application will be able to read the metadata and list contents for OSS buckets that it has access to.
+      bucket:update: The application will be able to set permissions and entitlements for OSS buckets that it has permission to modify.
+      bucket:delete: The application will be able to delete a bucket that it has permission to delete.
+      code:all: The application will be able to author and execute code on behalf of the end user (e.g., scripts processed by the Design Automation API).
+      account:read: For Product APIs, the application will be able to read the account data the end user has entitlements to.
+      account:write: For Product APIs, the application will be able to update the account data the end user has entitlements to.
+      user-profile:read: The application will be able to read the end user’s profile data.
+    x-authentication_context: user context required
+  oauth2_application:
+    type: oauth2
+    tokenUrl: https://developer.api.autodesk.com/authentication/v1/authenticate
+    flow: application
+    scopes:
+      data:read: The application will be able to read the end user’s data within the Autodesk ecosystem.
+      data:write: The application will be able to create, update, and delete data on behalf of the end user within the Autodesk ecosystem.
+      data:create: The application will be able to create data on behalf of the end user within the Autodesk ecosystem.
+      data:search: The application will be able to search the end user’s data within the Autodesk ecosystem.
+      bucket:create: The application will be able to create an OSS bucket it will own.
+      bucket:read: The application will be able to read the metadata and list contents for OSS buckets that it has access to.
+      bucket:update: The application will be able to set permissions and entitlements for OSS buckets that it has permission to modify.
+      bucket:delete: The application will be able to delete a bucket that it has permission to delete.
+      code:all: The application will be able to author and execute code on behalf of the end user (e.g., scripts processed by the Design Automation API).
+      account:read: For Product APIs, the application will be able to read the account data the end user has entitlements to.
+      account:write: For Product APIs, the application will be able to update the account data the end user has entitlements to.
+      user-profile:read: The application will be able to read the end user’s profile data.
+    x-authentication_context: application context required
+  
+paths:
+  '/oss/v2/buckets':
+    x-summary: Buckets
+    x-description: Buckets related operations
+    post:
+      operationId: create_bucket
+      description: |
+        Use this endpoint to create a bucket. Buckets are arbitrary spaces created and owned by applications. Bucket keys are globally unique across all regions, regardless of where they were created, and they cannot be changed. The application creating the bucket is the owner of the bucket.
+      parameters:
+        - $ref: '#/parameters/x-ads-region'
+        - $ref: '#/parameters/post_buckets'
+      responses:
+        '200': { $ref: '#/responses/post_buckets_OK' }
+        '400': { $ref: '#/responses/BAD_REQUEST' }
+        '401': { $ref: '#/responses/UNAUTHORIZED' }
+        '403': { $ref: '#/responses/FORBIDDEN' }
+        '409': { $ref: '#/responses/CONFLICT' }
+        '500': { $ref: '#/responses/INTERNAL_SERVER_ERROR' }
+      security:
+        [ { oauth2_application: [ 'bucket:create' ] } ]
+      x-ads_command_line_example: "curl -v \"https://developer.api.autodesk.com/oss/v2/buckets\" -X POST -H \"Content-Type: application/json\" -H \"Authorization: Bearer kgEJWMJitdYbhfxghap8SbZqXMoS\" -d  '{\"bucketKey\":\"apptestbucket\",\"policyKey\":\"transient\"}'"
+      tags:
+        - Buckets
+    get:
+      operationId: get_buckets
+      description: |
+        This endpoint will return the buckets owned by the application. This endpoint supports pagination.
+      parameters:
+        - $ref: '#/parameters/region'
+        - $ref: '#/parameters/limit'
+        - $ref: '#/parameters/startAt'
+      responses:
+        '200': { $ref: '#/responses/get_buckets_OK' }
+        '400': { $ref: '#/responses/BAD_REQUEST' }
+        '401': { $ref: '#/responses/UNAUTHORIZED' }
+        '403': { $ref: '#/responses/FORBIDDEN' }
+        '404': { $ref: '#/responses/NOT_FOUND' }
+        '500': { $ref: '#/responses/INTERNAL_SERVER_ERROR' }
+      security:
+        [ { oauth2_application: [ 'bucket:read' ] } ]
+      x-ads_command_line_example: 'curl -v "https://developer.api.autodesk.com/oss/v2/buckets" -X GET -H "Authorization: Bearer RhS6iEVMnEfl77MBSK3l2je06UHj"'
+      tags:
+        - Buckets
+  '/oss/v2/buckets/{bucketKey}':
+    x-summary: Buckets
+    x-description: Buckets related operations
+    parameters:
+      - $ref: '#/parameters/bucketKey'
+    delete:
+      operationId: delete_bucket
+      description: |
+        This endpoint will delete a bucket.
+      responses:
+        '200': { $ref: '#/responses/OK' }
+        '400': { $ref: '#/responses/BAD_REQUEST' }
+        '401': { $ref: '#/responses/UNAUTHORIZED' }
+        '403': { $ref: '#/responses/FORBIDDEN' }
+        '404': { $ref: '#/responses/NOT_FOUND' }
+        '500': { $ref: '#/responses/INTERNAL_SERVER_ERROR' }
+      security:
+        [ { oauth2_application: [ 'bucket:delete' ] } ]
+      x-ads_command_line_example: 'curl -v "https://developer.api.autodesk.com/oss/v2/buckets/" -X DELETE -H "Authorization: Bearer RhS6iEVMnEfl77MBSK3l2je06UHj"'
+      tags:
+        - Buckets
+  '/oss/v2/buckets/{bucketKey}/details':
+    x-summary: Buckets
+    x-description: Buckets related operations
+    parameters:
+      - $ref: '#/parameters/bucketKey'
+    get:
+      operationId: get_bucket_details
+      description: This endpoint will return the buckets owned by the application. This endpoint supports pagination.
+      responses:
+        '200': { $ref: '#/responses/get_buckets_details_OK' }
+        '400': { $ref: '#/responses/BAD_REQUEST' }
+        '401': { $ref: '#/responses/UNAUTHORIZED' }
+        '403': { $ref: '#/responses/FORBIDDEN' }
+        '404': { $ref: '#/responses/NOT_FOUND' }
+        '500': { $ref: '#/responses/INTERNAL_SERVER_ERROR' }
+      security:
+        [ { oauth2_application: [ 'bucket:read' ] } ]
+      x-ads_command_line_example: 'curl -v "https://developer.api.autodesk.com/oss/v2/buckets" -X GET -H "Authorization: Bearer RhS6iEVMnEfl77MBSK3l2je06UHj"'
+      tags:
+        - Buckets
+  '/oss/v2/buckets/{bucketKey}/objects/{objectName}':
+    x-summary: Objects
+    x-description: Objects related operations
+    parameters:
+      - $ref: '#/parameters/bucketKey'
+      - $ref: '#/parameters/objectName'
+    put:
+      operationId: upload_object
+      description: |
+        Upload an object. If the specified object name already exists in the bucket, the uploaded content will overwrite the existing content for the bucket name/object name combination.
+      parameters:
+        - $ref: '#/parameters/Content-Length'
+        - $ref: '#/parameters/Content-Disposition'
+        - $ref: '#/parameters/If-Match'
+        - $ref: '#/parameters/bodyStream'
+      consumes: [ 'application/octet-stream' ]
+      responses:
+        '200': { $ref: '#/responses/put_object_OK' }
+        '400': { $ref: '#/responses/BAD_REQUEST' }
+        '401': { $ref: '#/responses/UNAUTHORIZED' }
+        '403': { $ref: '#/responses/FORBIDDEN' }
+        '404': { $ref: '#/responses/NOT_FOUND' }
+        '412': { $ref: '#/responses/PRECONDITION_FAILED' }
+        '500': { $ref: '#/responses/INTERNAL_SERVER_ERROR' }
+      security:
+        [ { oauth2_application: [ 'data:write', 'data:create' ] } ]
+      x-ads_command_line_example: "curl -v 'https://developer.api.autodesk.com/oss/v2/buckets/mybucket/objects/example.txt' -X 'PUT' -H 'Authorization: Bearer AlmsGlZlqz1JkkzEruUdINMKA6IF' -H 'Content-Type: text/plain; charset=UTF-8' -T 'example.txt'"
+      tags:
+        - Objects
+    get:
+      operationId: get_object
+      description: Download an object.
+      parameters:
+        - $ref: '#/parameters/Range'
+        - $ref: '#/parameters/If-None-Match'
+        - $ref: '#/parameters/If-Modified-Since'
+        - $ref: '#/parameters/Accept-Encoding'
+      produces: [ 'application/octet-stream' ]
+      responses:
+        '200': { $ref: '#/responses/OK-Stream' }
+        '206': { $ref: '#/responses/PARTIAL_CONTENT' }
+        '400': { $ref: '#/responses/BAD_REQUEST' }
+        '401': { $ref: '#/responses/UNAUTHORIZED' }
+        '403': { $ref: '#/responses/FORBIDDEN' }
+        '404': { $ref: '#/responses/NOT_FOUND' }
+        '429': { $ref: '#/responses/THROTTLE' }
+        '500': { $ref: '#/responses/INTERNAL_SERVER_ERROR' }
+      security:
+        [ { oauth2_application: [ 'data:read' ] } ]
+      x-ads_command_line_example: "curl -v 'https://developer.api.autodesk.com/oss/v2/buckets/apptestbucket/objects/test.txt' -X GET -H 'Authorization: Bearer ShiAeQ67rdNSfmyEmtGW8Lnrcqto'"
+      tags:
+        - Objects
+    delete:
+      operationId: delete_object
+      description: Deletes an object from the bucket.
+      produces: []
+      responses:
+        '200': { $ref: '#/responses/OK' }
+        '400': { $ref: '#/responses/BAD_REQUEST' }
+        '401': { $ref: '#/responses/UNAUTHORIZED' }
+        '403': { $ref: '#/responses/FORBIDDEN' }
+        '404': { $ref: '#/responses/NOT_FOUND' }
+        '500': { $ref: '#/responses/INTERNAL_SERVER_ERROR' }
+      security:
+        [ { oauth2_application: [ 'data:write' ] } ]
+      x-ads_command_line_example: "curl -v 'https://developer.api.autodesk.com/oss/v2/buckets/bucketexamplekey/objects/objectKey' -X DELETE -H 'Authorization: Bearer kuhodzPEHSCrWH3Pm1WuBMBnxw39' -H 'Content-Type: application/json;charset=UTF-8'"
+      tags:
+        - Objects
+  '/oss/v2/buckets/{bucketKey}/objects/{objectName}/resumable':
+    x-summary: Objects
+    x-description: Objects related operations
+    parameters:
+      - $ref: '#/parameters/bucketKey'
+      - $ref: '#/parameters/objectName'
+    put:
+      operationId: upload_chunk
+      description: This endpoint allows resumable uploads for large files in chunks.
+      parameters:
+        - $ref: '#/parameters/Content-Length'
+        - $ref: '#/parameters/Content-Range'
+        - $ref: '#/parameters/Content-Disposition'
+        - $ref: '#/parameters/If-Match'
+        - $ref: '#/parameters/Session-Id'
+        - $ref: '#/parameters/bodyStream'
+      consumes: [ 'application/octet-stream' ]
+      responses:
+        '200': { $ref: '#/responses/put_object_resumable_OK' }
+        '202': { $ref: '#/responses/ACCEPTED' }
+        '400': { $ref: '#/responses/BAD_REQUEST' }
+        '401': { $ref: '#/responses/UNAUTHORIZED' }
+        '403': { $ref: '#/responses/FORBIDDEN' }
+        '404': { $ref: '#/responses/NOT_FOUND' }
+        '409': { $ref: '#/responses/CONFLICT' }
+        '416': { $ref: '#/responses/REQUEST_RANGE_NOT_SATISFIABLE' }
+        '500': { $ref: '#/responses/INTERNAL_SERVER_ERROR' }
+      security:
+        [ { oauth2_application: [ 'data:write', 'data:create' ] } ]
+      x-ads_command_line_example: "curl -v 'https://developer.api.autodesk.com/oss/v2/buckets/bucketexamplekey/objects/objectKeyFoo/resumable' -X PUT -H 'Authorization:Bearer p0vNqwggSc4EOJdhR4KkTVyJFIzQ' -H 'Content-Type:text/plain; charset=UTF-8' -H 'Content-Range:bytes 1-15/100' -H 'Session-Id:-811577637' --data 'five-five-five-'"
+      tags:
+        - Objects
+  '/oss/v2/buckets/{bucketKey}/objects/{objectName}/status/{sessionId}':
+    x-summary: Objects
+    x-description: Objects related operations
+    parameters:
+      - $ref: '#/parameters/bucketKey'
+      - $ref: '#/parameters/objectName'
+      - $ref: '#/parameters/sessionId'
+    get:
+      operationId: get_sessionid
+      description: This endpoint returns status information about a resumable upload.
+      responses:
+        '202': { $ref: '#/responses/ACCEPTED' }
+        '400': { $ref: '#/responses/BAD_REQUEST' }
+        '401': { $ref: '#/responses/UNAUTHORIZED' }
+        '403': { $ref: '#/responses/FORBIDDEN' }
+        '404': { $ref: '#/responses/NOT_FOUND' }
+        '409': { $ref: '#/responses/CONFLICT' }
+        '416': { $ref: '#/responses/REQUEST_RANGE_NOT_SATISFIABLE' }
+        '500': { $ref: '#/responses/INTERNAL_SERVER_ERROR' }
+      security:
+        [ { oauth2_application: [ 'data:read' ] } ]
+      x-ads_command_line_example: "curl -v 'https://developer.api.autodesk.com/oss/v2/buckets/apptestbucket/objects/resumabletest.txt/status/679a7ef0-7b26-4a36-a4d8-968e518a864d' -X GET -H 'Authorization: Bearer ShiAeQ67rdNSfmyEmtGW8Lnrcqto'"
+      tags:
+        - Objects
+  '/oss/v2/buckets/{bucketKey}/objects':
+    x-summary: Objects
+    x-description: Objects related operations
+    parameters:
+      - $ref: '#/parameters/bucketKey'
+    get:
+      operationId: get_objects
+      description: List objects in a bucket. It is only available to the bucket creator.
+      parameters:
+        - $ref: '#/parameters/limit'
+        - $ref: '#/parameters/beginsWith'
+        - $ref: '#/parameters/startAt'
+      responses:
+        '200': { $ref: '#/responses/get_buckets_objects_OK' }
+        '400': { $ref: '#/responses/BAD_REQUEST' }
+        '401': { $ref: '#/responses/UNAUTHORIZED' }
+        '403': { $ref: '#/responses/FORBIDDEN' }
+        '404': { $ref: '#/responses/NOT_FOUND' }
+        '500': { $ref: '#/responses/INTERNAL_SERVER_ERROR' }
+      security:
+        [ { oauth2_application: [ 'data:read' ] } ]
+      x-ads_command_line_example: "curl -v 'https://developer.api.autodesk.com/oss/v2/buckets/apptestbucket/objects?limit=1' -X GET -H 'Authorization: Bearer ShiAeQ67rdNSfmyEmtGW8Lnrcqto' -H 'Content-Type: application/json'"
+      tags:
+        - Objects
+  '/oss/v2/buckets/{bucketKey}/objects/{objectName}/details':
+    x-summary: Objects
+    x-description: Objects related operations
+    parameters:
+      - $ref: '#/parameters/bucketKey'
+      - $ref: '#/parameters/objectName'
+    get:
+      operationId: get_object_details
+      description: Returns object details in JSON format.
+      parameters:
+        - $ref: '#/parameters/If-Modified-Since'
+        - $ref: '#/parameters/with'
+      responses:
+        '200': { $ref: '#/responses/get_object_details_OK' }
+        '304': { $ref: '#/responses/NOT_MODIFIED' }
+        '400': { $ref: '#/responses/BAD_REQUEST' }
+        '401': { $ref: '#/responses/UNAUTHORIZED' }
+        '403': { $ref: '#/responses/FORBIDDEN' }
+        '404': { $ref: '#/responses/NOT_FOUND' }
+        '500': { $ref: '#/responses/INTERNAL_SERVER_ERROR' }
+      security:
+        [ { oauth2_application: [ 'data:read' ] } ]
+      x-ads_command_line_example: "curl -v 'https://developer.api.autodesk.com/oss/v2/buckets/apptestbucket/objects/test.txt/details' -X GET -H 'Authorization: Bearer ShiAeQ67rdNSfmyEmtGW8Lnrcqto' -H 'Content-Type: application/json'"
+      tags:
+        - Objects
+  '/oss/v2/buckets/{bucketKey}/objects/{objectName}/signed':
+    x-summary: Objects
+    x-description: Objects related operations
+    parameters:
+      - $ref: '#/parameters/bucketKey'
+      - $ref: '#/parameters/objectName'
+    post:
+      operationId: create_signed_resource
+      description: This endpoint creates a signed URL that can be used to download an object within the specified expiration time. Be aware that if the object the signed URL points to is deleted or expires before the signed URL expires, then the signed URL will no longer be valid. A successful call to this endpoint requires bucket owner access.
+      parameters:
+        - $ref: '#/parameters/access'
+        - $ref: '#/parameters/post_buckets_signed'
+      responses:
+        '200': { $ref: '#/responses/post_object_signed_OK' }
+        '400': { $ref: '#/responses/BAD_REQUEST' }
+        '401': { $ref: '#/responses/UNAUTHORIZED' }
+        '403': { $ref: '#/responses/FORBIDDEN' }
+        '404': { $ref: '#/responses/NOT_FOUND' }
+        '500': { $ref: '#/responses/INTERNAL_SERVER_ERROR' }
+      security:
+        [ { oauth2_application: [ 'data:write' ] } ]
+      x-ads_command_line_example: "curl -v -X POST 'https://developer.api.autodesk.com/oss/v2/buckets/apptestbucket/objects/test.txt/signed?access=read' -H 'Authorization: Bearer L1yVvPcJDWel0oV3xlYnq7AMZIQE' -H 'Content-Type: application/json;charset=UTF-8' -d '{\"minutesExpiration\":30}'"
+      tags:
+        - Objects
+  '/oss/v2/signedresources/{id}':
+    x-summary: Objects
+    x-description: Objects related operations
+    parameters:
+      - $ref: '#/parameters/id'
+    put:
+      operationId: upload_signed_resource
+      description: |
+        Overwrite a existing object using a signed URL.
+
+        Conditions to call this operation:
+
+        Object is available
+        Expiration period is valid
+        Signed URL should be created with `write` or `readwrite`
+      parameters:
+        - $ref: '#/parameters/Content-Length'
+        - $ref: '#/parameters/Content-Disposition'
+        - $ref: '#/parameters/x-ads-region'
+        - $ref: '#/parameters/If-Match'
+        - $ref: '#/parameters/bodyStream'
+      consumes: [ 'application/octet-stream' ]
+      responses:
+        '200': { $ref: '#/responses/put_signedresources_OK' }
+        '400': { $ref: '#/responses/BAD_REQUEST' }
+        '401': { $ref: '#/responses/UNAUTHORIZED' }
+        '403': { $ref: '#/responses/FORBIDDEN' }
+        '404': { $ref: '#/responses/NOT_FOUND' }
+        '412': { $ref: '#/responses/PRECONDITION_FAILED' }
+        '500': { $ref: '#/responses/INTERNAL_SERVER_ERROR' }
+      security:
+        [ { oauth2_application: [ 'data:write' ] } ]
+      x-ads_command_line_example: "curl -v 'https://developer.api.autodesk.com/oss/v2/signedresources/e63f23e2-2486-4f32-a921-bcfe8fade5e3' -X PUT -H 'Content-Type: text/plain; charset=UTF-8' --data 'BODY: new file content bytes...'"
+      tags:
+        - Objects
+    get:
+      operationId: get_signed_resource
+      description: Download an object using a signed URL.
+      parameters:
+        - $ref: '#/parameters/Range'
+        - $ref: '#/parameters/If-None-Match'
+        - $ref: '#/parameters/If-Modified-Since'
+        - $ref: '#/parameters/Accept-Encoding'
+        - $ref: '#/parameters/region'
+      produces: [ 'application/octet-stream' ]
+      responses:
+        '200': { $ref: '#/responses/OK-Stream' }
+        '400': { $ref: '#/responses/BAD_REQUEST' }
+        '401': { $ref: '#/responses/UNAUTHORIZED' }
+        '403': { $ref: '#/responses/FORBIDDEN' }
+        '404': { $ref: '#/responses/NOT_FOUND' }
+        '412': { $ref: '#/responses/PRECONDITION_FAILED' }
+        '500': { $ref: '#/responses/INTERNAL_SERVER_ERROR' }
+      security:
+        [ { oauth2_application: [ 'data:read' ] } ]
+      x-ads_command_line_example: "curl -v 'https://developer.api.autodesk.com/oss/v2/signedresources/7ffc5eef-1407-4c24-b3f3-3cbfe32a9232?region=US' -X GET"
+      tags:
+        - Objects
+    delete:
+      operationId: delete_signed_resource
+      description: Delete a signed URL. A successful call to this endpoint requires bucket owner access.
+      parameters:
+        - $ref: '#/parameters/region'
+      responses:
+        '200': { $ref: '#/responses/OK-Stream' }
+        '400': { $ref: '#/responses/BAD_REQUEST' }
+        '401': { $ref: '#/responses/UNAUTHORIZED' }
+        '403': { $ref: '#/responses/FORBIDDEN' }
+        '404': { $ref: '#/responses/NOT_FOUND' }
+        '500': { $ref: '#/responses/INTERNAL_SERVER_ERROR' }
+      produces:
+        - text/plain
+      security:
+        [ { oauth2_application: [ 'data:write' ] } ]
+      x-ads_command_line_example: "curl -v 'https://developer.api.autodesk.com/oss/v2/signedresources/322cca8f-4cbf-448f-b70b-55df2597b0d2' -X DELETE -H 'Authorization: Bearer tQrZGiR0L1rYRAtEAsGyvA9ZF9Nj'"
+      tags:
+        - Objects
+  '/oss/v2/signedresources/{id}/resumable':
+    x-summary: Objects
+    x-description: Objects related operations
+    parameters:
+      - $ref: '#/parameters/id'
+    put:
+      operationId: upload_signed_resources_chunk
+      description: Resumable upload for signed URLs.
+      parameters:
+        - $ref: '#/parameters/Content-Range'
+        - $ref: '#/parameters/Content-Disposition'
+        - $ref: '#/parameters/x-ads-region'
+        - $ref: '#/parameters/Session-Id'
+        - $ref: '#/parameters/bodyStream'
+      consumes: [ 'application/octet-stream' ]
+      responses:
+        '200': { $ref: '#/responses/put_signedresources_OK' }
+        '202': { $ref: '#/responses/ACCEPTED' }
+        '400': { $ref: '#/responses/BAD_REQUEST' }
+        '401': { $ref: '#/responses/UNAUTHORIZED' }
+        '403': { $ref: '#/responses/FORBIDDEN' }
+        '404': { $ref: '#/responses/NOT_FOUND' }
+        '409': { $ref: '#/responses/CONFLICT' }
+        '416': { $ref: '#/responses/REQUEST_RANGE_NOT_SATISFIABLE' }
+        '500': { $ref: '#/responses/INTERNAL_SERVER_ERROR' }
+      security:
+        [ { oauth2_application: [ 'data:write' ] } ]
+      x-ads_command_line_example: "curl -v 'https://developer.api.autodesk.com/oss/v2/signedresources/4ff88e65-e7c0-4b10-bac8-750f48b37cf2/resumable' -X PUT -H 'Content-Type:text/plain; charset=UTF-8' -H 'Content-Range:bytes 0-0/10' -H 'Session-Id:1661831201' --data ' X '"
+      tags:
+        - Objects
+  '/oss/v2/buckets/{bucketKey}/objects/{objectName}/copyTo/{newObjName}':
+    x-summary: Objects
+    x-description: Objects related operations
+    parameters:
+      - $ref: '#/parameters/bucketKey'
+      - $ref: '#/parameters/objectName'
+      - $ref: '#/parameters/newObjName'
+    put:
+      operationId: copyTo
+      description: Copies an object to another object name in the same bucket.
+      responses:
+        '200': { $ref: '#/responses/put_copyTo_OK' }
+        '400': { $ref: '#/responses/BAD_REQUEST' }
+        '401': { $ref: '#/responses/UNAUTHORIZED' }
+        '403': { $ref: '#/responses/FORBIDDEN' }
+        '404': { $ref: '#/responses/NOT_FOUND' }
+        '500': { $ref: '#/responses/INTERNAL_SERVER_ERROR' }
+      security:
+        [ { oauth2_application: [ 'data:write' ] } ]
+      x-ads_command_line_example: "curl -v 'https://developer.api.autodesk.com/oss/v2/buckets/bucketexamplekey/objects/testobject/copyto/copyoftestobject' -X PUT -H 'Authorization=Bearer 1B6FU8z9S2x1PrjADDfPCzSGrXmI'"
+      tags:
+        - Objects
+  
+parameters:
+  bodyStream:
+    name: body
+    in: body
+    required: true
+    schema:
+      $ref: "#/definitions/InputStream"
+  post_buckets:
+    name: post_buckets
+    in: body
+    description: Body Structure
+    required: true
+    schema: { $ref: "#/definitions/post_buckets_payload" }
+  post_buckets_signed:
+    name: post_buckets_signed
+    in: body
+    description: Body Structure
+    required: true
+    schema:
+      type: object
+      required: [ minutesExpiration ]
+      properties:
+        minutesExpiration:
+          description: |
+            Expiration time in minutes Default value: 60
+          type: integer
+          format: int32
+          default: 60
+
+  bucketKey:
+    name: bucketKey
+    in: path
+    description: URL-encoded bucket key
+    required: true
+    type: string
+    pattern: "^[-_.a-z0-9]{3,128}$"
+  objectName:
+    name: objectName
+    in: path
+    description: URL-encoded object name
+    required: true
+    type: string
+  newObjName:
+    name: newObjName
+    in: path
+    description: URL-encoded Object key to use as the destination
+    required: true
+    type: string
+  id:
+    name: id
+    in: path
+    description: Id of signed resource
+    required: true
+    type: string
+
+  x-ads-region:
+    name: x-ads-region
+    in: header
+    description: |
+      The region where the bucket resides
+      Acceptable values: `US`, `EMEA`
+      Default is `US`
+    required: false
+    type: string
+    enum: [ US, EMEA ]
+    default: US
+  region:
+    name: region
+    in: query
+    description: |
+      The region where the bucket resides
+      Acceptable values: `US`, `EMEA`
+      Default is `US`
+    required: false
+    type: string
+    enum: [ US, EMEA ]
+    default: US
+  limit:
+    name: limit
+    in: query
+    description: |
+      Limit to the response size,
+      Acceptable values: 1-100 Default = 10
+    required: false
+    type: integer
+    default: 10
+  startAt:
+    name: startAt
+    in: query
+    description: |
+      Key to use as an offset to continue pagination This is typically the last bucket key found in a preceding GET buckets response
+    required: false
+    type: string
+  beginsWith:
+    name: beginsWith
+    in: query
+    description: Provides a way to filter the based on object key name
+    required: false
+    type: string
+  Content-Length:
+    name: Content-Length
+    in: header
+    description: Indicates the size of the request body.
+    required: true
+    type: integer
+    format: int32
+  Content-Range:
+    name: Content-Range
+    in: header
+    description: Byte range of a segment being uploaded
+    required: true
+    type: string
+    pattern: "^bytes [0-9]+\\-[0-9]+\\/[0-9]+$"
+  Range:
+    name: Range
+    in: header
+    description: A range of bytes to download from the specified object.
+    required: false
+    type: string
+    pattern: "^bytes=[0-9]+\\-[0-9]*$"
+  Content-Disposition:
+    name: Content-Disposition
+    in: header
+    description: The suggested default filename when downloading this object to a file after it has been uploaded.
+    required: false
+    type: string
+  If-Match:
+    name: If-Match
+    in: header
+    description: |
+      If-Match header containing a SHA-1 hash of the bytes in the request body can be sent by the calling service or client application with the request.
+      If present, OSS will use the value of If-Match header to verify that a SHA-1 calculated for the uploaded bytes server side matches what was sent in the header. If not, the request is failed with a status 412 Precondition Failed and the data is not written.
+    required: false
+    type: string
+  If-None-Match:
+    name: If-None-Match
+    in: header
+    description: The value of this header is compared to the ETAG of the object. If they match, the body will not be included in the response. Only the object information will be included.
+    required: false
+    type: string
+  If-Modified-Since:
+    name: If-Modified-Since
+    in: header
+    description: |
+      If the requested object has not been modified since the time specified in this field, an entity will not be returned from the server; instead, a 304 (not modified) response will be returned without any message body.
+    required: false
+    type: string
+    format: date
+  Session-Id:
+    name: Session-Id
+    in: header
+    description: Unique identifier of a session of a file being uploaded
+    required: true
+    type: string
+  sessionId:
+    name: sessionId
+    in: path
+    description: Unique identifier of a session of a file being uploaded
+    required: true
+    type: string
+  with:
+    name: with
+    in: query
+    description: |
+      Extra information in details; multiple uses are supported Acceptable values: `createdDate`, `lastAccessedDate`, `lastModifiedDate`
+    required: false
+    type: string
+    enum: [ createdDate, lastAccessedDate, lastModifiedDate ]
+  Accept-Encoding:
+    name: Accept-Encoding
+    in: header
+    description: |
+      When gzip is specified, a gzip compressed stream of the object’s bytes will be returned in the response. Cannot use “Accept-Encoding:gzip” with Range header containing an end byte range. End byte range will not be honored if “Accept-Encoding: gzip” header is used.
+    required: false
+    type: string
+  access:
+    name: access
+    in: header
+    description: |
+      Access for signed resource
+      Acceptable values: `read`, `write`, `readwrite`. Default value: `read`
+    required: false
+    type: string
+    enum: [ read, write, readwrite ]
+    default: read
+    
+definitions:
+  InputStream:
+    description: application/octet_stream body support
+    type: string
+    format: binary
+  reason:
+    description: reason for failure
+    type: object
+    required: [ reason ]
+    properties:
+      reason:
+        description: reason for failure
+        type: string
+  post_buckets_payload:
+    #$schema: 'http://json-schema.org/draft-04/schema#'
+    description: Bucket Payload Body Structure
+    type: object
+    required: [ bucketKey, policyKey ]
+    properties:
+      bucketKey:
+        description: Bucket key
+        type: string
+      allow:
+        description: >
+        type: array
+        items:
+          type: object
+          required: [ authId, access ]
+          properties:
+            authId:
+              description: The application key to grant access to
+              type: string
+            access:
+              description: |
+                Acceptable values: `full` or `read`
+              type: string
+              enum: [ full, read ]
+      policyKey:
+        description: |
+          [Data retention policy](https://developer.autodesk.com/en/docs/data/v2/overview/retention-policy/)
+
+          Acceptable values: `transient`, `temporary` or `persistent`
+        type: string
+        enum: [ transient, temporary, persistent ]
+  buckets:
+    description: Bucket json response
+    #$schema: 'http://json-schema.org/draft-04/schema#'
+    type: object
+    required: [ bucketKey, bucketOwner, createdDate, permissions, policyKey ]
+    properties:
+      bucketKey:
+        description: The key for the created bucket
+        type: string
+      bucketOwner:
+        description: Owner of the bucket
+        type: string
+      createdDate:
+        description: Timestamp in epoch time
+        type: integer
+        format: int64
+      permissions:
+        description: Array of objects representing the applications with access granted at bucket creation
+        type: array
+        items:
+          type: [ object, 'null' ]
+          required: [ authId, access ] 
+          properties:
+            authId:
+              description: The application to grant access to
+              type: string
+            access:
+              description: |
+                Acceptable values: `full` or `read`
+              type: string
+              enum: [ full, read ]
+      policyKey:
+        description: |
+          [Data retention policy](https://developer.autodesk.com/en/docs/data/v2/overview/retention-policy/)
+
+          Acceptable values: `transient`, `temporary` or `persistent`
+        type: string
+        enum: [ transient, temporary, persistent ]
+  objectDetails:
+    description: Object json response
+    type: object
+    #required: []
+    properties:
+      bucketKey:
+        description: Bucket key
+        type: string
+      objectId:
+        description: Object URN
+        type: string
+        format: byte
+      objectKey:
+        description: Object name
+        type: string
+      sha1:
+        description: Object SHA1
+        type: string
+        format: byte
+      size:
+        description: Object size
+        type: integer
+        format: int32
+      contentType:
+        description: Object content-type
+        type: string
+      location:
+        description: URL to download the object
+        type: string
+  objectFullDetails:
+    description: Object Details json response
+    type: object
+    #$schema: 'http://json-schema.org/draft-04/schema#'
+    properties:
+      bucketKey:
+        description: Bucket key
+        type: string
+      objectId:
+        description: Object URN
+        type: string
+        format: byte
+      objectKey:
+        description: Object name
+        type: string
+      sha1:
+        description: Object SHA1
+        type: string
+        format: byte
+      size:
+        description: Object size
+        type: integer
+        format: int32
+      contentType:
+        description: Object content-type
+        type: string
+      location:
+        description: URL to download the object
+        type: string
+      blockSizes:
+        description: For delta-encoding. Represents whether a signature exists at a specific block size
+        type: array
+        items:
+          type: integer
+          format: int32
+      deltas:
+        description: Patch files available for download related to this object
+        type: array
+        items:
+          type: object
+          properties:
+            position:
+              type: integer
+              format: int32
+            sha1:
+              type: string
+  post_object_signed:
+    description: Object Signed Object json response
+    type: object
+    #$schema: 'http://json-schema.org/draft-04/schema#'
+    properties:
+      required: [ signedUrl, expiration ]
+      properties:
+        signedUrl:
+          description: URL created for downloading the object
+          type: string
+        expiration:
+          description: Value for expiration in minutes
+          type: integer
+          format: int32
+
+responses:
+  post_buckets_OK:
+    description: OK, Bucket successfully created.
+    schema: { $ref: "#/definitions/buckets" }
+  get_buckets_OK:
+    description: OK, Success.
+    schema:
+      #$schema: 'http://json-schema.org/draft-04/schema#'
+      type: object
+      required: [ items, next ]
+      properties:
+        items:
+          description: Array of items representing the buckets
+          type: array
+          items:
+            type: object
+            required: [ bucketKey, createdDate, policyKey ]
+            properties:
+              bucketKey:
+                description: Bucket key
+                type: string
+              createdDate:
+                description: Timestamp in epoch time
+                type: integer
+                format: int64
+              policyKey:
+                description: |
+                  Policy values: `transient`, `temporary` or `persistent`
+                type: string
+                enum: [ transient, temporary, persistent ]
+        next:
+          description: Next possible request
+          type: string
+  get_buckets_details_OK:
+    description: OK, Get bucket details was successful.
+    schema: { $ref: "#/definitions/buckets" }
+  put_object_OK:
+    description: OK, Get bucket details was successful.
+    schema: { $ref: "#/definitions/objectDetails" }
+  put_object_resumable_OK:
+    description: |
+      OK, Success, with the following caveat: no SHA1 information will be returned in object details until the object has been recombined.
+    schema: { $ref: '#/definitions/objectDetails' }
+  get_buckets_objects_OK:
+    description: OK, Successful
+    schema:
+      #$schema: 'http://json-schema.org/draft-04/schema#'
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/definitions/objectDetails"
+        next:
+          description: Next possible request
+          type: string
+  get_object_details_OK:
+    description: OK, Get object details was successful.
+    schema: { $ref: '#/definitions/objectFullDetails' }
+    #  allOf:
+    #    - $ref: "#/definitions/objectDetails"
+    #    - type: object
+    #      #$schema: 'http://json-schema.org/draft-04/schema#'
+    #      properties:
+    #        blockSizes:
+    #          description: For delta-encoding. Represents whether a signature exists at a specific block size
+    #          type: array
+    #          items:
+    #            type: integer
+    #            format: int32
+    #        deltas:
+    #          description: Patch files available for download related to this object
+    #          type: array
+    #          items:
+    #            type: object
+    #            properties:
+    #              position:
+    #                type: integer
+    #                format: int32
+    #              sha1:
+    #                type: string
+
+  post_object_signed_OK:
+    description: OK, Success
+    schema: { $ref: '#/definitions/post_object_signed' }
+  put_signedresources_OK:
+    description: OK, Successful operation
+    schema: { $ref: '#/definitions/post_object_signed' }
+  put_copyTo_OK:
+    description: OK, Successful copy operation.
+    schema: { $ref: "#/definitions/objectDetails" }
+          
+  OK:
+    description: OK, Success
+  OK-Stream:
+    description: OK, Success
+    schema: { $ref: '#/definitions/InputStream' }
+  ACCEPTED:
+    description: ACCEPTED, Server acknowledges receiving data segment.
+  PARTIAL_CONTENT:
+    description: PARTIAL CONTENT, The server is delivering only part of the resource due to a range header sent by the client.
+  NOT_MODIFIED:
+    description: NOT MODIFIED, If using the If-None-Match header on the request and it matches the object’s ETAG, no content will be sent. Or, if using If-Modified-Since header and the object has not been modified since the time specified, no content will be sent.
+  BAD_REQUEST:
+    description: BAD REQUEST, The request could not be understood by the server due to malformed syntax or missing request headers. The client SHOULD NOT repeat the request without modifications. The response body may give an indication of what is wrong with the request.
+    schema: { $ref: "#/definitions/reason" }
+  UNAUTHORIZED:
+    description: UNAUTHORIZED, The supplied Authorization header was not valid or the supplied token scope was not acceptable. Verify Authentication and try again.
+  FORBIDDEN:
+    description: FORBIDDEN, The Authorization was successfully validated but permission is not granted. Don’t try again unless you solve permissions first.
+    schema: { $ref: "#/definitions/reason" }
+  NOT_FOUND:
+    description: NOT FOUND, Resource not found.
+  CONFLICT:
+    description: CONFLICT, The specified bucket key already exists.
+    schema: { $ref: "#/definitions/reason" }
+  PRECONDITION_FAILED:
+    description: PRECONDITION FAILED, If the value sent for the `If-Match` header is not equal to the `sha1` value stored in OSS for this object, a Precondition Failed message will be returned.
+    schema: { $ref: "#/definitions/reason" }
+  REQUEST_RANGE_NOT_SATISFIABLE:
+    description: REQUEST RANGE NOT SATISFIABLE, Missing Content-Range header.
+    schema: { $ref: "#/definitions/reason" }
+  THROTTLE:
+    description: THROTTLE, The server is busy. Please retry.
+  INTERNAL_SERVER_ERROR:
+    description: INTERNAL SERVER ERROR, Internal failure while processing the request, reason depends on error.
+    

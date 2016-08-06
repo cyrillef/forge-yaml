@@ -1,0 +1,16 @@
+  oauth2_access_code:
+    type: oauth2
+    authorizationUrl: https://developer.api.autodesk.com/authentication/v1/authorize
+    tokenUrl: https://developer.api.autodesk.com/authentication/v1/gettoken
+    x-refreshTokenUrl: https://developer.api.autodesk.com/authentication/v1/refreshtoken
+    flow: accessCode
+    scopes:
+      $ref: 'forge-scopes.yaml'
+    x-authentication_context: user context required
+  oauth2_application:
+    type: oauth2
+    tokenUrl: https://developer.api.autodesk.com/authentication/v1/authenticate
+    flow: application
+    scopes:
+      $ref: 'forge-scopes.yaml'
+    x-authentication_context: application context required

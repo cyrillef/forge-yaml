@@ -1,0 +1,4540 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Forge-Data-Management",
+    "version": "2.0.0",
+    "x-summary": "Asynchronous Javascript/Node.js library for the Autodesk Forge Data Management API",
+    "description": "The Data Management API provides a unified and consistent way to access data across A360, Fusion 360, and the Object Storage Service.\n\nWith this API, you can accomplish a number of workflows, including accessing a Fusion model in A360 and getting an ordered structure of items, IDs, and properties for generating a bill of materials in a 3rd-party process. Or, you might want to superimpose a Fusion model and a building model to use in the [Viewer](https://developer.autodesk.com/en/docs/viewer/v2).\n\nThe Data Management API is composed of the following services:\n\n|  |  |\n|-----|-----|\n| Project Service | Navigate to a project from an A360 Hub. The project acts as an “anchor” point for data available through the API. |\n| Data Service | Navigate and manage the A360 metadata in terms of folders, items, and versions, as well as the relationships between these entities. An item could be a file or a Fusion 360 design. Each item can have multiple versions. |\n| Schema Service | This allows your application to understand the structure and semantics of extended data types, like Fusion designs. |\n| Object Storage Service (OSS) | This allows your application to download and upload raw files (such as PDF, XLS, DWG, or RVT) that are managed by the Data Service. |\n\nYou may have any number of logically separated apps that utilize one or more of these functionalities, and any of these apps are interoperable with other APIs on the Forge Platform.\n\n![](https://developer.doc.autodesk.com/bPlouYTd/7/_images/dms_overview.png)\n",
+    "contact": {
+      "name": "Autodesk, Inc.",
+      "url": "https://developer.autodesk.com/en/docs/data/v2/",
+      "email": "forge.help@autodesk.com"
+    },
+    "x-support": "http://stackoverflow.com/questions/tagged/autodesk-data-management",
+    "termsOfService": "http://www.autodesk.com/company/legal-notices-trademarks/terms-of-service-autodesk360-web-services/autodesk-web-services-api-beta-terms-of-service"
+  },
+  "host": "developer.api.autodesk.com",
+  "schemes": [
+    "https"
+  ],
+  "basePath": "/",
+  "consumes": [
+    "application/vnd.api+json"
+  ],
+  "produces": [
+    "application/vnd.api+json",
+    "application/json"
+  ],
+  "tags": [
+    {
+      "name": "Project Service",
+      "description": "Project Service APIs"
+    },
+    {
+      "name": "Forge-DM",
+      "description": "Forge-DM APIs"
+    },
+    {
+      "name": "Hubs",
+      "description": "Interact with account/hub/node i.e container for projects"
+    },
+    {
+      "name": "Projects",
+      "description": "start point for aggregation of related folders/items/metadata"
+    },
+    {
+      "name": "Folders",
+      "description": "Interact with a Forge-DM Folder"
+    },
+    {
+      "name": "Items",
+      "description": "Interact with a Forge-DM Item"
+    },
+    {
+      "name": "Versions",
+      "description": "Interact with a Forge-DM Version"
+    },
+    {
+      "name": "Refs",
+      "description": "Interact with a Forge-DM Refs"
+    },
+    {
+      "name": "Storage",
+      "description": "Interact with Forge blob storage mechanisms"
+    },
+    {
+      "name": "Types and Actions",
+      "description": "Get the details of the entity types and orchestration actions in the system"
+    }
+  ],
+  "securityDefinitions": {
+    "oauth2_access_code": {
+      "type": "oauth2",
+      "authorizationUrl": "https://developer.api.autodesk.com/authentication/v1/authorize",
+      "tokenUrl": "https://developer.api.autodesk.com/authentication/v1/gettoken",
+      "x-refreshTokenUrl": "https://developer.api.autodesk.com/authentication/v1/refreshtoken",
+      "flow": "accessCode",
+      "scopes": {
+        "data:read": "The application will be able to read the end user’s data within the Autodesk ecosystem.",
+        "data:write": "The application will be able to create, update, and delete data on behalf of the end user within the Autodesk ecosystem.",
+        "data:create": "The application will be able to create data on behalf of the end user within the Autodesk ecosystem.",
+        "data:search": "The application will be able to search the end user’s data within the Autodesk ecosystem.",
+        "bucket:create": "The application will be able to create an OSS bucket it will own.",
+        "bucket:read": "The application will be able to read the metadata and list contents for OSS buckets that it has access to.",
+        "bucket:update": "The application will be able to set permissions and entitlements for OSS buckets that it has permission to modify.",
+        "bucket:delete": "The application will be able to delete a bucket that it has permission to delete.",
+        "code:all": "The application will be able to author and execute code on behalf of the end user (e.g., scripts processed by the Design Automation API).",
+        "account:read": "For Product APIs, the application will be able to read the account data the end user has entitlements to.",
+        "account:write": "For Product APIs, the application will be able to update the account data the end user has entitlements to.",
+        "user-profile:read": "The application will be able to read the end user’s profile data."
+      },
+      "x-authentication_context": "user context required"
+    },
+    "oauth2_application": {
+      "type": "oauth2",
+      "tokenUrl": "https://developer.api.autodesk.com/authentication/v1/authenticate",
+      "flow": "application",
+      "scopes": {
+        "data:read": "The application will be able to read the end user’s data within the Autodesk ecosystem.",
+        "data:write": "The application will be able to create, update, and delete data on behalf of the end user within the Autodesk ecosystem.",
+        "data:create": "The application will be able to create data on behalf of the end user within the Autodesk ecosystem.",
+        "data:search": "The application will be able to search the end user’s data within the Autodesk ecosystem.",
+        "bucket:create": "The application will be able to create an OSS bucket it will own.",
+        "bucket:read": "The application will be able to read the metadata and list contents for OSS buckets that it has access to.",
+        "bucket:update": "The application will be able to set permissions and entitlements for OSS buckets that it has permission to modify.",
+        "bucket:delete": "The application will be able to delete a bucket that it has permission to delete.",
+        "code:all": "The application will be able to author and execute code on behalf of the end user (e.g., scripts processed by the Design Automation API).",
+        "account:read": "For Product APIs, the application will be able to read the account data the end user has entitlements to.",
+        "account:write": "For Product APIs, the application will be able to update the account data the end user has entitlements to.",
+        "user-profile:read": "The application will be able to read the end user’s profile data."
+      },
+      "x-authentication_context": "application context required"
+    }
+  },
+  "paths": {
+    "/project/v1/health": {
+      "x-summary": "Health for `project` domain",
+      "x-description": "Health related operations",
+      "get": {
+        "operationId": "get_project_health",
+        "description": "Returns health information for the `project` domain.\nThe health check assesses the current working status of the 'project' domain service.\n",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/health"
+          }
+        },
+        "x-ads_command_line_example": "curl -X GET \"https://developer.api.autodesk.com/project/v1/health\"",
+        "tags": [
+          "Projects"
+        ]
+      }
+    },
+    "/project/v1/hubs": {
+      "x-summary": "Hubs",
+      "x-description": "Hub related operations",
+      "get": {
+        "operationId": "get_hubs",
+        "description": "Returns a collection of accessible hubs for this member.\nA Hub represents an A360 Team/Personal hub or a BIM 360 account.\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/query_filter_id"
+          },
+          {
+            "$ref": "#/parameters/query_filter_extensionType"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/hubs"
+          },
+          "403": {
+            "$ref": "#/responses/forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2_access_code": [
+              "data:read"
+            ]
+          }
+        ],
+        "x-ads_command_line_example": "curl -X GET -H \"Authorization: Bearer kEnG562yz5bhE9igXf2YTcZ2bu0z\" \"https://developer.api.autodesk.com/project/v1/hubs\"",
+        "tags": [
+          "Hubs"
+        ]
+      }
+    },
+    "/project/v1/hubs/{hub_id}": {
+      "x-summary": "Hubs by ID",
+      "x-description": "Hub related operations",
+      "parameters": [
+        {
+          "$ref": "#/parameters/hub_id"
+        }
+      ],
+      "get": {
+        "operationId": "get_hub",
+        "description": "Returns data on a specific `hub_id`.\n",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/hub"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/forbidden"
+          },
+          "404": {
+            "$ref": "#/responses/not_found"
+          }
+        },
+        "security": [
+          {
+            "oauth2_access_code": [
+              "data:read"
+            ]
+          }
+        ],
+        "x-ads_command_line_example": "curl -X GET -H \"Authorization: Bearer kEnG562yz5bhE9igXf2YTcZ2bu0z\" \"https://developer.api.autodesk.com/project/v1/hubs/a.1256\"",
+        "tags": [
+          "Hubs"
+        ]
+      }
+    },
+    "/project/v1/hubs/{hub_id}/projects": {
+      "x-summary": "Projects",
+      "x-description": "Project related operations",
+      "parameters": [
+        {
+          "$ref": "#/parameters/hub_id"
+        }
+      ],
+      "get": {
+        "operationId": "get_hub_projects",
+        "description": "Returns a collection of projects for a given `hub_id`.\nA project represents an A360 project or a BIM 360 project which is set up under an A360 hub or BIM 360 account, respectively.\nWithin a hub or an account, multiple projects can be created to be used.\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/query_filter_id"
+          },
+          {
+            "$ref": "#/parameters/query_filter_extensionType"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/projects"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/forbidden"
+          },
+          "404": {
+            "$ref": "#/responses/not_found"
+          }
+        },
+        "security": [
+          {
+            "oauth2_access_code": [
+              "data:read"
+            ]
+          }
+        ],
+        "x-ads_command_line_example": "curl -X GET -H \"Authorization: Bearer kEnG562yz5bhE9igXf2YTcZ2bu0z\" \"https://developer.api.autodesk.com/project/v1/hubs/a.1256/projects\"",
+        "tags": [
+          "Hubs"
+        ]
+      }
+    },
+    "/project/v1/hubs/{hub_id}/projects/{project_id}": {
+      "x-summary": "Projects by ID",
+      "x-description": "Project related operations",
+      "parameters": [
+        {
+          "$ref": "#/parameters/hub_id"
+        },
+        {
+          "$ref": "#/parameters/project_id"
+        }
+      ],
+      "get": {
+        "operationId": "get_project",
+        "description": "Returns a project for a given `project_id`.\n",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/project"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/forbidden"
+          },
+          "404": {
+            "$ref": "#/responses/not_found"
+          }
+        },
+        "security": [
+          {
+            "oauth2_access_code": [
+              "data:read"
+            ]
+          }
+        ],
+        "x-ads_command_line_example": "curl -X GET -H \"Authorization: Bearer kEnG562yz5bhE9igXf2YTcZ2bu0z\" \"https://developer.api.autodesk.com/project/v1/hubs/a.1256/projects/a.45637\"",
+        "tags": [
+          "Projects"
+        ]
+      }
+    },
+    "/project/v1/hubs/{hub_id}/projects/{project_id}/hub": {
+      "x-summary": "Project hub",
+      "x-description": "Project related operations",
+      "parameters": [
+        {
+          "$ref": "#/parameters/hub_id"
+        },
+        {
+          "$ref": "#/parameters/project_id"
+        }
+      ],
+      "get": {
+        "operationId": "get_project_hub",
+        "description": "Returns the hub for a given `project_id`.\n",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/hub"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/forbidden"
+          },
+          "404": {
+            "$ref": "#/responses/not_found"
+          }
+        },
+        "security": [
+          {
+            "oauth2_access_code": [
+              "data:read"
+            ]
+          }
+        ],
+        "x-ads_command_line_example": "curl -X GET -H \"Authorization: Bearer kEnG562yz5bhE9igXf2YTcZ2bu0z\" \"https://developer.api.autodesk.com/project/v1/hubs/a.1256/projects/a.45637/hub\"",
+        "tags": [
+          "Projects"
+        ]
+      }
+    },
+    "/data/v1/health": {
+      "x-summary": "Health for `data` domain",
+      "x-description": "Health related operations",
+      "get": {
+        "operationId": "get_data_health",
+        "description": "Returns the health information for the `data` domain.\nThe health check assesses the current working status of the 'data' domain service.\n",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/health"
+          }
+        },
+        "x-ads_command_line_example": "curl -X GET \"https://developer.api.autodesk.com/data/v1/health\"",
+        "tags": [
+          "Items"
+        ]
+      }
+    },
+    "/data/v1/projects/{project_id}/folders/{folder_id}": {
+      "x-summary": "Folders by ID",
+      "x-description": "Folder related operations",
+      "parameters": [
+        {
+          "$ref": "#/parameters/project_id"
+        },
+        {
+          "$ref": "#/parameters/folder_id"
+        }
+      ],
+      "get": {
+        "operationId": "get_folder",
+        "description": "Returns the folder by ID for any folder within a given project.\nAll folders or sub-folders within a project are associated with their own unique ID, including the root folder.\n",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/folder"
+          },
+          "400": {
+            "$ref": "#/responses/bad_input"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/forbidden"
+          },
+          "404": {
+            "$ref": "#/responses/not_found"
+          }
+        },
+        "security": [
+          {
+            "oauth2_access_code": [
+              "data:read"
+            ]
+          }
+        ],
+        "x-ads_command_line_example": "curl -X GET -H \"Authorization: Bearer kEnG562yz5bhE9igXf2YTcZ2bu0z\" \"https://developer.api.autodesk.com/data/v1/projects/a.45637/folders/urn%3Aadsk.wipprod%3Adm.folder%3AhC6k4hndRWaeIVhIjvHu8w\"",
+        "tags": [
+          "Folders"
+        ]
+      }
+    },
+    "/data/v1/projects/{project_id}/folders/{folder_id}/parent": {
+      "x-summary": "Folder parent",
+      "x-description": "Folder related operations",
+      "parameters": [
+        {
+          "$ref": "#/parameters/project_id"
+        },
+        {
+          "$ref": "#/parameters/folder_id"
+        }
+      ],
+      "get": {
+        "operationId": "get_folder_parent",
+        "description": "Returns the parent folder (if it exists).\nIn a project, subfolders and resource items are stored under a folder\nexcept the root folder which does not have a parent of its own.\n",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/folder"
+          },
+          "400": {
+            "$ref": "#/responses/bad_input"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/forbidden"
+          },
+          "404": {
+            "$ref": "#/responses/not_found"
+          }
+        },
+        "security": [
+          {
+            "oauth2_access_code": [
+              "data:read"
+            ]
+          }
+        ],
+        "x-ads_command_line_example": "curl -X GET -H \"Authorization: Bearer kEnG562yz5bhE9igXf2YTcZ2bu0z\" \"https://developer.api.autodesk.com/data/v1/projects/a.45637/folders/urn%3Aadsk.wipprod%3Adm.folder%3AhC6k4hndRWaeIVhIjvHu8w/parent\"",
+        "tags": [
+          "Folders"
+        ]
+      }
+    },
+    "/data/v1/projects/{project_id}/folders/{folder_id}/contents": {
+      "x-summary": "Folder contents",
+      "x-description": "Folder related operations",
+      "parameters": [
+        {
+          "$ref": "#/parameters/project_id"
+        },
+        {
+          "$ref": "#/parameters/folder_id"
+        }
+      ],
+      "get": {
+        "operationId": "get_folder_contents",
+        "description": "Returns a collection of items and folders within a folder.\nItems represent word documents, fusion design files, drawings, spreadsheets, etc.\n",
+        "x-ads_notes": "* The tip version for each item resource is included by default.\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/query_filter_type"
+          },
+          {
+            "$ref": "#/parameters/query_filter_id"
+          },
+          {
+            "$ref": "#/parameters/query_filter_extensionType"
+          },
+          {
+            "$ref": "#/parameters/query_paging_page_number"
+          },
+          {
+            "$ref": "#/parameters/query_paging_page_limit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/contents"
+          },
+          "400": {
+            "$ref": "#/responses/bad_input"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/forbidden"
+          },
+          "404": {
+            "$ref": "#/responses/not_found"
+          }
+        },
+        "security": [
+          {
+            "oauth2_access_code": [
+              "data:read"
+            ]
+          }
+        ],
+        "x-ads_command_line_example": "curl -X GET -H \"Authorization: Bearer kEnG562yz5bhE9igXf2YTcZ2bu0z\" \"https://developer.api.autodesk.com/data/v1/projects/a.45637/folders/urn%3Aadsk.wipprod%3Adm.folder%3AhC6k4hndRWaeIVhIjvHu8w/contents\"",
+        "tags": [
+          "Folders"
+        ]
+      }
+    },
+    "/data/v1/projects/{project_id}/folders/{folder_id}/refs": {
+      "x-summary": "Folder refs",
+      "x-description": "Folder related operations",
+      "parameters": [
+        {
+          "$ref": "#/parameters/project_id"
+        },
+        {
+          "$ref": "#/parameters/folder_id"
+        }
+      ],
+      "get": {
+        "operationId": "get_folder_refs",
+        "description": "Returns the resources (`items`, `folders`, and `versions`) which have a custom relationship with the given `folder_id`.\nCustom relationships can be established between a folder and\nother resources within the 'data' domain service (folders, items, and versions).\n",
+        "x-ads_notes": "* Each relationship is defined by the `id` of the object at the other end of the relationship,\n  together with `type`, `attributes`, and `relationships` links.\n* Callers will typically use a `filter` parameter to restrict the response to the\n  custom relationship types (`filter[meta.refType]`) they are interested in.\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/query_filter_type"
+          },
+          {
+            "$ref": "#/parameters/query_filter_id"
+          },
+          {
+            "$ref": "#/parameters/query_filter_extensionType"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/entities"
+          },
+          "400": {
+            "$ref": "#/responses/bad_input"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/forbidden"
+          },
+          "404": {
+            "$ref": "#/responses/not_found"
+          }
+        },
+        "security": [
+          {
+            "oauth2_access_code": [
+              "data:read"
+            ]
+          }
+        ],
+        "x-ads_command_line_example": "curl -X GET -H \"Authorization: Bearer kEnG562yz5bhE9igXf2YTcZ2bu0z\" \"https://developer.api.autodesk.com/data/v1/projects/a.45637/folders/urn%3Aadsk.wipprod%3Adm.folder%3AhC6k4hndRWaeIVhIjvHu8w/refs\"",
+        "tags": [
+          "Folders"
+        ]
+      }
+    },
+    "/data/v1/projects/{project_id}/folders/{folder_id}/relationships/refs": {
+      "x-summary": "Folder refs relationships",
+      "x-description": "Folder related operations",
+      "parameters": [
+        {
+          "$ref": "#/parameters/project_id"
+        },
+        {
+          "$ref": "#/parameters/folder_id"
+        }
+      ],
+      "get": {
+        "operationId": "get_folder_relationships_refs",
+        "description": "Returns the custom relationships that are associated to the given `folder_id`.\nCustom relationships can be established between a folder and\nother resources within the 'data' domain service (folders, items, and versions).\n",
+        "x-ads_notes": "* Each relationship is defined by the `id` of the object at the other end of the relationship,\n  together with `type`, specific reference `meta` including `extension` data.\n* Callers will typically use a `filter` parameter to restrict the response to the\n  custom relationship types (`filter[meta.refType]`) they are interested in.\n* The response body will have an `included` section which contains the resources that are involved in the\n  relationship, which is essentially the `GET projects/:project_id/folders/:folder_id/refs` endpoint.\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/query_filter_type"
+          },
+          {
+            "$ref": "#/parameters/query_filter_id"
+          },
+          {
+            "$ref": "#/parameters/query_filter_refType"
+          },
+          {
+            "$ref": "#/parameters/query_filter_refDirection"
+          },
+          {
+            "$ref": "#/parameters/query_filter_extensionType"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/refs"
+          },
+          "400": {
+            "$ref": "#/responses/bad_input"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/forbidden"
+          },
+          "404": {
+            "$ref": "#/responses/not_found"
+          }
+        },
+        "security": [
+          {
+            "oauth2_access_code": [
+              "data:read"
+            ]
+          }
+        ],
+        "x-ads_command_line_example": "curl -X GET -H \"Authorization: Bearer kEnG562yz5bhE9igXf2YTcZ2bu0z\" \"https://developer.api.autodesk.com/data/v1/projects/a.45637/folders/urn%3Aadsk.wipprod%3Adm.folder%3AhC6k4hndRWaeIVhIjvHu8w/relationships/refs\"",
+        "tags": [
+          "Folders"
+        ]
+      },
+      "post": {
+        "operationId": "post_folder_relationships_ref",
+        "description": "Creates a custom relationship between a folder and another resource within the 'data' domain service (folder, item, or version).\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/body_create_ref"
+          }
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/responses/ref_created"
+          },
+          "400": {
+            "$ref": "#/responses/bad_input"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/forbidden"
+          },
+          "404": {
+            "$ref": "#/responses/not_found"
+          }
+        },
+        "security": [
+          {
+            "oauth2_access_code": [
+              "data:create"
+            ]
+          }
+        ],
+        "x-ads_command_line_example": "curl -X POST -H \"Authorization: Bearer kEnG562yz5bhE9igXf2YTcZ2bu0z\" -H \"Content-Type: application/vnd.api+json\" -d '<Example POST data>' \"https://developer.api.autodesk.com/data/v1/projects/a.45637/folders/urn%3Aadsk.wipprod%3Adm.folder%3AhC6k4hndRWaeIVhIjvHu8w/relationships/refs\"",
+        "tags": [
+          "Folders"
+        ]
+      }
+    },
+    "/data/v1/projects/{project_id}/items/{item_id}": {
+      "x-summary": "Items by ID",
+      "x-description": "Item related operations",
+      "parameters": [
+        {
+          "$ref": "#/parameters/project_id"
+        },
+        {
+          "$ref": "#/parameters/item_id"
+        }
+      ],
+      "get": {
+        "operationId": "get_item",
+        "description": "Returns a resource item by ID for any item within a given project.\nResource items represent word documents, fusion design files, drawings, spreadsheets, etc.\n",
+        "x-ads_notes": "* The tip version for the item is included by default.\n",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/item"
+          },
+          "400": {
+            "$ref": "#/responses/bad_input"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/forbidden"
+          },
+          "404": {
+            "$ref": "#/responses/not_found"
+          }
+        },
+        "security": [
+          {
+            "oauth2_access_code": [
+              "data:read"
+            ]
+          }
+        ],
+        "x-ads_command_line_example": "curl -X GET -H \"Authorization: Bearer kEnG562yz5bhE9igXf2YTcZ2bu0z\" \"https://developer.api.autodesk.com/data/v1/projects/a.45637/items/urn%3Aadsk.wipprod%3Adm.lineage%3AhC6k4hndRWaeIVhIjvHu8w\"",
+        "tags": [
+          "Items"
+        ]
+      }
+    },
+    "/data/v1/projects/{project_id}/items/{item_id}/parent": {
+      "x-summary": "Item parent folder",
+      "x-description": "Item related operations",
+      "parameters": [
+        {
+          "$ref": "#/parameters/project_id"
+        },
+        {
+          "$ref": "#/parameters/item_id"
+        }
+      ],
+      "get": {
+        "operationId": "get_item_parent_folder",
+        "description": "Returns the \"parent\" folder for the given item.\n",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/folder"
+          },
+          "400": {
+            "$ref": "#/responses/bad_input"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/forbidden"
+          },
+          "404": {
+            "$ref": "#/responses/not_found"
+          }
+        },
+        "security": [
+          {
+            "oauth2_access_code": [
+              "data:read"
+            ]
+          }
+        ],
+        "x-ads_command_line_example": "curl -X GET -H \"Authorization: Bearer kEnG562yz5bhE9igXf2YTcZ2bu0z\" \"https://developer.api.autodesk.com/data/v1/projects/a.45637/items/urn%3Aadsk.wipprod%3Adm.lineage%3AhC6k4hndRWaeIVhIjvHu8w/parent\"",
+        "tags": [
+          "Items"
+        ]
+      }
+    },
+    "/data/v1/projects/{project_id}/items/{item_id}/refs": {
+      "x-summary": "Item refs",
+      "x-description": "Item related operations|",
+      "parameters": [
+        {
+          "$ref": "#/parameters/project_id"
+        },
+        {
+          "$ref": "#/parameters/item_id"
+        }
+      ],
+      "get": {
+        "operationId": "get_item_refs",
+        "description": "Returns the resources (`items`, `folders`, and `versions`) which have a custom relationship with the given `item_id`.\nCustom relationships can be established between an item and\nother resources within the 'data' domain service (folders, items, and versions).\n",
+        "x-ads_notes": "* Each relationship is defined by the `id` of the object at the other end of the relationship,\n  together with `type`, `attributes`, and `relationships` links.\n* Callers will typically use a `filter` parameter to restrict the response to the\n  custom relationship types (`filter[meta.refType]`) they are interested in.\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/query_filter_type"
+          },
+          {
+            "$ref": "#/parameters/query_filter_id"
+          },
+          {
+            "$ref": "#/parameters/query_filter_extensionType"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/entities"
+          },
+          "400": {
+            "$ref": "#/responses/bad_input"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/forbidden"
+          },
+          "404": {
+            "$ref": "#/responses/not_found"
+          }
+        },
+        "security": [
+          {
+            "oauth2_access_code": [
+              "data:read"
+            ]
+          }
+        ],
+        "x-ads_command_line_example": "curl -X GET -H \"Authorization: Bearer kEnG562yz5bhE9igXf2YTcZ2bu0z\" \"https://developer.api.autodesk.com/data/v1/projects/a.45637/items/urn%3Aadsk.wipprod%3Adm.lineage%3AhC6k4hndRWaeIVhIjvHu8w/refs\"",
+        "tags": [
+          "Items"
+        ]
+      }
+    },
+    "/data/v1/projects/{project_id}/items/{item_id}/relationships/refs": {
+      "x-summary": "Item refs relationships",
+      "x-description": "Item related operations",
+      "parameters": [
+        {
+          "$ref": "#/parameters/project_id"
+        },
+        {
+          "$ref": "#/parameters/item_id"
+        }
+      ],
+      "get": {
+        "operationId": "get_item_relationships_refs",
+        "description": "Returns the custom relationships that are associated to the given `item_id`.\nCustom relationships can be established between an item and\nother resources within the 'data' domain service (folders, items, and versions).\n",
+        "x-ads_notes": "* Each relationship is defined by the `id` of the object at the other end of the relationship,\n  together with `type`, specific reference `meta` including `extension` data.\n* Callers will typically use a `filter` parameter to restrict the response to the\n  custom relationship types (`filter[meta.refType]`) they are interested in.\n* The response body will have an `included` section which contains the resources that are involved in the\n  relationship, which is essentially the `GET projects/:project_id/items/:item_id/refs` endpoint.\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/query_filter_type"
+          },
+          {
+            "$ref": "#/parameters/query_filter_id"
+          },
+          {
+            "$ref": "#/parameters/query_filter_refType"
+          },
+          {
+            "$ref": "#/parameters/query_filter_refDirection"
+          },
+          {
+            "$ref": "#/parameters/query_filter_extensionType"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/refs"
+          },
+          "400": {
+            "$ref": "#/responses/bad_input"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/forbidden"
+          },
+          "404": {
+            "$ref": "#/responses/not_found"
+          }
+        },
+        "security": [
+          {
+            "oauth2_access_code": [
+              "data:read"
+            ]
+          }
+        ],
+        "x-ads_command_line_example": "curl -X GET -H \"Authorization: Bearer kEnG562yz5bhE9igXf2YTcZ2bu0z\" \"https://developer.api.autodesk.com/data/v1/projects/a.45637/items/urn%3Aadsk.wipprod%3Adm.lineage%3AhC6k4hndRWaeIVhIjvHu8w/relationships/refs\"",
+        "tags": [
+          "Items"
+        ]
+      },
+      "post": {
+        "operationId": "post_item_relationships_ref",
+        "description": "Creates a custom relationship between an item and another resource within the 'data' domain service (folder, item, or version).\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/body_create_ref"
+          }
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/responses/ref_created"
+          },
+          "400": {
+            "$ref": "#/responses/bad_input"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/forbidden"
+          },
+          "404": {
+            "$ref": "#/responses/not_found"
+          }
+        },
+        "security": [
+          {
+            "oauth2_access_code": [
+              "data:create"
+            ]
+          }
+        ],
+        "x-ads_command_line_example": "curl -X POST -H \"Authorization: Bearer kEnG562yz5bhE9igXf2YTcZ2bu0z\" -H \"Content-Type: application/vnd.api+json\" -d '<Example POST data>' \"https://developer.api.autodesk.com/data/v1/projects/a.45637/items/urn%3Aadsk.wipprod%3Adm.lineage%3AhC6k4hndRWaeIVhIjvHu8w/relationships/refs\"",
+        "tags": [
+          "Items"
+        ]
+      }
+    },
+    "/data/v1/projects/{project_id}/items/{item_id}/tip": {
+      "x-summary": "Item tip version",
+      "x-description": "Item related operations",
+      "parameters": [
+        {
+          "$ref": "#/parameters/project_id"
+        },
+        {
+          "$ref": "#/parameters/item_id"
+        }
+      ],
+      "get": {
+        "operationId": "get_item_tip",
+        "description": "Returns the \"tip\" version for the given item.\nMultiple versions of a resource item can be uploaded in a project.\nThe tip version is the most recent one.\n",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/version"
+          },
+          "400": {
+            "$ref": "#/responses/bad_input"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/forbidden"
+          },
+          "404": {
+            "$ref": "#/responses/not_found"
+          }
+        },
+        "security": [
+          {
+            "oauth2_access_code": [
+              "data:read"
+            ]
+          }
+        ],
+        "x-ads_command_line_example": "curl -X GET -H \"Authorization: Bearer kEnG562yz5bhE9igXf2YTcZ2bu0z\" \"https://developer.api.autodesk.com/data/v1/projects/a.45637/items/urn%3Aadsk.wipprod%3Adm.lineage%3AhC6k4hndRWaeIVhIjvHu8w/tip\"",
+        "tags": [
+          "Items"
+        ]
+      }
+    },
+    "/data/v1/projects/{project_id}/items/{item_id}/versions": {
+      "x-summary": "Item versions",
+      "x-description": "Item related operations",
+      "parameters": [
+        {
+          "$ref": "#/parameters/project_id"
+        },
+        {
+          "$ref": "#/parameters/item_id"
+        }
+      ],
+      "get": {
+        "operationId": "get_item_versions",
+        "description": "Returns versions for the given item.\nMultiple versions of a resource item can be uploaded in a project.\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/query_filter_type"
+          },
+          {
+            "$ref": "#/parameters/query_filter_id"
+          },
+          {
+            "$ref": "#/parameters/query_filter_extensionType"
+          },
+          {
+            "$ref": "#/parameters/query_filter_item_version"
+          },
+          {
+            "$ref": "#/parameters/query_paging_page_number"
+          },
+          {
+            "$ref": "#/parameters/query_paging_page_limit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/versions"
+          },
+          "400": {
+            "$ref": "#/responses/bad_input"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/forbidden"
+          },
+          "404": {
+            "$ref": "#/responses/not_found"
+          }
+        },
+        "security": [
+          {
+            "oauth2_access_code": [
+              "data:read"
+            ]
+          }
+        ],
+        "x-ads_command_line_example": "curl -X GET -H \"Authorization: Bearer kEnG562yz5bhE9igXf2YTcZ2bu0z\" \"https://developer.api.autodesk.com/data/v1/projects/a.45637/items/urn%3Aadsk.wipprod%3Adm.lineage%3AhC6k4hndRWaeIVhIjvHu8w/versions\"",
+        "tags": [
+          "Items"
+        ]
+      }
+    },
+    "/data/v1/projects/{project_id}/versions/{version_id}": {
+      "x-summary": "Versions by ID",
+      "x-description": "Version related operations",
+      "parameters": [
+        {
+          "$ref": "#/parameters/project_id"
+        },
+        {
+          "$ref": "#/parameters/version_id"
+        }
+      ],
+      "get": {
+        "operationId": "get_version",
+        "description": "Returns the version with the given `version_id`.\n",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/version"
+          },
+          "400": {
+            "$ref": "#/responses/bad_input"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/forbidden"
+          },
+          "404": {
+            "$ref": "#/responses/not_found"
+          }
+        },
+        "security": [
+          {
+            "oauth2_access_code": [
+              "data:read"
+            ]
+          }
+        ],
+        "x-ads_command_line_example": "curl -X GET -H \"Authorization: Bearer kEnG562yz5bhE9igXf2YTcZ2bu0z\" \"https://developer.api.autodesk.com/data/v1/projects/a.45637/items/urn%3Aadsk.wipprod%3Adm.lineage%3AhC6k4hndRWaeIVhIjvHu8w/tip\"",
+        "tags": [
+          "Versions"
+        ]
+      }
+    },
+    "/data/v1/projects/{project_id}/versions/{version_id}/item": {
+      "x-summary": "Version item",
+      "x-description": "Version related operations",
+      "parameters": [
+        {
+          "$ref": "#/parameters/project_id"
+        },
+        {
+          "$ref": "#/parameters/version_id"
+        }
+      ],
+      "get": {
+        "operationId": "get_version_item",
+        "description": "Returns the item the given version is associated with.\n",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/item"
+          },
+          "400": {
+            "$ref": "#/responses/bad_input"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/forbidden"
+          },
+          "404": {
+            "$ref": "#/responses/not_found"
+          }
+        },
+        "security": [
+          {
+            "oauth2_access_code": [
+              "data:read"
+            ]
+          }
+        ],
+        "x-ads_command_line_example": "curl -X GET -H \"Authorization: Bearer kEnG562yz5bhE9igXf2YTcZ2bu0z\" \"https://developer.api.autodesk.com/data/v1/projects/a.45637/versions/urn%3Aadsk.wipprod%3Afs.file%3Avf.b909RzMKR4mhc3O7UBY_8g%3Fversions%3D2/item\"",
+        "tags": [
+          "Versions"
+        ]
+      }
+    },
+    "/data/v1/projects/{project_id}/versions/{version_id}/refs": {
+      "x-summary": "Version refs",
+      "x-description": "Version related operations",
+      "parameters": [
+        {
+          "$ref": "#/parameters/project_id"
+        },
+        {
+          "$ref": "#/parameters/version_id"
+        }
+      ],
+      "get": {
+        "operationId": "get_version_refs",
+        "description": "Returns the resources (`items`, `folders`, and `versions`) which have a custom relationship with the given `version_id`.\nCustom relationships can be established between a version of an item and\nother resources within the 'data' domain service (folders, items, and versions).\n",
+        "x-ads_notes": "* Each relationship is defined by the `id` of the object at the other end of the relationship,\n  together with `type`, `attributes`, and `relationships` links.\n* Callers will typically use a `filter` parameter to restrict the response to the\n  custom relationship types (`filter[meta.refType]`) they are interested in.\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/query_filter_type"
+          },
+          {
+            "$ref": "#/parameters/query_filter_id"
+          },
+          {
+            "$ref": "#/parameters/query_filter_extensionType"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/entities"
+          },
+          "400": {
+            "$ref": "#/responses/bad_input"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/forbidden"
+          },
+          "404": {
+            "$ref": "#/responses/not_found"
+          }
+        },
+        "security": [
+          {
+            "oauth2_access_code": [
+              "data:read"
+            ]
+          }
+        ],
+        "x-ads_command_line_example": "curl -X GET -H \"Authorization: Bearer kEnG562yz5bhE9igXf2YTcZ2bu0z\" \"https://developer.api.autodesk.com/data/v1/projects/a.45637/versions/urn%3Aadsk.wipprod%3Afs.file%3Avf.b909RzMKR4mhc3O7UBY_8g%3Fversions%3D2/refs\"",
+        "tags": [
+          "Versions"
+        ]
+      }
+    },
+    "/data/v1/projects/{project_id}/versions/{version_id}/relationships/refs": {
+      "x-summary": "Version refs relationships",
+      "x-description": "Version related operations",
+      "parameters": [
+        {
+          "$ref": "#/parameters/project_id"
+        },
+        {
+          "$ref": "#/parameters/version_id"
+        }
+      ],
+      "get": {
+        "operationId": "get_version_relationships_refs",
+        "description": "Returns the custom relationships that are associated to the given `version_id`.\nCustom relationships can be established between a version of an item and\nother resources within the 'data' domain service (folders, items, and versions).\n",
+        "x-ads_notes": "* Each relationship is defined by the `id` of the object at the other end of the relationship,\n  together with `type`, specific reference `meta` including `extension` data.\n* Callers will typically use a `filter` parameter to restrict the response to the\n  custom relationship types (`filter[meta.refType]`) they are interested in.\n* The response body will have an `included` section which contains the resources that are involved in the\n  relationship, which is essentially the `GET projects/:project_id/versions/:version_id/refs` endpoint.\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/query_filter_type"
+          },
+          {
+            "$ref": "#/parameters/query_filter_id"
+          },
+          {
+            "$ref": "#/parameters/query_filter_refType"
+          },
+          {
+            "$ref": "#/parameters/query_filter_refDirection"
+          },
+          {
+            "$ref": "#/parameters/query_filter_extensionType"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/refs"
+          },
+          "400": {
+            "$ref": "#/responses/bad_input"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/forbidden"
+          },
+          "404": {
+            "$ref": "#/responses/not_found"
+          }
+        },
+        "security": [
+          {
+            "oauth2_access_code": [
+              "data:read"
+            ]
+          }
+        ],
+        "x-ads_command_line_example": "curl -X GET -H \"Authorization: Bearer kEnG562yz5bhE9igXf2YTcZ2bu0z\" \"https://developer.api.autodesk.com/data/v1/projects/a.45637/versions/urn%3Aadsk.wipprod%3Afs.file%3Avf.b909RzMKR4mhc3O7UBY_8g%3Fversions%3D2/relationships/refs\"",
+        "tags": [
+          "Versions"
+        ]
+      },
+      "post": {
+        "operationId": "post_version_relationships_ref",
+        "description": "Creates a custom relationship between a version and another resource within the 'data' domain service (folder, item, or version).\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/body_create_ref"
+          }
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/responses/ref_created"
+          },
+          "400": {
+            "$ref": "#/responses/bad_input"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/forbidden"
+          },
+          "404": {
+            "$ref": "#/responses/not_found"
+          }
+        },
+        "security": [
+          {
+            "oauth2_access_code": [
+              "data:create"
+            ]
+          }
+        ],
+        "x-ads_command_line_example": "curl -X POST -H \"Authorization: Bearer kEnG562yz5bhE9igXf2YTcZ2bu0z\" -H \"Content-Type: application/vnd.api+json\" -d '<Example POST data>' \"https://developer.api.autodesk.com/data/v1/projects/a.45637/versions/urn%3Aadsk.wipprod%3Afs.file%3Avf.b909RzMKR4mhc3O7UBY_8g%3Fversions%3D2/relationships/refs\"",
+        "tags": [
+          "Versions"
+        ]
+      }
+    },
+    "/data/v1/projects/{project_id}/storage": {
+      "x-summary": "Storage",
+      "x-description": "Create storage",
+      "parameters": [
+        {
+          "$ref": "#/parameters/project_id"
+        }
+      ],
+      "post": {
+        "operationId": "post_storage",
+        "description": "Creates a storage location in the OSS where data can be uploaded to.\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/body_create_storage"
+          }
+        ],
+        "responses": {
+          "201": {
+            "$ref": "#/responses/storage_created"
+          },
+          "400": {
+            "$ref": "#/responses/bad_input"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/forbidden"
+          },
+          "404": {
+            "$ref": "#/responses/not_found"
+          }
+        },
+        "security": [
+          {
+            "oauth2_access_code": [
+              "data:create"
+            ]
+          }
+        ],
+        "x-ads_command_line_example": "curl -X POST -H \"Authorization: Bearer kEnG562yz5bhE9igXf2YTcZ2bu0z\" -H \"Content-Type: application/vnd.api+json\" -d '<Example POST data>' \"https://developer.api.autodesk.com/data/v1/projects/a.45637/storage\"",
+        "tags": [
+          "Projects"
+        ]
+      }
+    },
+    "/data/v1/projects/{project_id}/items": {
+      "x-summary": "Storage",
+      "x-description": "Create item",
+      "parameters": [
+        {
+          "$ref": "#/parameters/project_id"
+        }
+      ],
+      "post": {
+        "operationId": "post_item",
+        "description": "Creates a new item in the 'data' domain service.\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/body_create_item"
+          }
+        ],
+        "responses": {
+          "201": {
+            "$ref": "#/responses/item_created"
+          },
+          "400": {
+            "$ref": "#/responses/bad_input"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/forbidden"
+          },
+          "404": {
+            "$ref": "#/responses/not_found"
+          },
+          "409": {
+            "$ref": "#/responses/conflict"
+          }
+        },
+        "security": [
+          {
+            "oauth2_access_code": [
+              "data:create"
+            ]
+          }
+        ],
+        "x-ads_command_line_example": "curl -X POST -H \"Authorization: Bearer kEnG562yz5bhE9igXf2YTcZ2bu0z\" -H \"Content-Type: application/vnd.api+json\" -d '{ \"jsonapi\": { \"version\": \"1.0\" }, \"data\": { \"type\": \"versions\", \"id\": \"urn:adsk.wipprod:fs.file:vf.ooWjwAQJR0uEoPRyfEnvew?version=2\", \"meta\": { \"extension\": { \"type\": \"auxiliary:autodesk.core:Attachment\", \"version\": \"1.0\" } } } }' \"https://developer.api.autodesk.com/data/v1/projects/a.45637/items\"",
+        "tags": [
+          "Projects"
+        ]
+      }
+    },
+    "/data/v1/projects/{project_id}/versions": {
+      "x-summary": "Storage",
+      "x-description": "Create version",
+      "parameters": [
+        {
+          "$ref": "#/parameters/project_id"
+        }
+      ],
+      "post": {
+        "operationId": "post_version",
+        "description": "Creates a new version of an item in the 'data' domain service.\n",
+        "parameters": [
+          {
+            "$ref": "#/parameters/body_create_version"
+          }
+        ],
+        "responses": {
+          "201": {
+            "$ref": "#/responses/version_created"
+          },
+          "400": {
+            "$ref": "#/responses/bad_input"
+          },
+          "401": {
+            "$ref": "#/responses/unauthorized"
+          },
+          "403": {
+            "$ref": "#/responses/forbidden"
+          },
+          "404": {
+            "$ref": "#/responses/not_found"
+          },
+          "409": {
+            "$ref": "#/responses/conflict"
+          }
+        },
+        "security": [
+          {
+            "oauth2_access_code": [
+              "data:create"
+            ]
+          }
+        ],
+        "x-ads_command_line_example": "curl -X POST -H \"Authorization: Bearer kEnG562yz5bhE9igXf2YTcZ2bu0z\" -H \"Content-Type: application/vnd.api+json\" -d '<Example POST data>' \"https://developer.api.autodesk.com/data/v1/projects/a.45637/versions\"",
+        "tags": [
+          "Projects"
+        ]
+      }
+    }
+  },
+  "parameters": {
+    "hub_id": {
+      "name": "hub_id",
+      "in": "path",
+      "description": "the `hub id` for the current operation",
+      "required": true,
+      "type": "string"
+    },
+    "project_id": {
+      "name": "project_id",
+      "in": "path",
+      "description": "the `project id`",
+      "required": true,
+      "type": "string"
+    },
+    "folder_id": {
+      "name": "folder_id",
+      "in": "path",
+      "description": "the `folder id`",
+      "required": true,
+      "type": "string"
+    },
+    "item_id": {
+      "name": "item_id",
+      "in": "path",
+      "description": "the `item id`",
+      "required": true,
+      "type": "string"
+    },
+    "version_id": {
+      "name": "version_id",
+      "in": "path",
+      "description": "the `version id`",
+      "required": true,
+      "type": "string"
+    },
+    "query_filter_type": {
+      "name": "filter[type]",
+      "in": "query",
+      "description": "filter by the `type` of the `ref` target",
+      "required": false,
+      "type": "array",
+      "format": "string",
+      "items": {
+        "type": "string"
+      }
+    },
+    "query_filter_id": {
+      "name": "filter[id]",
+      "in": "query",
+      "description": "filter by the `id` of the `ref` target",
+      "required": false,
+      "type": "array",
+      "format": "string",
+      "items": {
+        "type": "string"
+      }
+    },
+    "query_filter_extensionType": {
+      "name": "filter[extension.type]",
+      "in": "query",
+      "description": "filter by the extension type",
+      "required": false,
+      "type": "array",
+      "format": "string",
+      "items": {
+        "type": "string"
+      }
+    },
+    "query_filter_refType": {
+      "name": "filter[refType]",
+      "in": "query",
+      "description": "filter by `refType`",
+      "required": false,
+      "type": "array",
+      "format": "string",
+      "items": {
+        "type": "string"
+      }
+    },
+    "query_filter_refDirection": {
+      "name": "filter[direction]",
+      "in": "query",
+      "description": "filter by the direction of the reference",
+      "required": false,
+      "type": "string",
+      "enum": [
+        "from",
+        "to"
+      ]
+    },
+    "query_filter_item_version": {
+      "name": "filter[versionNumber]",
+      "in": "query",
+      "description": "filter by `versionNumber`",
+      "required": false,
+      "type": "array",
+      "format": "string",
+      "items": {
+        "type": "integer",
+        "format": "int32"
+      }
+    },
+    "query_paging_page_number": {
+      "name": "page[number]",
+      "in": "query",
+      "description": "specify the page number",
+      "required": false,
+      "type": "integer",
+      "format": "int32"
+    },
+    "query_paging_page_limit": {
+      "name": "page[limit]",
+      "in": "query",
+      "description": "specify the maximal number of elements per page",
+      "required": false,
+      "type": "integer",
+      "format": "int32"
+    },
+    "body_create_storage": {
+      "name": "body",
+      "in": "body",
+      "description": "describe the file the storage is created for",
+      "required": true,
+      "schema": {
+        "$ref": "#/definitions/create_storage"
+      }
+    },
+    "body_create_item": {
+      "name": "body",
+      "in": "body",
+      "description": "describe the item to be created",
+      "required": true,
+      "schema": {
+        "$ref": "#/definitions/create_item"
+      }
+    },
+    "body_create_version": {
+      "name": "body",
+      "in": "body",
+      "description": "describe the version to be created",
+      "required": true,
+      "schema": {
+        "$ref": "#/definitions/create_version"
+      }
+    },
+    "body_create_ref": {
+      "name": "body",
+      "in": "body",
+      "description": "describe the ref to be created",
+      "required": true,
+      "schema": {
+        "$ref": "#/definitions/create_ref"
+      }
+    }
+  },
+  "definitions": {
+    "json_api_version": {
+      "type": "object",
+      "required": [
+        "jsonapi"
+      ],
+      "properties": {
+        "jsonapi": {
+          "type": "object",
+          "required": [
+            "version"
+          ],
+          "properties": {
+            "version": {
+              "type": "string",
+              "enum": [
+                "1.0"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "json_api_error": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_version"
+        },
+        {
+          "type": "object",
+          "required": [
+            "errors"
+          ],
+          "properties": {
+            "errors": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "status",
+                  "detail"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "a unique identifier for this particular occurrence of the problem"
+                  },
+                  "status": {
+                    "type": "string",
+                    "description": "the HTTP status code applicable to this problem, expressed as a string value"
+                  },
+                  "code": {
+                    "type": "string",
+                    "description": "an application-specific error code, expressed as a string value"
+                  },
+                  "title": {
+                    "type": "string",
+                    "description": "a short, human-readable summary of the problem that SHOULD NOT change from occurrence to occurrence of the problem, except for purposes of localization"
+                  },
+                  "detail": {
+                    "type": "string",
+                    "description": "a human-readable explanation specific to this occurrence of the problem. Like title, this field's value can be localized"
+                  },
+                  "meta": {
+                    "type": "object",
+                    "description": "a meta object containing non-standard meta-information about the error"
+                  },
+                  "links": {
+                    "type": "object",
+                    "description": "a link that leads to further details about this particular occurrence of the problem",
+                    "required": [
+                      "about"
+                    ],
+                    "properties": {
+                      "about": {
+                        "$ref": "#/definitions/json_api_link"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "json_api_document_base": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_version"
+        },
+        {
+          "type": "object",
+          "required": [
+            "data"
+          ],
+          "properties": {
+            "data": {
+              "$ref": "#/definitions/json_api_resource"
+            },
+            "included": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/json_api_resource"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "json_api_document": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_document_base"
+        },
+        {
+          "type": "object",
+          "required": [
+            "links"
+          ],
+          "properties": {
+            "links": {
+              "$ref": "#/definitions/json_api_links_self"
+            }
+          }
+        }
+      ]
+    },
+    "json_api_collection": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_version"
+        },
+        {
+          "type": "object",
+          "required": [
+            "data",
+            "links"
+          ],
+          "properties": {
+            "data": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/json_api_resource"
+              }
+            },
+            "links": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/json_api_links_self"
+                },
+                {
+                  "$ref": "#/definitions/json_api_links_paging"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "json_api_type_id": {
+      "type": "object",
+      "required": [
+        "id",
+        "type"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "resource id"
+        },
+        "type": {
+          "type": "string",
+          "description": "resource type"
+        }
+      }
+    },
+    "json_api_resource": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_type_id"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "attributes": {
+              "$ref": "#/definitions/json_api_attributes"
+            },
+            "meta": {
+              "$ref": "#/definitions/json_api_meta"
+            },
+            "relationships": {
+              "$ref": "#/definitions/json_api_relationships"
+            },
+            "links": {
+              "$ref": "#/definitions/json_api_links"
+            }
+          }
+        }
+      ]
+    },
+    "json_api_attributes": {
+      "type": "object",
+      "description": "resource specific attributes/properties"
+    },
+    "json_api_meta": {
+      "type": "object",
+      "description": "resource specific meta data"
+    },
+    "json_api_relationships": {
+      "type": "object",
+      "description": "resource specific relationships"
+    },
+    "json_api_links": {
+      "type": "object",
+      "description": "resource specific links"
+    },
+    "json_api_link": {
+      "type": "object",
+      "required": [
+        "href"
+      ],
+      "properties": {
+        "href": {
+          "type": "string"
+        }
+      }
+    },
+    "json_api_links_self": {
+      "type": "object",
+      "description": "provides the identity link (a link to itself)",
+      "required": [
+        "self"
+      ],
+      "properties": {
+        "self": {
+          "$ref": "#/definitions/json_api_link"
+        }
+      }
+    },
+    "json_api_links_related": {
+      "type": "object",
+      "description": "provides a link to related resources",
+      "required": [
+        "related"
+      ],
+      "properties": {
+        "related": {
+          "$ref": "#/definitions/json_api_link"
+        }
+      }
+    },
+    "json_api_meta_link": {
+      "type": "object",
+      "required": [
+        "link"
+      ],
+      "properties": {
+        "link": {
+          "$ref": "#/definitions/json_api_link"
+        }
+      }
+    },
+    "json_api_relationships_links_internal": {
+      "type": "object",
+      "required": [
+        "links"
+      ],
+      "properties": {
+        "links": {
+          "$ref": "#/definitions/json_api_links_related"
+        }
+      }
+    },
+    "json_api_relationships_links_internal_resource": {
+      "type": "object",
+      "required": [
+        "links",
+        "data"
+      ],
+      "properties": {
+        "links": {
+          "$ref": "#/definitions/json_api_links_related"
+        },
+        "data": {
+          "$ref": "#/definitions/json_api_type_id"
+        }
+      }
+    },
+    "json_api_relationships_links_external_resource": {
+      "type": "object",
+      "required": [
+        "meta",
+        "data"
+      ],
+      "properties": {
+        "meta": {
+          "$ref": "#/definitions/json_api_meta_link"
+        },
+        "data": {
+          "$ref": "#/definitions/json_api_type_id"
+        }
+      }
+    },
+    "json_api_relationships_links_refs": {
+      "type": "object",
+      "required": [
+        "links"
+      ],
+      "properties": {
+        "links": {
+          "type": "object",
+          "required": [
+            "self",
+            "related"
+          ],
+          "properties": {
+            "self": {
+              "$ref": "#/definitions/json_api_link"
+            },
+            "related": {
+              "$ref": "#/definitions/json_api_link"
+            }
+          }
+        }
+      }
+    },
+    "json_api_links_paging": {
+      "type": "object",
+      "description": "provides the links used for paging",
+      "properties": {
+        "first": {
+          "$ref": "#/definitions/json_api_link"
+        },
+        "prev": {
+          "$ref": "#/definitions/json_api_link"
+        },
+        "next": {
+          "$ref": "#/definitions/json_api_link"
+        },
+        "last": {
+          "$ref": "#/definitions/json_api_link"
+        }
+      }
+    },
+    "base_attributes_created_updated": {
+      "type": "object",
+      "required": [
+        "attributes"
+      ],
+      "properties": {
+        "attributes": {
+          "type": "object",
+          "required": [
+            "createTime",
+            "createUserId",
+            "lastModifiedTime",
+            "lastModifiedUserId"
+          ],
+          "properties": {
+            "createTime": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "createUserId": {
+              "type": "string"
+            },
+            "lastModifiedTime": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "lastModifiedUserId": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "base_attributes_extension_object": {
+      "type": "object",
+      "required": [
+        "type",
+        "version",
+        "schema"
+      ],
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "schema": {
+          "$ref": "#/definitions/json_api_link"
+        },
+        "data": {
+          "type": "object"
+        }
+      }
+    },
+    "health": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_resource"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "meta"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "health"
+              ]
+            },
+            "meta": {
+              "type": "object",
+              "required": [
+                "healthy"
+              ],
+              "properties": {
+                "healthy": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "hub": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_resource"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "attributes",
+            "relationships"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "hubs"
+              ]
+            },
+            "attributes": {
+              "type": "object",
+              "required": [
+                "name",
+                "extension"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "displayable name of the hub"
+                },
+                "extension": {
+                  "$ref": "#/definitions/base_attributes_extension_object"
+                }
+              }
+            },
+            "relationships": {
+              "type": "object",
+              "required": [
+                "projects"
+              ],
+              "properties": {
+                "projects": {
+                  "$ref": "#/definitions/json_api_relationships_links_internal"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "project": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_resource"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "attributes",
+            "relationships"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "projects"
+              ]
+            },
+            "attributes": {
+              "type": "object",
+              "required": [
+                "name",
+                "extension"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "displayable name of the project"
+                },
+                "extension": {
+                  "$ref": "#/definitions/base_attributes_extension_object"
+                }
+              }
+            },
+            "relationships": {
+              "type": "object",
+              "required": [
+                "hub",
+                "rootFolder"
+              ],
+              "properties": {
+                "hub": {
+                  "$ref": "#/definitions/json_api_relationships_links_internal_resource"
+                },
+                "rootFolder": {
+                  "$ref": "#/definitions/json_api_relationships_links_external_resource"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "folder": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_resource"
+        },
+        {
+          "$ref": "#/definitions/base_attributes_created_updated"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "attributes",
+            "relationships"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "folders"
+              ]
+            },
+            "attributes": {
+              "type": "object",
+              "required": [
+                "name",
+                "displayName",
+                "objectCount",
+                "extension"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "filename used when synced to local disk"
+                },
+                "displayName": {
+                  "type": "string",
+                  "description": "displayable name of the folder"
+                },
+                "objectCount": {
+                  "type": "integer",
+                  "format": "int32",
+                  "description": "number of contained sub-folders and items"
+                },
+                "extension": {
+                  "$ref": "#/definitions/base_attributes_extension_object"
+                }
+              }
+            },
+            "relationships": {
+              "type": "object",
+              "required": [
+                "contents",
+                "refs"
+              ],
+              "properties": {
+                "parent": {
+                  "$ref": "#/definitions/json_api_relationships_links_internal_resource"
+                },
+                "contents": {
+                  "$ref": "#/definitions/json_api_relationships_links_internal"
+                },
+                "refs": {
+                  "$ref": "#/definitions/json_api_relationships_links_refs"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "item": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_resource"
+        },
+        {
+          "$ref": "#/definitions/base_attributes_created_updated"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "attributes",
+            "relationships"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "items"
+              ]
+            },
+            "attributes": {
+              "type": "object",
+              "required": [
+                "displayName",
+                "extension"
+              ],
+              "properties": {
+                "displayName": {
+                  "type": "string",
+                  "description": "displayable name of the item"
+                },
+                "extension": {
+                  "$ref": "#/definitions/base_attributes_extension_object"
+                }
+              }
+            },
+            "relationships": {
+              "type": "object",
+              "required": [
+                "parent",
+                "tip",
+                "versions",
+                "refs"
+              ],
+              "properties": {
+                "parent": {
+                  "$ref": "#/definitions/json_api_relationships_links_internal_resource"
+                },
+                "tip": {
+                  "$ref": "#/definitions/json_api_relationships_links_internal_resource"
+                },
+                "versions": {
+                  "$ref": "#/definitions/json_api_relationships_links_internal"
+                },
+                "refs": {
+                  "$ref": "#/definitions/json_api_relationships_links_refs"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "version": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_resource"
+        },
+        {
+          "$ref": "#/definitions/base_attributes_created_updated"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "attributes",
+            "relationships"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "versions"
+              ]
+            },
+            "attributes": {
+              "type": "object",
+              "required": [
+                "name",
+                "displayName",
+                "versionNumber",
+                "extension"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "filename used when synced to local disk"
+                },
+                "displayName": {
+                  "type": "string",
+                  "description": "displayable name of the version"
+                },
+                "versionNumber": {
+                  "type": "integer",
+                  "format": "int32",
+                  "description": "version number of this version"
+                },
+                "mimeType": {
+                  "type": "string",
+                  "description": "mimetype of the version`s content"
+                },
+                "fileType": {
+                  "type": "string",
+                  "description": "file type, only present if this version represents a file"
+                },
+                "storageSize": {
+                  "type": "integer",
+                  "format": "int64",
+                  "description": "file size in bytes, only present if this version represents a file"
+                },
+                "extension": {
+                  "$ref": "#/definitions/base_attributes_extension_object"
+                }
+              }
+            },
+            "relationships": {
+              "type": "object",
+              "required": [
+                "item",
+                "refs"
+              ],
+              "properties": {
+                "item": {
+                  "$ref": "#/definitions/json_api_relationships_links_internal_resource"
+                },
+                "refs": {
+                  "$ref": "#/definitions/json_api_relationships_links_refs"
+                },
+                "storage": {
+                  "$ref": "#/definitions/json_api_relationships_links_external_resource"
+                },
+                "derivatives": {
+                  "$ref": "#/definitions/json_api_relationships_links_external_resource"
+                },
+                "thumbnails": {
+                  "$ref": "#/definitions/json_api_relationships_links_external_resource"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "rel_ref": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_resource"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "meta"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "folders",
+                "items",
+                "versions"
+              ]
+            },
+            "meta": {
+              "type": "object",
+              "required": [
+                "refType",
+                "direction",
+                "fromId",
+                "fromType",
+                "toId",
+                "toType",
+                "extension"
+              ],
+              "properties": {
+                "refType": {
+                  "type": "string",
+                  "enum": [
+                    "derived",
+                    "dependencies",
+                    "auxiliary",
+                    "xrefs"
+                  ]
+                },
+                "direction": {
+                  "type": "string",
+                  "enum": [
+                    "from",
+                    "to"
+                  ],
+                  "description": "describes the direction of the reference relative to the resource the refs are queried for"
+                },
+                "fromId": {
+                  "type": "string"
+                },
+                "fromType": {
+                  "type": "string",
+                  "enum": [
+                    "folders",
+                    "items",
+                    "versions"
+                  ]
+                },
+                "toId": {
+                  "type": "string"
+                },
+                "toType": {
+                  "type": "string",
+                  "enum": [
+                    "folders",
+                    "items",
+                    "versions"
+                  ]
+                },
+                "extension": {
+                  "$ref": "#/definitions/base_attributes_extension_object"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "storage": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_resource"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "relationships"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "objects"
+              ]
+            },
+            "relationships": {
+              "type": "object",
+              "required": [
+                "target"
+              ],
+              "properties": {
+                "target": {
+                  "type": "object",
+                  "required": [
+                    "links",
+                    "data"
+                  ],
+                  "properties": {
+                    "links": {
+                      "$ref": "#/definitions/json_api_links_related"
+                    },
+                    "data": {
+                      "type": "object",
+                      "required": [
+                        "type",
+                        "id"
+                      ],
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "folders"
+                          ]
+                        },
+                        "id": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "create_storage": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_version"
+        },
+        {
+          "type": "object",
+          "required": [
+            "data"
+          ],
+          "properties": {
+            "data": {
+              "type": "object",
+              "required": [
+                "type",
+                "attributes",
+                "relationships"
+              ],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "objects"
+                  ]
+                },
+                "attributes": {
+                  "type": "object",
+                  "required": [
+                    "name",
+                    "extension"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "extension": {
+                      "$ref": "#/definitions/base_attributes_extension_object"
+                    }
+                  }
+                },
+                "relationships": {
+                  "type": "object",
+                  "required": [
+                    "target"
+                  ],
+                  "properties": {
+                    "target": {
+                      "type": "object",
+                      "required": [
+                        "data"
+                      ],
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "required": [
+                            "type",
+                            "id"
+                          ],
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "folders"
+                              ]
+                            },
+                            "id": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "example": {
+            "application/vnd.api+json": {
+              "data": {
+                "type": "objects",
+                "attributes": {
+                  "name": "drawing.dwg"
+                },
+                "relationships": {
+                  "target": {
+                    "data": {
+                      "type": "folders",
+                      "id": "urn:adsk.wipprod:fs.folder:co.mgS-lb-BThaTdHnhiN_mbA"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "create_item": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_version"
+        },
+        {
+          "type": "object",
+          "required": [
+            "data",
+            "included"
+          ],
+          "properties": {
+            "data": {
+              "type": "object",
+              "required": [
+                "type",
+                "attributes",
+                "relationships"
+              ],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "items"
+                  ]
+                },
+                "attributes": {
+                  "type": "object",
+                  "required": [
+                    "name",
+                    "extension"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "extension": {
+                      "$ref": "#/definitions/base_attributes_extension_object"
+                    }
+                  }
+                },
+                "relationships": {
+                  "type": "object",
+                  "required": [
+                    "tip",
+                    "parent"
+                  ],
+                  "properties": {
+                    "tip": {
+                      "type": "object",
+                      "required": [
+                        "data"
+                      ],
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "required": [
+                            "type",
+                            "id"
+                          ],
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "versions"
+                              ]
+                            },
+                            "id": {
+                              "type": "string",
+                              "enum": [
+                                "1"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "parent": {
+                      "type": "object",
+                      "required": [
+                        "data"
+                      ],
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "required": [
+                            "type",
+                            "id"
+                          ],
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "folders"
+                              ]
+                            },
+                            "id": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "included": {
+              "type": "array",
+              "items": {
+                "minItems": 1,
+                "maxItems": 1,
+                "type": "object",
+                "required": [
+                  "type",
+                  "id",
+                  "attributes",
+                  "relationships"
+                ],
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "versions"
+                    ]
+                  },
+                  "id": {
+                    "type": "string",
+                    "enum": [
+                      "1"
+                    ]
+                  },
+                  "attributes": {
+                    "type": "object",
+                    "required": [
+                      "name",
+                      "extension"
+                    ],
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "extension": {
+                        "$ref": "#/definitions/base_attributes_extension_object"
+                      }
+                    }
+                  },
+                  "relationships": {
+                    "type": "object",
+                    "required": [
+                      "storage"
+                    ],
+                    "properties": {
+                      "storage": {
+                        "type": "object",
+                        "required": [
+                          "data"
+                        ],
+                        "properties": {
+                          "data": {
+                            "type": "object",
+                            "required": [
+                              "type",
+                              "id"
+                            ],
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "enum": [
+                                  "objects"
+                                ]
+                              },
+                              "id": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "example": {
+            "application/vnd.api+json": {
+              "jsonapi": {
+                "version": "1.0"
+              },
+              "data": [
+                {
+                  "type": "items",
+                  "attributes": {
+                    "name": "drawing.dwg",
+                    "extension": {
+                      "type": "items:autodesk.core:File",
+                      "version": "1.0"
+                    }
+                  },
+                  "relationships": {
+                    "tip": {
+                      "data": {
+                        "type": "versions",
+                        "id": "1"
+                      }
+                    },
+                    "parent": {
+                      "data": {
+                        "type": "folders",
+                        "id": "urn:adsk.wipprod:fs.folder:co.mgS-lb-BThaTdHnhiN_mbA"
+                      }
+                    }
+                  }
+                }
+              ],
+              "included": [
+                {
+                  "type": "versions",
+                  "id": "1",
+                  "attributes": {
+                    "name": "drawing.dwg"
+                  },
+                  "relationships": {
+                    "storage": {
+                      "data": {
+                        "type": "objects",
+                        "id": "urn:adsk.objects:os.object:wip.dm.prod/2a6d61f2-49df-4d7b-9aed-439586d61df7.dwg"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "create_version": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_version"
+        },
+        {
+          "type": "object",
+          "required": [
+            "data"
+          ],
+          "properties": {
+            "data": {
+              "type": "object",
+              "required": [
+                "type",
+                "attributes",
+                "relationships"
+              ],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "versions"
+                  ]
+                },
+                "attributes": {
+                  "type": "object",
+                  "required": [
+                    "name",
+                    "extension"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "extension": {
+                      "$ref": "#/definitions/base_attributes_extension_object"
+                    }
+                  }
+                },
+                "relationships": {
+                  "type": "object",
+                  "required": [
+                    "item",
+                    "storage"
+                  ],
+                  "properties": {
+                    "item": {
+                      "type": "object",
+                      "required": [
+                        "data"
+                      ],
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "required": [
+                            "type",
+                            "id"
+                          ],
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "items"
+                              ]
+                            },
+                            "id": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "storage": {
+                      "type": "object",
+                      "required": [
+                        "data"
+                      ],
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "required": [
+                            "type",
+                            "id"
+                          ],
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "objects"
+                              ]
+                            },
+                            "id": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "example": {
+            "application/vnd.api+json": {
+              "jsonapi": {
+                "version": "1.0"
+              },
+              "data": {
+                "type": "versions",
+                "attributes": {
+                  "name": "drawing.dwg",
+                  "extension": {
+                    "type": "versions:autodesk.core:File",
+                    "version": "1.0"
+                  }
+                },
+                "relationships": {
+                  "item": {
+                    "data": {
+                      "type": "items",
+                      "id": "urn:adsk.wipprod:dm.lineage:AeYgDtcTSuqYoyMweWFhhQ"
+                    }
+                  },
+                  "storage": {
+                    "data": {
+                      "type": "objects",
+                      "id": "urn:adsk.objects:os.object:wip.dm.prod/980cff2c-f0f8-43d9-a151-4a2d916b91a2.dwg"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "create_ref": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_version"
+        },
+        {
+          "type": "object",
+          "required": [
+            "data"
+          ],
+          "properties": {
+            "data": {
+              "type": "object",
+              "required": [
+                "type",
+                "id",
+                "meta"
+              ],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "folders",
+                    "items",
+                    "versions"
+                  ]
+                },
+                "id": {
+                  "type": "string"
+                },
+                "meta": {
+                  "type": "object",
+                  "required": [
+                    "extension"
+                  ],
+                  "properties": {
+                    "extension": {
+                      "$ref": "#/definitions/base_attributes_extension_object"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "example": {
+            "application/vnd.api+json": {
+              "jsonapi": {
+                "version": "1.0"
+              },
+              "data": {
+                "type": "versions",
+                "id": "urn:adsk.wipprod:fs.file:vf.ooWjwAQJR0uEoPRyfEnvew?version=1",
+                "meta": {
+                  "extension": {
+                    "type": "auxiliary:autodesk.core:Attachment",
+                    "version": "1.0"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "responses": {
+    "health": {
+      "description": "Successful response",
+      "schema": {
+        "title": "health",
+        "allOf": [
+          {
+            "$ref": "#/definitions/json_api_document"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/health"
+              }
+            }
+          }
+        ]
+      },
+      "examples": {
+        "application/vnd.api+json": {
+          "data": {
+            "type": "health",
+            "id": "<current timestamp>",
+            "meta": {
+              "healthy": true
+            }
+          },
+          "links": {
+            "self": {
+              "href": "/project/v1/health"
+            }
+          }
+        }
+      }
+    },
+    "hubs": {
+      "description": "Successful response",
+      "schema": {
+        "title": "hubs",
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/json_api_collection"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/hub"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "examples": {
+        "application/vnd.api+json": {
+          "data": [
+            {
+              "type": "hubs",
+              "id": "a.1256",
+              "attributes": {
+                "name": "my hub",
+                "extension": {
+                  "type": "hubs:autodesk.core:Hub",
+                  "version": "1.0",
+                  "schema": {
+                    "href": "/schema/v1/versions/hubs%3Aautodesk.core%3AHub-1.0"
+                  },
+                  "data": {}
+                }
+              },
+              "links": {
+                "self": {
+                  "href": "/project/v1/hubs/a.1256"
+                }
+              },
+              "relationships": {
+                "projects": {
+                  "links": {
+                    "related": {
+                      "href": "/project/v1/hubs/a.1256/projects"
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "links": {
+            "self": {
+              "href": "/project/v1/hubs"
+            }
+          }
+        }
+      }
+    },
+    "hub": {
+      "description": "Successful response",
+      "schema": {
+        "title": "hub",
+        "allOf": [
+          {
+            "$ref": "#/definitions/json_api_document"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/hub"
+              }
+            }
+          }
+        ]
+      },
+      "examples": {
+        "application/vnd.api+json": {
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": {
+              "href": "/project/v1/hubs/a.1256"
+            }
+          },
+          "data": {
+            "type": "hubs",
+            "id": "a.1256",
+            "attributes": {
+              "name": "my hub",
+              "extension": {
+                "data": {},
+                "version": "1.0",
+                "type": "hubs:autodesk.core:Hub",
+                "schema": {
+                  "href": "/schema/v1/versions/hubs%3Aautodesk.core%3AHub-1.0"
+                }
+              }
+            },
+            "relationships": {
+              "projects": {
+                "links": {
+                  "related": {
+                    "href": "/project/v1/hubs/a.1256/projects"
+                  }
+                }
+              }
+            },
+            "links": {
+              "self": {
+                "href": "/project/v1/hubs/a.1256"
+              }
+            }
+          }
+        }
+      }
+    },
+    "projects": {
+      "description": "Successful response",
+      "schema": {
+        "title": "projects",
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/json_api_collection"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/project"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "examples": {
+        "application/vnd.api+json": {
+          "data": [
+            {
+              "type": "projects",
+              "id": "a.45637",
+              "attributes": {
+                "name": "my project",
+                "extension": {
+                  "type": "projects:autodesk.core:Project",
+                  "version": "1.0",
+                  "schema": {
+                    "href": "/schema/v1/versions/projects%3Aautodesk.core%3AProject-1.0"
+                  },
+                  "data": {}
+                }
+              },
+              "links": {
+                "self": {
+                  "href": "/project/v1/hubs/a.1256/projects/a.45637"
+                }
+              },
+              "relationships": {
+                "hub": {
+                  "links": {
+                    "related": {
+                      "href": "/project/v1/hubs/a.1256/projects/a.45637/hub"
+                    }
+                  },
+                  "data": {
+                    "type": "hubs",
+                    "id": "a.1256"
+                  }
+                },
+                "rootFolder": {
+                  "meta": {
+                    "link": {
+                      "href": "/data/v1/projects/a.45637/folders/urn%3Aadsk.wipprod%3Adm.folder%3AhC6k4hndRWaeIVhIjvHu8w"
+                    }
+                  },
+                  "data": {
+                    "type": "folders",
+                    "id": "urn:adsk.wipprod:dm.folder:hC6k4hndRWaeIVhIjvHu8w"
+                  }
+                }
+              }
+            }
+          ],
+          "links": {
+            "self": {
+              "href": "/project/v1/hubs/a.1256/projects/a.45637"
+            }
+          }
+        }
+      }
+    },
+    "project": {
+      "description": "Successful response",
+      "schema": {
+        "title": "project",
+        "allOf": [
+          {
+            "$ref": "#/definitions/json_api_document"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/project"
+              }
+            }
+          }
+        ]
+      },
+      "examples": {
+        "application/vnd.api+json": {
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": {
+              "href": "/project/v1/hubs/a.1256/projects/a.45637"
+            }
+          },
+          "data": {
+            "type": "projects",
+            "id": "a.45637",
+            "attributes": {
+              "name": "my project",
+              "extension": {
+                "data": {},
+                "version": "1.0",
+                "type": "projects:autodesk.core:Project",
+                "schema": {
+                  "href": "/schema/v1/versions/projects%3Aautodesk.core%3AProject-1.0"
+                }
+              }
+            },
+            "relationships": {
+              "rootFolder": {
+                "meta": {
+                  "link": {
+                    "href": "/data/v1/projects/a.45637/folders/urn%3Aadsk.wipprod%3Adm.folder%3AhC6k4hndRWaeIVhIjvHu8w"
+                  }
+                },
+                "data": {
+                  "type": "folders",
+                  "id": "urn:adsk.wipprod:dm.folder:hC6k4hndRWaeIVhIjvHu8w"
+                }
+              },
+              "hub": {
+                "data": {
+                  "type": "hubs",
+                  "id": "a.1256"
+                },
+                "links": {
+                  "related": {
+                    "href": "/project/v1/hubs/a.1256/projects/a.45637/hub"
+                  }
+                }
+              }
+            },
+            "links": {
+              "self": {
+                "href": "/project/v1/hubs/a.1256/projects/a.45637"
+              }
+            }
+          }
+        }
+      }
+    },
+    "folder": {
+      "description": "Successful response",
+      "schema": {
+        "title": "folder",
+        "allOf": [
+          {
+            "$ref": "#/definitions/json_api_document"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/folder"
+              }
+            }
+          }
+        ]
+      },
+      "examples": {
+        "application/vnd.api+json": {
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": {
+              "href": "/data/v1/projects/a.45637/folders/urn%3Aadsk.wipprod%3Adm.folder%3AhC6k4hndRWaeIVhIjvHu8w"
+            }
+          },
+          "data": {
+            "type": "folders",
+            "id": "urn:adsk.wipprod:dm.folder:hC6k4hndRWaeIVhIjvHu8w",
+            "attributes": {
+              "name": "Plans",
+              "displayName": "Plans",
+              "createTime": "2015-11-27T11:11:23.000Z",
+              "createUserId": "BW9RM76WZBGL",
+              "lastModifiedTime": "2015-11-27T11:11:27.000Z",
+              "lastModifiedUserId": "BW9RM76WZBGL",
+              "objectCount": 4,
+              "extension": {
+                "type": "folders:autodesk.bim360:Folders",
+                "version": "1.0",
+                "schema": {
+                  "href": "/schema/v1/versions/folders%3Aautodesk.bim360%3AFolders-1.0"
+                },
+                "data": {
+                  "allowedTypes": [
+                    "folders",
+                    "items:autodesk.bim360:Files",
+                    "items:autodesk.bim360:Documents",
+                    "items:autodesk.bim360:TitleBlocks"
+                  ],
+                  "visibleTypes": [
+                    "folders",
+                    "items:autodesk.bim360:Documents"
+                  ]
+                }
+              }
+            },
+            "links": {
+              "self": {
+                "href": "/data/v1/projects/a.45637/folders/urn%3Aadsk.wipprod%3Adm.folder%3AhC6k4hndRWaeIVhIjvHu8w"
+              }
+            },
+            "relationships": {
+              "parent": {
+                "links": {
+                  "related": {
+                    "href": "/data/v1/projects/a.45637/folders/urn%3Aadsk.wipprod%3Adm.folder%3AhC6k4hndRWaeIVhIjvHu8w/parent"
+                  }
+                },
+                "data": {
+                  "type": "folders",
+                  "id": "urn:adsk.wipprod:dm.folder:sdfedf8wefl"
+                }
+              },
+              "refs": {
+                "links": {
+                  "self": {
+                    "href": "/data/v1/projects/a.45637/folders/urn%3Aadsk.wipprod%3Adm.folder%3AhC6k4hndRWaeIVhIjvHu8w/relationships/refs"
+                  },
+                  "related": {
+                    "href": "/data/v1/projects/a.45637/folders/urn%3Aadsk.wipprod%3Adm.folder%3AhC6k4hndRWaeIVhIjvHu8w/refs"
+                  }
+                }
+              },
+              "contents": {
+                "links": {
+                  "related": {
+                    "href": "/data/v1/projects/a.45637/folders/urn%3Aadsk.wipprod%3Adm.folder%3AhC6k4hndRWaeIVhIjvHu8w/contents"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "item": {
+      "description": "Successful response",
+      "schema": {
+        "title": "item",
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/json_api_document"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/item"
+              }
+            }
+          }
+        ]
+      },
+      "examples": {
+        "application/vnd.api+json": {
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": {
+              "href": "/data/v1/projects/a.45637/items/urn%3Aadsk.wipprod%3Adm.lineage%3AhC6k4hndRWaeIVhIjvHu8w"
+            }
+          },
+          "data": {
+            "type": "items",
+            "id": "urn:adsk.wipprod:dm.lineage:hC6k4hndRWaeIVhIjvHu8w",
+            "attributes": {
+              "displayName": "my file",
+              "extension": {
+                "data": {},
+                "version": "1.0",
+                "type": "items:autodesk.bim360:Files",
+                "schema": {
+                  "href": "/schema/v1/versions/items%3Aautodesk.bim360%3AFiles-1.0"
+                }
+              },
+              "createUserId": "BW9RM76WZBGL",
+              "lastModifiedUserId": "BW9RM76WZBGL",
+              "lastModifiedTime": "2015-11-27T11:11:27.000Z",
+              "createTime": "2015-11-27T11:11:23.000Z"
+            },
+            "relationships": {
+              "refs": {
+                "links": {
+                  "self": {
+                    "href": "/data/v1/projects/a.45637/items/urn%3Aadsk.wipprod%3Adm.lineage%3AhC6k4hndRWaeIVhIjvHu8w/relationships/refs"
+                  },
+                  "related": {
+                    "href": "/data/v1/projects/a.45637/items/urn%3Aadsk.wipprod%3Adm.lineage%3AhC6k4hndRWaeIVhIjvHu8w/refs"
+                  }
+                }
+              },
+              "tip": {
+                "data": {
+                  "type": "versions",
+                  "id": "urn:adsk.wipprod:fs.file:vf.d34fdsg3g?version=2"
+                },
+                "links": {
+                  "related": {
+                    "href": "/data/v1/projects/a.45637/items/urn%3Aadsk.wipprod%3Adm.lineage%3AhC6k4hndRWaeIVhIjvHu8w/tip"
+                  }
+                }
+              },
+              "parent": {
+                "data": {
+                  "type": "folders",
+                  "id": "urn:adsk.wipprod:dm.folder:sdfedf8wefl"
+                },
+                "links": {
+                  "related": {
+                    "href": "/data/v1/projects/a.45637/items/urn%3Aadsk.wipprod%3Adm.lineage%3AhC6k4hndRWaeIVhIjvHu8w/parent"
+                  }
+                }
+              },
+              "versions": {
+                "links": {
+                  "related": {
+                    "href": "/data/v1/projects/a.45637/items/urn%3Aadsk.wipprod%3Adm.lineage%3AhC6k4hndRWaeIVhIjvHu8w/versions"
+                  }
+                }
+              }
+            },
+            "links": {
+              "self": {
+                "href": "/data/v1/projects/a.45637/items/urn%3Aadsk.wipprod%3Adm.lineage%3AhC6k4hndRWaeIVhIjvHu8w"
+              }
+            }
+          }
+        }
+      }
+    },
+    "refs": {
+      "description": "Successful response",
+      "schema": {
+        "title": "refs",
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/json_api_collection"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/rel_ref"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "examples": {
+        "application/vnd.api+json": {
+          "links": {
+            "self": {
+              "href": "/data/v1/projects/b.45678/folders/urn%3Aadsk.wipprod%3Adm.folder%3AhC6k4hndRWaeIVhIjvHu8w/relationships/refs"
+            },
+            "related": {
+              "href": "/data/v1/projects/b.45678/folders/urn%3Aadsk.wipprod%3Adm.folder%3AhC6k4hndRWaeIVhIjvHu8w/refs"
+            }
+          },
+          "data": [
+            {
+              "type": "folders",
+              "id": "urn:adsk.wipprod:dm.folder:hC6k4hndRWaeIVhIjvHu8w",
+              "meta": {
+                "refType": "dependencies",
+                "fromId": "urn:adsk.wipprod:dm.folder:hC6k4hndRWaeIVhIjvHu8w",
+                "fromType": "folders",
+                "toId": "urn:adsk.wipprod:dm.folder:hC6k4hndRWaeIVhIjvHu8w",
+                "toType": "folders",
+                "direction": "from",
+                "extension": {
+                  "type": "folders:autodesk.bim360:WipToShared",
+                  "version": "1.0",
+                  "schema": {
+                    "href": "/schema/v1/versions/dependencies%3Aautodesk.bim360%3AWipToShared-1.0"
+                  },
+                  "data": {
+                    "bim360dm_type": {
+                      "value": "folder_and_title_block_relationship",
+                      "dataType": "STRING"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "items",
+              "id": "urn:adsk.wipprod:dm.lineage:hC6k4hndRWaeIVhIjvHu8w",
+              "meta": {
+                "refType": "xrefs",
+                "fromId": "urn:adsk.wipprod:dm.lineage:hC6k4hndRWaeIVhIjvHu8w",
+                "fromType": "items",
+                "toId": "urn:adsk.wipprod:dm.folder:hC6k4hndRWaeIVhIjvHu8w",
+                "toType": "folders",
+                "direction": "to",
+                "extension": {
+                  "type": "items:autodesk.bim360:AggregateToModel",
+                  "version": "1.0",
+                  "schema": {
+                    "href": "/schema/v1/versions/xrefs%3Aautodesk.bim360%3AAggregateToModel-1.0"
+                  },
+                  "data": {
+                    "bim360dm_type": {
+                      "value": "folder_contains_seed",
+                      "dataType": "STRING"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "version": {
+      "description": "Successful response",
+      "schema": {
+        "title": "version",
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/json_api_document"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/version"
+              }
+            }
+          }
+        ]
+      },
+      "examples": {
+        "application/vnd.api+json": {
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": {
+              "href": "/data/v1/projects/b.6f8813fe-31a7-4440-bc63-d8ca97c856b4/versions/urn%3Aadsk.wipprod%3Afs.file%3Avf.b909RzMKR4mhc3O7UBY_8g%3Fversions%3D2"
+            }
+          },
+          "data": {
+            "type": "versions",
+            "id": "urn:adsk.wipprod:fs.file:vf.b909RzMKR4mhc3O7UBY_8g?version=2",
+            "attributes": {
+              "name": "version-test.pdf",
+              "displayName": "version-test.pdf",
+              "createTime": "2016-04-01T11:12:35.000Z",
+              "createUserId": "BW9RM76WZBGL",
+              "lastModifiedTime": "2016-04-01T11:15:22.000Z",
+              "lastModifiedUserId": "BW9RM76WZBGL",
+              "versionNumber": 2,
+              "mimeType": "application/pdf",
+              "extension": {
+                "type": "versions:autodesk.bim360:FileVersions",
+                "version": "1.0",
+                "schema": {
+                  "href": "/schema/v1/versions/versions%3Aautodesk.bim360%3AFileVersions-1.0"
+                },
+                "data": {
+                  "tempUrn": null,
+                  "properties": {},
+                  "storageUrn": "urn:adsk.objects:os.object:wip.dm.prod/9f8bdc3f-e29c-4ada-ab7b-bb8dfa821163.pdf",
+                  "storageType": "OSS"
+                }
+              }
+            },
+            "links": {
+              "self": {
+                "href": "/data/v1/projects/b.6f8813fe-31a7-4440-bc63-d8ca97c856b4/versions/urn%3Aadsk.wipprod%3Afs.file%3Avf.b909RzMKR4mhc3O7UBY_8g%3Fversions%3D2"
+              }
+            },
+            "relationships": {
+              "derivatives": {
+                "data": {
+                  "type": "derivatives",
+                  "id": "dXJuOmFkc2sud2lwcWE6ZnMuZmlsZTp2Zi50X3hodWwwYVFkbWhhN2FBaVBuXzlnP3ZlcnNpb249MQ"
+                },
+                "meta": {
+                  "link": {
+                    "href": "/viewingservice/v1/dXJuOmFkc2sud2lwcWE6ZnMuZmlsZTp2Zi50X3hodWwwYVFkbWhhN2FBaVBuXzlnP3ZlcnNpb249MQ"
+                  }
+                }
+              },
+              "item": {
+                "links": {
+                  "related": {
+                    "href": "/data/v1/projects/b.6f8813fe-31a7-4440-bc63-d8ca97c856b4/items/urn%3Aadsk.wipprod%3Adm.lineage%3Ab909RzMKR4mhc3O7UBY_8g"
+                  }
+                },
+                "data": {
+                  "type": "items",
+                  "id": "urn:adsk.wipprod:dm.lineage:b909RzMKR4mhc3O7UBY_8g"
+                }
+              },
+              "refs": {
+                "links": {
+                  "self": {
+                    "href": "/data/v1/projects/b.6f8813fe-31a7-4440-bc63-d8ca97c856b4/versions/urn%3Aadsk.wipprod%3Afs.file%3Avf.b909RzMKR4mhc3O7UBY_8g%3Fversions%3D2/relationships/refs"
+                  },
+                  "related": {
+                    "href": "/data/v1/projects/b.6f8813fe-31a7-4440-bc63-d8ca97c856b4/versions/urn%3Aadsk.wipprod%3Afs.file%3Avf.b909RzMKR4mhc3O7UBY_8g%3Fversions%3D2/refs"
+                  }
+                }
+              },
+              "storage": {
+                "meta": {
+                  "link": {
+                    "href": "/oss/v2/buckets/wipbucket/objects/urn:adsk.objects:os.object:wip.dm.prod%2F9f8bdc3f-e29c-4ada-ab7b-bb8dfa821163.pdf"
+                  }
+                },
+                "data": {
+                  "type": "objects",
+                  "id": "urn:adsk.objects:os.object:wip.dm.prod/9f8bdc3f-e29c-4ada-ab7b-bb8dfa821163.pdf"
+                }
+              },
+              "thumbnails": {
+                "data": {
+                  "type": "thumbnails",
+                  "id": "dXJuOmFkc2sud2lwcWE6ZnMuZmlsZTp2Zi50X3hodWwwYVFkbWhhN2FBaVBuXzlnP3ZlcnNpb249MQ"
+                },
+                "meta": {
+                  "link": {
+                    "href": "/viewingservice/v1/thumbnails/dXJuOmFkc2sud2lwcWE6ZnMuZmlsZTp2Zi50X3hodWwwYVFkbWhhN2FBaVBuXzlnP3ZlcnNpb249MQ"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "versions": {
+      "description": "Successful response",
+      "schema": {
+        "title": "versions",
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/json_api_collection"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/version"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "examples": {
+        "application/vnd.api+json": {
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "data": [
+            {
+              "type": "versions",
+              "id": "urn:adsk.wipprod:fs.file:vf.b909RzMKR4mhc3O7UBY_8g?version=2",
+              "attributes": {
+                "name": "version-test.pdf",
+                "displayName": "version-test.pdf",
+                "createTime": "2016-04-01T11:12:35.000Z",
+                "createUserId": "BW9RM76WZBGL",
+                "lastModifiedTime": "2016-04-01T11:15:22.000Z",
+                "lastModifiedUserId": "BW9RM76WZBGL",
+                "versionNumber": 2,
+                "mimeType": "application/pdf",
+                "extension": {
+                  "type": "versions:autodesk.bim360:FileVersions",
+                  "version": "1.0",
+                  "schema": {
+                    "href": "/schema/v1/versions/versions%3Aautodesk.bim360%3AFileVersions-1.0"
+                  },
+                  "data": {
+                    "tempUrn": null,
+                    "properties": {},
+                    "storageUrn": "urn:adsk.objects:os.object:wip.dm.prod/9f8bdc3f-e29c-4ada-ab7b-bb8dfa821163.pdf",
+                    "storageType": "OSS"
+                  }
+                }
+              },
+              "links": {
+                "self": {
+                  "href": "/data/v1/projects/b.6f8813fe-31a7-4440-bc63-d8ca97c856b4/versions/urn%3Aadsk.wipprod%3Afs.file%3Avf.b909RzMKR4mhc3O7UBY_8g%3Fversions%3D2"
+                }
+              },
+              "relationships": {
+                "item": {
+                  "links": {
+                    "related": {
+                      "href": "/data/v1/projects/b.6f8813fe-31a7-4440-bc63-d8ca97c856b4/items/urn%3Aadsk.wipprod%3Adm.lineage%3Ab909RzMKR4mhc3O7UBY_8g"
+                    }
+                  },
+                  "data": {
+                    "type": "items",
+                    "id": "urn:adsk.wipprod:dm.lineage:b909RzMKR4mhc3O7UBY_8g"
+                  }
+                },
+                "refs": {
+                  "links": {
+                    "related": {
+                      "href": "/data/v1/projects/b.6f8813fe-31a7-4440-bc63-d8ca97c856b4/versions/urn%3Aadsk.wipprod%3Afs.file%3Avf.b909RzMKR4mhc3O7UBY_8g%3Fversions%3D2/relationships/refs"
+                    }
+                  }
+                },
+                "storage": {
+                  "meta": {
+                    "link": {
+                      "href": "/oss/v2/buckets/wipbucket/objects/urn:adsk.objects:os.object:wip.dm.prod%2F9f8bdc3f-e29c-4ada-ab7b-bb8dfa821163.pdf"
+                    }
+                  },
+                  "data": {
+                    "type": "objects",
+                    "id": "urn:adsk.objects:os.object:wip.dm.prod/9f8bdc3f-e29c-4ada-ab7b-bb8dfa821163.pdf"
+                  }
+                }
+              }
+            },
+            {
+              "type": "versions",
+              "id": "urn:adsk.wipprod:fs.file:vf.b909RzMKR4mhc3O7UBY_8g?version=1",
+              "attributes": {
+                "name": "version-test.pdf",
+                "displayName": "version-test.pdf",
+                "createTime": "2016-04-01T11:09:03.000Z",
+                "createUserId": "BW9RM76WZBGL",
+                "lastModifiedTime": "2016-04-01T11:11:18.000Z",
+                "lastModifiedUserId": "BW9RM76WZBGL",
+                "versionNumber": 1,
+                "mimeType": "appplication/pdf",
+                "extension": {
+                  "type": "versions:autodesk.bim360:FileVersions",
+                  "version": "1.0",
+                  "schema": {
+                    "href": "/schema/v1/versions/versions%3Aautodesk.bim360%3AFileVersions-1.0"
+                  },
+                  "data": {
+                    "tempUrn": null,
+                    "properties": {},
+                    "storageUrn": "urn:adsk.objects:os.object:wip.dm.prod/3c8f6bbc-fe5c-4815-a92e-8b8635e7b1cb.pdf",
+                    "storageType": "OSS"
+                  }
+                }
+              },
+              "links": {
+                "self": {
+                  "href": "/data/v1/projects/b.6f8813fe-31a7-4440-bc63-d8ca97c856b4/versions/urn%3Aadsk.wipprod%3Afs.file%3Avf.b909RzMKR4mhc3O7UBY_8g%3Fversions%3D1"
+                }
+              },
+              "relationships": {
+                "item": {
+                  "links": {
+                    "related": {
+                      "href": "/data/v1/projects/b.6f8813fe-31a7-4440-bc63-d8ca97c856b4/items/urn%3Aadsk.wipprod%3Adm.lineage%3Ab909RzMKR4mhc3O7UBY_8g"
+                    }
+                  },
+                  "data": {
+                    "type": "items",
+                    "id": "urn:adsk.wipprod:dm.lineage:b909RzMKR4mhc3O7UBY_8g"
+                  }
+                },
+                "refs": {
+                  "links": {
+                    "related": {
+                      "href": "/data/v1/projects/b.6f8813fe-31a7-4440-bc63-d8ca97c856b4/versions/urn%3Aadsk.wipprod%3Afs.file%3Avf.b909RzMKR4mhc3O7UBY_8g%3Fversions%3D1/relationships/refs"
+                    }
+                  }
+                },
+                "storage": {
+                  "meta": {
+                    "link": {
+                      "href": "/oss/v2/buckets/wipbucket/objects/urn:adsk.objects:os.object:wip.dm.prod%2F3c8f6bbc-fe5c-4815-a92e-8b8635e7b1cb.pdf"
+                    }
+                  },
+                  "data": {
+                    "type": "objects",
+                    "id": "urn:adsk.objects:os.object:wip.dm.prod/3c8f6bbc-fe5c-4815-a92e-8b8635e7b1cb.pdf"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "contents": {
+      "description": "Successful response",
+      "schema": {
+        "$ref": "#/definitions/json_api_collection"
+      },
+      "examples": {
+        "application/vnd.api+json": {
+          "data": [
+            {
+              "type": "folders",
+              "id": "urn:adsk.wipprod:dm.folder:hC6k4hndRWaeIVhIjvHu8w",
+              "attributes": {
+                "name": "Plans",
+                "displayName": "Plans",
+                "createTime": "2015-11-27T11:11:23.000Z",
+                "createUserId": "BW9RM76WZBGL",
+                "lastModifiedTime": "2015-11-27T11:11:27.000Z",
+                "lastModifiedUserId": "BW9RM76WZBGL",
+                "path": "/dm-test-root/f0cb4ba0-7722-0133-9814-0eeb7bad1e3b",
+                "objectCount": 4,
+                "extension": {
+                  "type": "folders:autodesk.bim360:Folders",
+                  "version": "1.0",
+                  "schema": {
+                    "href": "/schema/v1/versions/folders%3Aautodesk.bim360%3AFolders-1.0"
+                  },
+                  "data": {
+                    "allowedTypes": [
+                      "folders",
+                      "items:autodesk.bim360:Files",
+                      "items:autodesk.bim360:Documents",
+                      "items:autodesk.bim360:TitleBlocks"
+                    ],
+                    "visibleTypes": [
+                      "folders",
+                      "items:autodesk.bim360:Documents"
+                    ]
+                  }
+                }
+              },
+              "links": {
+                "self": {
+                  "href": "/data/v1/projects/a.45637/folders/urn%3Aadsk.wipprod%3Adm.folder%3AhC6k4hndRWaeIVhIjvHu8w"
+                }
+              },
+              "relationships": {
+                "parent": {
+                  "links": {
+                    "related": {
+                      "href": "/data/v1/projects/a.45637/folders/urn%3Aadsk.wipprod%3Adm.folder%3Asdfedf8wefl"
+                    }
+                  },
+                  "data": {
+                    "type": "folders",
+                    "id": "urn:adsk.wipprod:dm.folder:sdfedf8wefl"
+                  }
+                },
+                "refs": {
+                  "links": {
+                    "related": {
+                      "href": "/data/v1/projects/a.45637/folders/urn%3Aadsk.wipprod%3Adm.folder%3AhC6k4hndRWaeIVhIjvHu8w/relationships/refs"
+                    }
+                  }
+                },
+                "contents": {
+                  "links": {
+                    "related": {
+                      "href": "/data/v1/projects/a.45637/folders/urn%3Aadsk.wipprod%3Adm.folder%3AhC6k4hndRWaeIVhIjvHu8w/contents"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "items",
+              "id": "urn:adsk.wipprod:dm.lineage:hC6k4hndRWaeIVhIjvHu8w",
+              "attributes": {
+                "displayName": "my file",
+                "createTime": "2015-11-27T11:11:23.000Z",
+                "createUserId": "BW9RM76WZBGL",
+                "lastModifiedTime": "2015-11-27T11:11:27.000Z",
+                "lastModifiedUserId": "BW9RM76WZBGL",
+                "extension": {
+                  "type": "items:autodesk.bim360:Files",
+                  "version": "1.0",
+                  "schema": {
+                    "href": "/schema/v1/versions/items%3Aautodesk.bim360%3AFiles-1.0"
+                  },
+                  "data": {}
+                }
+              },
+              "links": {
+                "self": {
+                  "href": "/data/v1/projects/a.45637/items/urn%3Aadsk.wipprod%3Adm.lineage%3AhC6k4hndRWaeIVhIjvHu8w"
+                }
+              },
+              "relationships": {
+                "tip": {
+                  "links": {
+                    "related": {
+                      "href": "/data/v1/projects/a.45637/items/urn%3Aadsk.wipprod%3Adm.lineage%3AhC6k4hndRWaeIVhIjvHu8w/tip"
+                    }
+                  },
+                  "data": {
+                    "type": "versions",
+                    "id": "urn:adsk.wipprod:fs.file:vf.d34fdsg3g?version=2"
+                  }
+                },
+                "versions": {
+                  "links": {
+                    "related": {
+                      "href": "/data/v1/projects/a.45637/items/urn%3Aadsk.wipprod%3Adm.lineage%3AhC6k4hndRWaeIVhIjvHu8w/versions"
+                    }
+                  }
+                },
+                "refs": {
+                  "links": {
+                    "related": {
+                      "href": "/data/v1/projects/a.45637/items/urn%3Aadsk.wipprod%3Adm.lineage%3AhC6k4hndRWaeIVhIjvHu8w/relationships/refs"
+                    }
+                  }
+                },
+                "parent": {
+                  "links": {
+                    "related": {
+                      "href": "/data/v1/projects/a.45637/folders/urn%3Aadsk.wipprod%3Adm.folder%3Asdfedf8wefl"
+                    }
+                  },
+                  "data": {
+                    "type": "folders",
+                    "id": "urn:adsk.wipprod:dm.folder:sdfedf8wefl"
+                  }
+                }
+              }
+            }
+          ],
+          "included": [
+            {
+              "type": "versions",
+              "id": "urn:adsk.wipprod:fs.file:vf.d34fdsg3g?version=2",
+              "attributes": {
+                "name": "version-test.pdf",
+                "displayName": "version-test.pdf",
+                "createTime": "2016-04-01T11:09:03.000Z",
+                "createUserId": "BW9RM76WZBGL",
+                "lastModifiedTime": "2016-04-01T11:11:18.000Z",
+                "lastModifiedUserId": "BW9RM76WZBGL",
+                "versionNumber": 2,
+                "mimeType": "appplication/pdf",
+                "extension": {
+                  "type": "versions:autodesk.bim360:FileVersions",
+                  "version": "1.0",
+                  "schema": {
+                    "href": "/schema/v1/versions/versions%3Aautodesk.bim360%3AFileVersions-1.0"
+                  },
+                  "data": {
+                    "tempUrn": null,
+                    "properties": {},
+                    "storageUrn": "urn:adsk.objects:os.object:wip.dm.prod/3c8f6bbc-fe5c-4815-a92e-8b8635e7b1cb.pdf",
+                    "storageType": "OSS"
+                  }
+                }
+              },
+              "links": {
+                "self": {
+                  "href": "/data/v1/projects/b.6f8813fe-31a7-4440-bc63-d8ca97c856b4/versions/urn%3Aadsk.wipprod%3Afs.file%3Avf.b909RzMKR4mhc3O7UBY_8g%3Fversions%3D1"
+                }
+              },
+              "relationships": {
+                "item": {
+                  "links": {
+                    "related": {
+                      "href": "/data/v1/projects/b.6f8813fe-31a7-4440-bc63-d8ca97c856b4/items/urn%3Aadsk.wipprod%3Adm.lineage%3Ab909RzMKR4mhc3O7UBY_8g"
+                    }
+                  },
+                  "data": {
+                    "type": "items",
+                    "id": "urn:adsk.wipprod:dm.lineage:b909RzMKR4mhc3O7UBY_8g"
+                  }
+                },
+                "refs": {
+                  "links": {
+                    "related": {
+                      "href": "/data/v1/projects/b.6f8813fe-31a7-4440-bc63-d8ca97c856b4/versions/urn%3Aadsk.wipprod%3Afs.file%3Avf.b909RzMKR4mhc3O7UBY_8g%3Fversions%3D1/relationships/refs"
+                    }
+                  }
+                },
+                "storage": {
+                  "meta": {
+                    "link": {
+                      "href": "/oss/v2/buckets/wipbucket/objects/urn:adsk.objects:os.object:wip.dm.prod%2F3c8f6bbc-fe5c-4815-a92e-8b8635e7b1cb.pdf"
+                    }
+                  },
+                  "data": {
+                    "type": "objects",
+                    "id": "urn:adsk.objects:os.object:wip.dm.prod/3c8f6bbc-fe5c-4815-a92e-8b8635e7b1cb.pdf"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "entities": {
+      "description": "Successful response",
+      "schema": {
+        "$ref": "#/definitions/json_api_collection"
+      },
+      "examples": {
+        "application/vnd.api+json": {
+          "data": [
+            {
+              "type": "folders",
+              "id": "urn:adsk.wipprod:dm.folder:hC6k4hndRWaeIVhIjvHu8w",
+              "attributes": {
+                "name": "Plans",
+                "displayName": "Plans",
+                "createTime": "2015-11-27T11:11:23.000Z",
+                "createUserId": "BW9RM76WZBGL",
+                "lastModifiedTime": "2015-11-27T11:11:27.000Z",
+                "lastModifiedUserId": "BW9RM76WZBGL",
+                "path": "/dm-test-root/f0cb4ba0-7722-0133-9814-0eeb7bad1e3b",
+                "objectCount": 4,
+                "extension": {
+                  "type": "folders:autodesk.bim360:Folders",
+                  "version": "1.0",
+                  "schema": {
+                    "href": "/schema/v1/versions/folders%3Aautodesk.bim360%3AFolders-1.0"
+                  },
+                  "data": {
+                    "allowedTypes": [
+                      "folders",
+                      "items:autodesk.bim360:Files",
+                      "items:autodesk.bim360:Documents",
+                      "items:autodesk.bim360:TitleBlocks"
+                    ],
+                    "visibleTypes": [
+                      "folders",
+                      "items:autodesk.bim360:Documents"
+                    ]
+                  }
+                }
+              },
+              "links": {
+                "self": {
+                  "href": "/data/v1/projects/a.45637/folders/urn%3Aadsk.wipprod%3Adm.folder%3AhC6k4hndRWaeIVhIjvHu8w"
+                }
+              },
+              "relationships": {
+                "parent": {
+                  "links": {
+                    "related": {
+                      "href": "/data/v1/projects/a.45637/folders/urn%3Aadsk.wipprod%3Adm.folder%3Asdfedf8wefl"
+                    }
+                  },
+                  "data": {
+                    "type": "folders",
+                    "id": "urn:adsk.wipprod:dm.folder:sdfedf8wefl"
+                  }
+                },
+                "refs": {
+                  "links": {
+                    "related": {
+                      "href": "/data/v1/projects/a.45637/folders/urn%3Aadsk.wipprod%3Adm.folder%3AhC6k4hndRWaeIVhIjvHu8w/relationships/refs"
+                    }
+                  }
+                },
+                "contents": {
+                  "links": {
+                    "related": {
+                      "href": "/data/v1/projects/a.45637/folders/urn%3Aadsk.wipprod%3Adm.folder%3AhC6k4hndRWaeIVhIjvHu8w/contents"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "items",
+              "id": "urn:adsk.wipprod:dm.lineage:hC6k4hndRWaeIVhIjvHu8w",
+              "attributes": {
+                "displayName": "my file",
+                "createTime": "2015-11-27T11:11:23.000Z",
+                "createUserId": "BW9RM76WZBGL",
+                "lastModifiedTime": "2015-11-27T11:11:27.000Z",
+                "lastModifiedUserId": "BW9RM76WZBGL",
+                "extension": {
+                  "type": "items:autodesk.bim360:Files",
+                  "version": "1.0",
+                  "schema": {
+                    "href": "/schema/v1/versions/items%3Aautodesk.bim360%3AFiles-1.0"
+                  },
+                  "data": {}
+                }
+              },
+              "links": {
+                "self": {
+                  "href": "/data/v1/projects/a.45637/items/urn%3Aadsk.wipprod%3Adm.lineage%3AhC6k4hndRWaeIVhIjvHu8w"
+                }
+              },
+              "relationships": {
+                "tip": {
+                  "links": {
+                    "related": {
+                      "href": "/data/v1/projects/a.45637/items/urn%3Aadsk.wipprod%3Adm.lineage%3AhC6k4hndRWaeIVhIjvHu8w/tip"
+                    }
+                  },
+                  "data": {
+                    "type": "versions",
+                    "id": "urn:adsk.wipprod:fs.file:vf.d34fdsg3g?version=2"
+                  }
+                },
+                "versions": {
+                  "links": {
+                    "related": {
+                      "href": "/data/v1/projects/a.45637/items/urn%3Aadsk.wipprod%3Adm.lineage%3AhC6k4hndRWaeIVhIjvHu8w/versions"
+                    }
+                  }
+                },
+                "refs": {
+                  "links": {
+                    "related": {
+                      "href": "/data/v1/projects/a.45637/items/urn%3Aadsk.wipprod%3Adm.lineage%3AhC6k4hndRWaeIVhIjvHu8w/relationships/refs"
+                    }
+                  }
+                },
+                "parent": {
+                  "links": {
+                    "related": {
+                      "href": "/data/v1/projects/a.45637/folders/urn%3Aadsk.wipprod%3Adm.folder%3Asdfedf8wefl"
+                    }
+                  },
+                  "data": {
+                    "type": "folders",
+                    "id": "urn:adsk.wipprod:dm.folder:sdfedf8wefl"
+                  }
+                }
+              }
+            },
+            {
+              "type": "versions",
+              "id": "urn:adsk.wipprod:fs.file:vf.b909RzMKR4mhc3O7UBY_8g?version=2",
+              "attributes": {
+                "name": "version-test.pdf",
+                "displayName": "version-test.pdf",
+                "createTime": "2016-04-01T11:12:35.000Z",
+                "createUserId": "BW9RM76WZBGL",
+                "lastModifiedTime": "2016-04-01T11:15:22.000Z",
+                "lastModifiedUserId": "BW9RM76WZBGL",
+                "versionNumber": 2,
+                "mimeType": "application/pdf",
+                "extension": {
+                  "type": "versions:autodesk.bim360:FileVersions",
+                  "version": "1.0",
+                  "schema": {
+                    "href": "/schema/v1/versions/versions%3Aautodesk.bim360%3AFileVersions-1.0"
+                  },
+                  "data": {
+                    "tempUrn": null,
+                    "properties": {},
+                    "storageUrn": "urn:adsk.objects:os.object:wip.dm.prod/9f8bdc3f-e29c-4ada-ab7b-bb8dfa821163.pdf",
+                    "storageType": "OSS"
+                  }
+                }
+              },
+              "links": {
+                "self": {
+                  "href": "/data/v1/projects/b.6f8813fe-31a7-4440-bc63-d8ca97c856b4/versions/urn%3Aadsk.wipprod%3Afs.file%3Avf.b909RzMKR4mhc3O7UBY_8g%3Fversions%3D2"
+                }
+              },
+              "relationships": {
+                "item": {
+                  "links": {
+                    "related": {
+                      "href": "/data/v1/projects/b.6f8813fe-31a7-4440-bc63-d8ca97c856b4/items/urn%3Aadsk.wipprod%3Adm.lineage%3Ab909RzMKR4mhc3O7UBY_8g"
+                    }
+                  },
+                  "data": {
+                    "type": "items",
+                    "id": "urn:adsk.wipprod:dm.lineage:b909RzMKR4mhc3O7UBY_8g"
+                  }
+                },
+                "refs": {
+                  "links": {
+                    "related": {
+                      "href": "/data/v1/projects/b.6f8813fe-31a7-4440-bc63-d8ca97c856b4/versions/urn%3Aadsk.wipprod%3Afs.file%3Avf.b909RzMKR4mhc3O7UBY_8g%3Fversions%3D2/relationships/refs"
+                    }
+                  }
+                },
+                "storage": {
+                  "meta": {
+                    "link": {
+                      "href": "/oss/v2/buckets/wipbucket/objects/urn:adsk.objects:os.object:wip.dm.prod%2F9f8bdc3f-e29c-4ada-ab7b-bb8dfa821163.pdf"
+                    }
+                  },
+                  "data": {
+                    "type": "objects",
+                    "id": "urn:adsk.objects:os.object:wip.dm.prod/9f8bdc3f-e29c-4ada-ab7b-bb8dfa821163.pdf"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "storage_created": {
+      "description": "Storage created response",
+      "schema": {
+        "title": "item",
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/json_api_document_base"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/storage"
+              }
+            }
+          }
+        ]
+      },
+      "headers": {
+        "location": {
+          "type": "string",
+          "description": "use this URL to upload the file content to"
+        }
+      },
+      "examples": {
+        "application/vnd.api+json": {
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "data": {
+            "type": "objects",
+            "id": "urn:adsk.objects:os.object:wip.dm.prod.temp/830b7ac3-dc75-4e36-aa32-7a1cff7599a1.dwg",
+            "relationships": {
+              "target": {
+                "links": {
+                  "related": {
+                    "href": "/data/v1/projects/b.6f8813fe-31a7-4440-bc63-d8ca97c856b4/folders/urn%3Aadsk.wipprod%3Adm.folder%3Asdfedf8wefl"
+                  }
+                },
+                "data": {
+                  "type": "folders",
+                  "id": "urn:adsk.wipprod:dm.folder:sdfedf8wefl"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "item_created": {
+      "description": "Item created response",
+      "schema": {
+        "title": "item",
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/json_api_document"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/item"
+              }
+            }
+          }
+        ]
+      },
+      "headers": {
+        "location": {
+          "type": "string",
+          "description": "the URL of the newly created item"
+        }
+      },
+      "examples": {
+        "application/vnd.api+json": {
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "data": {
+            "type": "items",
+            "id": "urn:adsk.wipprod:dm.lineage:hC6k4hndRWaeIVhIjvHu8w",
+            "attributes": {
+              "extension": {}
+            },
+            "relationships": {
+              "tip": {
+                "links": {
+                  "related": {
+                    "href": "/data/v1/projects/b.6f8813fe-31a7-4440-bc63-d8ca97c856b4/versions/urn%3Aadsk.wipprod%3Afs.file%3Avf.d34fdsg3g%3Fversions%3D1"
+                  }
+                },
+                "data": {
+                  "type": "versions",
+                  "id": "urn:adsk.wipprod:fs.file:vf.d34fdsg3g?version=1"
+                }
+              }
+            }
+          },
+          "included": [
+            {
+              "type": "versions",
+              "id": "urn:adsk.wipprod:fs.file:vf.d34fdsg3g?version=1",
+              "attributes": {},
+              "relationships": {}
+            }
+          ]
+        }
+      }
+    },
+    "version_created": {
+      "description": "Version created response",
+      "schema": {
+        "title": "version",
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/json_api_document"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/version"
+              }
+            }
+          }
+        ]
+      },
+      "headers": {
+        "location": {
+          "type": "string",
+          "description": "the URL of the newly created version"
+        }
+      },
+      "examples": {
+        "application/vnd.api+json": {
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "data": {
+            "type": "versions",
+            "id": "urn:adsk.wipprod:fs.file:vf.d34fdsg3g?version=2",
+            "attributes": {
+              "extension": {}
+            },
+            "relationships": {}
+          }
+        }
+      }
+    },
+    "ref_created": {
+      "description": "Ref created response"
+    },
+    "bad_input": {
+      "description": "Bad input response",
+      "schema": {
+        "title": "bad input",
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/json_api_error"
+          }
+        ]
+      },
+      "examples": {
+        "application/vnd.api+json": {
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "errors": [
+            {
+              "id": "f994fbeb-ae29-46ed-82da-7293aac53d20",
+              "status": "400",
+              "code": "BAD_INPUT",
+              "title": "One or more input values in the request were bad",
+              "detail": "'abcxyz' is an invalid Urn"
+            }
+          ]
+        }
+      }
+    },
+    "unauthorized": {
+      "description": "Token is not provided in the request."
+    },
+    "forbidden": {
+      "description": "Forbidden response",
+      "schema": {
+        "title": "forbidden",
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/json_api_error"
+          }
+        ]
+      },
+      "examples": {
+        "application/vnd.api+json": {
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "errors": [
+            {
+              "id": "d3f6d37c-a8d1-4dab-8beb-1462d06ef252",
+              "status": "403",
+              "code": "USER_NOT_AUTHENTICATED",
+              "detail": "The user was not authenticated."
+            }
+          ]
+        }
+      }
+    },
+    "not_found": {
+      "description": "Not found response",
+      "schema": {
+        "title": "not found",
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/json_api_error"
+          }
+        ]
+      },
+      "examples": {
+        "application/vnd.api+json": {
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "errors": [
+            {
+              "id": "cab3ca0a-05b9-49d8-a349-2f9ca81f459f",
+              "status": "404",
+              "code": "UNKNOWN_ENTITY",
+              "detail": "Resource not found."
+            }
+          ]
+        }
+      }
+    },
+    "conflict": {
+      "description": "Conflict response",
+      "schema": {
+        "title": "conflict",
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/json_api_error"
+          }
+        ]
+      },
+      "examples": {
+        "application/vnd.api+json": {
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "errors": [
+            {
+              "id": "cab3ca0a-05b9-49d8-a349-2f9ca81f459f",
+              "status": "409",
+              "code": "CONFLICT",
+              "detail": "There is a conflict between the provided data and the data stored on the server."
+            }
+          ]
+        }
+      }
+    }
+  }
+}
