@@ -55,14 +55,15 @@ program
                     var path =results.resolved.paths [ipath] ;
                     if ( !path.hasOwnProperty ('parameters') )
                         continue ;
+                    var rpaths =path.parameters.reverse () ;
                     for ( var iep in path ) {
                         var ep =path [iep] ;
                         if ( !ep.hasOwnProperty ('operationId') )
                             continue ;
                         if ( !ep.hasOwnProperty ('parameters') )
                             ep.parameters =[] ;
-                        for ( var param in path.parameters )
-                            ep.parameters.push (path.parameters [param]) ;
+                        for ( var param in rpaths )
+                            ep.parameters.unshift (rpaths [param]) ;
 
                     }
                     delete path.parameters ;

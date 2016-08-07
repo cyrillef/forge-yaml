@@ -210,13 +210,13 @@
         "description": "Returns a collection of projects for a given `hub_id`.\nA project represents an A360 project or a BIM 360 project which is set up under an A360 hub or BIM 360 account, respectively.\nWithin a hub or an account, multiple projects can be created to be used.\n",
         "parameters": [
           {
+            "$ref": "#/parameters/hub_id"
+          },
+          {
             "$ref": "#/parameters/query_filter_id"
           },
           {
             "$ref": "#/parameters/query_filter_extensionType"
-          },
-          {
-            "$ref": "#/parameters/hub_id"
           }
         ],
         "responses": {
@@ -442,6 +442,12 @@
         "x-ads_notes": "* The tip version for each item resource is included by default.\n",
         "parameters": [
           {
+            "$ref": "#/parameters/project_id"
+          },
+          {
+            "$ref": "#/parameters/folder_id"
+          },
+          {
             "$ref": "#/parameters/query_filter_type"
           },
           {
@@ -455,12 +461,6 @@
           },
           {
             "$ref": "#/parameters/query_paging_page_limit"
-          },
-          {
-            "$ref": "#/parameters/project_id"
-          },
-          {
-            "$ref": "#/parameters/folder_id"
           }
         ],
         "responses": {
@@ -502,6 +502,12 @@
         "x-ads_notes": "* Each relationship is defined by the `id` of the object at the other end of the relationship,\n  together with `type`, `attributes`, and `relationships` links.\n* Callers will typically use a `filter` parameter to restrict the response to the\n  custom relationship types (`filter[meta.refType]`) they are interested in.\n",
         "parameters": [
           {
+            "$ref": "#/parameters/project_id"
+          },
+          {
+            "$ref": "#/parameters/folder_id"
+          },
+          {
             "$ref": "#/parameters/query_filter_type"
           },
           {
@@ -509,12 +515,6 @@
           },
           {
             "$ref": "#/parameters/query_filter_extensionType"
-          },
-          {
-            "$ref": "#/parameters/project_id"
-          },
-          {
-            "$ref": "#/parameters/folder_id"
           }
         ],
         "responses": {
@@ -556,6 +556,12 @@
         "x-ads_notes": "* Each relationship is defined by the `id` of the object at the other end of the relationship,\n  together with `type`, specific reference `meta` including `extension` data.\n* Callers will typically use a `filter` parameter to restrict the response to the\n  custom relationship types (`filter[meta.refType]`) they are interested in.\n* The response body will have an `included` section which contains the resources that are involved in the\n  relationship, which is essentially the `GET projects/:project_id/folders/:folder_id/refs` endpoint.\n",
         "parameters": [
           {
+            "$ref": "#/parameters/project_id"
+          },
+          {
+            "$ref": "#/parameters/folder_id"
+          },
+          {
             "$ref": "#/parameters/query_filter_type"
           },
           {
@@ -569,12 +575,6 @@
           },
           {
             "$ref": "#/parameters/query_filter_extensionType"
-          },
-          {
-            "$ref": "#/parameters/project_id"
-          },
-          {
-            "$ref": "#/parameters/folder_id"
           }
         ],
         "responses": {
@@ -611,13 +611,13 @@
         "description": "Creates a custom relationship between a folder and another resource within the 'data' domain service (folder, item, or version).\n",
         "parameters": [
           {
-            "$ref": "#/parameters/body_create_ref"
-          },
-          {
             "$ref": "#/parameters/project_id"
           },
           {
             "$ref": "#/parameters/folder_id"
+          },
+          {
+            "$ref": "#/parameters/body_create_ref"
           }
         ],
         "responses": {
@@ -748,6 +748,12 @@
         "x-ads_notes": "* Each relationship is defined by the `id` of the object at the other end of the relationship,\n  together with `type`, `attributes`, and `relationships` links.\n* Callers will typically use a `filter` parameter to restrict the response to the\n  custom relationship types (`filter[meta.refType]`) they are interested in.\n",
         "parameters": [
           {
+            "$ref": "#/parameters/project_id"
+          },
+          {
+            "$ref": "#/parameters/item_id"
+          },
+          {
             "$ref": "#/parameters/query_filter_type"
           },
           {
@@ -755,12 +761,6 @@
           },
           {
             "$ref": "#/parameters/query_filter_extensionType"
-          },
-          {
-            "$ref": "#/parameters/project_id"
-          },
-          {
-            "$ref": "#/parameters/item_id"
           }
         ],
         "responses": {
@@ -802,6 +802,12 @@
         "x-ads_notes": "* Each relationship is defined by the `id` of the object at the other end of the relationship,\n  together with `type`, specific reference `meta` including `extension` data.\n* Callers will typically use a `filter` parameter to restrict the response to the\n  custom relationship types (`filter[meta.refType]`) they are interested in.\n* The response body will have an `included` section which contains the resources that are involved in the\n  relationship, which is essentially the `GET projects/:project_id/items/:item_id/refs` endpoint.\n",
         "parameters": [
           {
+            "$ref": "#/parameters/project_id"
+          },
+          {
+            "$ref": "#/parameters/item_id"
+          },
+          {
             "$ref": "#/parameters/query_filter_type"
           },
           {
@@ -815,12 +821,6 @@
           },
           {
             "$ref": "#/parameters/query_filter_extensionType"
-          },
-          {
-            "$ref": "#/parameters/project_id"
-          },
-          {
-            "$ref": "#/parameters/item_id"
           }
         ],
         "responses": {
@@ -857,13 +857,13 @@
         "description": "Creates a custom relationship between an item and another resource within the 'data' domain service (folder, item, or version).\n",
         "parameters": [
           {
-            "$ref": "#/parameters/body_create_ref"
-          },
-          {
             "$ref": "#/parameters/project_id"
           },
           {
             "$ref": "#/parameters/item_id"
+          },
+          {
+            "$ref": "#/parameters/body_create_ref"
           }
         ],
         "responses": {
@@ -948,6 +948,12 @@
         "description": "Returns versions for the given item.\nMultiple versions of a resource item can be uploaded in a project.\n",
         "parameters": [
           {
+            "$ref": "#/parameters/project_id"
+          },
+          {
+            "$ref": "#/parameters/item_id"
+          },
+          {
             "$ref": "#/parameters/query_filter_type"
           },
           {
@@ -964,12 +970,6 @@
           },
           {
             "$ref": "#/parameters/query_paging_page_limit"
-          },
-          {
-            "$ref": "#/parameters/project_id"
-          },
-          {
-            "$ref": "#/parameters/item_id"
           }
         ],
         "responses": {
@@ -1099,6 +1099,12 @@
         "x-ads_notes": "* Each relationship is defined by the `id` of the object at the other end of the relationship,\n  together with `type`, `attributes`, and `relationships` links.\n* Callers will typically use a `filter` parameter to restrict the response to the\n  custom relationship types (`filter[meta.refType]`) they are interested in.\n",
         "parameters": [
           {
+            "$ref": "#/parameters/project_id"
+          },
+          {
+            "$ref": "#/parameters/version_id"
+          },
+          {
             "$ref": "#/parameters/query_filter_type"
           },
           {
@@ -1106,12 +1112,6 @@
           },
           {
             "$ref": "#/parameters/query_filter_extensionType"
-          },
-          {
-            "$ref": "#/parameters/project_id"
-          },
-          {
-            "$ref": "#/parameters/version_id"
           }
         ],
         "responses": {
@@ -1153,6 +1153,12 @@
         "x-ads_notes": "* Each relationship is defined by the `id` of the object at the other end of the relationship,\n  together with `type`, specific reference `meta` including `extension` data.\n* Callers will typically use a `filter` parameter to restrict the response to the\n  custom relationship types (`filter[meta.refType]`) they are interested in.\n* The response body will have an `included` section which contains the resources that are involved in the\n  relationship, which is essentially the `GET projects/:project_id/versions/:version_id/refs` endpoint.\n",
         "parameters": [
           {
+            "$ref": "#/parameters/project_id"
+          },
+          {
+            "$ref": "#/parameters/version_id"
+          },
+          {
             "$ref": "#/parameters/query_filter_type"
           },
           {
@@ -1166,12 +1172,6 @@
           },
           {
             "$ref": "#/parameters/query_filter_extensionType"
-          },
-          {
-            "$ref": "#/parameters/project_id"
-          },
-          {
-            "$ref": "#/parameters/version_id"
           }
         ],
         "responses": {
@@ -1208,13 +1208,13 @@
         "description": "Creates a custom relationship between a version and another resource within the 'data' domain service (folder, item, or version).\n",
         "parameters": [
           {
-            "$ref": "#/parameters/body_create_ref"
-          },
-          {
             "$ref": "#/parameters/project_id"
           },
           {
             "$ref": "#/parameters/version_id"
+          },
+          {
+            "$ref": "#/parameters/body_create_ref"
           }
         ],
         "responses": {
@@ -1255,10 +1255,10 @@
         "description": "Creates a storage location in the OSS where data can be uploaded to.\n",
         "parameters": [
           {
-            "$ref": "#/parameters/body_create_storage"
+            "$ref": "#/parameters/project_id"
           },
           {
-            "$ref": "#/parameters/project_id"
+            "$ref": "#/parameters/body_create_storage"
           }
         ],
         "responses": {
@@ -1299,10 +1299,10 @@
         "description": "Creates a new item in the 'data' domain service.\n",
         "parameters": [
           {
-            "$ref": "#/parameters/body_create_item"
+            "$ref": "#/parameters/project_id"
           },
           {
-            "$ref": "#/parameters/project_id"
+            "$ref": "#/parameters/body_create_item"
           }
         ],
         "responses": {
@@ -1346,10 +1346,10 @@
         "description": "Creates a new version of an item in the 'data' domain service.\n",
         "parameters": [
           {
-            "$ref": "#/parameters/body_create_version"
+            "$ref": "#/parameters/project_id"
           },
           {
-            "$ref": "#/parameters/project_id"
+            "$ref": "#/parameters/body_create_version"
           }
         ],
         "responses": {

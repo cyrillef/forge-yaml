@@ -187,9 +187,9 @@ paths:
 
         '
       parameters:
+      - {$ref: '#/parameters/hub_id'}
       - {$ref: '#/parameters/query_filter_id'}
       - {$ref: '#/parameters/query_filter_extensionType'}
-      - {$ref: '#/parameters/hub_id'}
       responses:
         '200': {$ref: '#/responses/projects'}
         '401': {$ref: '#/responses/unauthorized'}
@@ -323,13 +323,13 @@ paths:
 
         '
       parameters:
+      - {$ref: '#/parameters/project_id'}
+      - {$ref: '#/parameters/folder_id'}
       - {$ref: '#/parameters/query_filter_type'}
       - {$ref: '#/parameters/query_filter_id'}
       - {$ref: '#/parameters/query_filter_extensionType'}
       - {$ref: '#/parameters/query_paging_page_number'}
       - {$ref: '#/parameters/query_paging_page_limit'}
-      - {$ref: '#/parameters/project_id'}
-      - {$ref: '#/parameters/folder_id'}
       responses:
         '200': {$ref: '#/responses/contents'}
         '400': {$ref: '#/responses/bad_input'}
@@ -360,11 +360,11 @@ paths:
         \ to restrict the response to the\n  custom relationship types (`filter[meta.refType]`)\
         \ they are interested in.\n"
       parameters:
+      - {$ref: '#/parameters/project_id'}
+      - {$ref: '#/parameters/folder_id'}
       - {$ref: '#/parameters/query_filter_type'}
       - {$ref: '#/parameters/query_filter_id'}
       - {$ref: '#/parameters/query_filter_extensionType'}
-      - {$ref: '#/parameters/project_id'}
-      - {$ref: '#/parameters/folder_id'}
       responses:
         '200': {$ref: '#/responses/entities'}
         '400': {$ref: '#/responses/bad_input'}
@@ -397,13 +397,13 @@ paths:
         \ which contains the resources that are involved in the\n  relationship, which\
         \ is essentially the `GET projects/:project_id/folders/:folder_id/refs` endpoint.\n"
       parameters:
+      - &id0001 {$ref: '#/parameters/project_id'}
+      - &id0002 {$ref: '#/parameters/folder_id'}
       - {$ref: '#/parameters/query_filter_type'}
       - {$ref: '#/parameters/query_filter_id'}
       - {$ref: '#/parameters/query_filter_refType'}
       - {$ref: '#/parameters/query_filter_refDirection'}
       - {$ref: '#/parameters/query_filter_extensionType'}
-      - &id0001 {$ref: '#/parameters/project_id'}
-      - &id0002 {$ref: '#/parameters/folder_id'}
       responses:
         '200': {$ref: '#/responses/refs'}
         '400': {$ref: '#/responses/bad_input'}
@@ -422,9 +422,9 @@ paths:
 
         '
       parameters:
-      - {$ref: '#/parameters/body_create_ref'}
       - *id0001
       - *id0002
+      - {$ref: '#/parameters/body_create_ref'}
       responses:
         '204': {$ref: '#/responses/ref_created'}
         '400': {$ref: '#/responses/bad_input'}
@@ -505,11 +505,11 @@ paths:
         \ to restrict the response to the\n  custom relationship types (`filter[meta.refType]`)\
         \ they are interested in.\n"
       parameters:
+      - {$ref: '#/parameters/project_id'}
+      - {$ref: '#/parameters/item_id'}
       - {$ref: '#/parameters/query_filter_type'}
       - {$ref: '#/parameters/query_filter_id'}
       - {$ref: '#/parameters/query_filter_extensionType'}
-      - {$ref: '#/parameters/project_id'}
-      - {$ref: '#/parameters/item_id'}
       responses:
         '200': {$ref: '#/responses/entities'}
         '400': {$ref: '#/responses/bad_input'}
@@ -542,13 +542,13 @@ paths:
         \ which contains the resources that are involved in the\n  relationship, which\
         \ is essentially the `GET projects/:project_id/items/:item_id/refs` endpoint.\n"
       parameters:
+      - &id0003 {$ref: '#/parameters/project_id'}
+      - &id0004 {$ref: '#/parameters/item_id'}
       - {$ref: '#/parameters/query_filter_type'}
       - {$ref: '#/parameters/query_filter_id'}
       - {$ref: '#/parameters/query_filter_refType'}
       - {$ref: '#/parameters/query_filter_refDirection'}
       - {$ref: '#/parameters/query_filter_extensionType'}
-      - &id0003 {$ref: '#/parameters/project_id'}
-      - &id0004 {$ref: '#/parameters/item_id'}
       responses:
         '200': {$ref: '#/responses/refs'}
         '400': {$ref: '#/responses/bad_input'}
@@ -567,9 +567,9 @@ paths:
 
         '
       parameters:
-      - {$ref: '#/parameters/body_create_ref'}
       - *id0003
       - *id0004
+      - {$ref: '#/parameters/body_create_ref'}
       responses:
         '204': {$ref: '#/responses/ref_created'}
         '400': {$ref: '#/responses/bad_input'}
@@ -618,14 +618,14 @@ paths:
 
         '
       parameters:
+      - {$ref: '#/parameters/project_id'}
+      - {$ref: '#/parameters/item_id'}
       - {$ref: '#/parameters/query_filter_type'}
       - {$ref: '#/parameters/query_filter_id'}
       - {$ref: '#/parameters/query_filter_extensionType'}
       - {$ref: '#/parameters/query_filter_item_version'}
       - {$ref: '#/parameters/query_paging_page_number'}
       - {$ref: '#/parameters/query_paging_page_limit'}
-      - {$ref: '#/parameters/project_id'}
-      - {$ref: '#/parameters/item_id'}
       responses:
         '200': {$ref: '#/responses/versions'}
         '400': {$ref: '#/responses/bad_input'}
@@ -700,11 +700,11 @@ paths:
         \ to restrict the response to the\n  custom relationship types (`filter[meta.refType]`)\
         \ they are interested in.\n"
       parameters:
+      - {$ref: '#/parameters/project_id'}
+      - {$ref: '#/parameters/version_id'}
       - {$ref: '#/parameters/query_filter_type'}
       - {$ref: '#/parameters/query_filter_id'}
       - {$ref: '#/parameters/query_filter_extensionType'}
-      - {$ref: '#/parameters/project_id'}
-      - {$ref: '#/parameters/version_id'}
       responses:
         '200': {$ref: '#/responses/entities'}
         '400': {$ref: '#/responses/bad_input'}
@@ -738,13 +738,13 @@ paths:
         \ is essentially the `GET projects/:project_id/versions/:version_id/refs`\
         \ endpoint.\n"
       parameters:
+      - &id0005 {$ref: '#/parameters/project_id'}
+      - &id0006 {$ref: '#/parameters/version_id'}
       - {$ref: '#/parameters/query_filter_type'}
       - {$ref: '#/parameters/query_filter_id'}
       - {$ref: '#/parameters/query_filter_refType'}
       - {$ref: '#/parameters/query_filter_refDirection'}
       - {$ref: '#/parameters/query_filter_extensionType'}
-      - &id0005 {$ref: '#/parameters/project_id'}
-      - &id0006 {$ref: '#/parameters/version_id'}
       responses:
         '200': {$ref: '#/responses/refs'}
         '400': {$ref: '#/responses/bad_input'}
@@ -763,9 +763,9 @@ paths:
 
         '
       parameters:
-      - {$ref: '#/parameters/body_create_ref'}
       - *id0005
       - *id0006
+      - {$ref: '#/parameters/body_create_ref'}
       responses:
         '204': {$ref: '#/responses/ref_created'}
         '400': {$ref: '#/responses/bad_input'}
@@ -787,8 +787,8 @@ paths:
 
         '
       parameters:
-      - {$ref: '#/parameters/body_create_storage'}
       - {$ref: '#/parameters/project_id'}
+      - {$ref: '#/parameters/body_create_storage'}
       responses:
         '201': {$ref: '#/responses/storage_created'}
         '400': {$ref: '#/responses/bad_input'}
@@ -809,8 +809,8 @@ paths:
 
         '
       parameters:
-      - {$ref: '#/parameters/body_create_item'}
       - {$ref: '#/parameters/project_id'}
+      - {$ref: '#/parameters/body_create_item'}
       responses:
         '201': {$ref: '#/responses/item_created'}
         '400': {$ref: '#/responses/bad_input'}
@@ -835,8 +835,8 @@ paths:
 
         '
       parameters:
-      - {$ref: '#/parameters/body_create_version'}
       - {$ref: '#/parameters/project_id'}
+      - {$ref: '#/parameters/body_create_version'}
       responses:
         '201': {$ref: '#/responses/version_created'}
         '400': {$ref: '#/responses/bad_input'}

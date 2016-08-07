@@ -210,12 +210,12 @@ paths:
 
         '
       parameters:
+      - &id0001 {$ref: '#/parameters/bucketKey'}
+      - &id0002 {$ref: '#/parameters/objectName'}
       - {$ref: '#/parameters/Content-Length'}
       - {$ref: '#/parameters/Content-Disposition'}
       - {$ref: '#/parameters/If-Match'}
       - {$ref: '#/parameters/bodyStream'}
-      - &id0001 {$ref: '#/parameters/bucketKey'}
-      - &id0002 {$ref: '#/parameters/objectName'}
       consumes: [application/octet-stream]
       responses:
         '200': {$ref: '#/responses/put_object_OK'}
@@ -235,12 +235,12 @@ paths:
       operationId: get_object
       description: Download an object.
       parameters:
+      - *id0001
+      - *id0002
       - {$ref: '#/parameters/Range'}
       - {$ref: '#/parameters/If-None-Match'}
       - {$ref: '#/parameters/If-Modified-Since'}
       - {$ref: '#/parameters/Accept-Encoding'}
-      - *id0001
-      - *id0002
       produces: [application/octet-stream]
       responses:
         '200': {$ref: '#/responses/OK-Stream'}
@@ -283,14 +283,14 @@ paths:
       operationId: upload_chunk
       description: This endpoint allows resumable uploads for large files in chunks.
       parameters:
+      - {$ref: '#/parameters/bucketKey'}
+      - {$ref: '#/parameters/objectName'}
       - {$ref: '#/parameters/Content-Length'}
       - {$ref: '#/parameters/Content-Range'}
       - {$ref: '#/parameters/Content-Disposition'}
       - {$ref: '#/parameters/If-Match'}
       - {$ref: '#/parameters/Session-Id'}
       - {$ref: '#/parameters/bodyStream'}
-      - {$ref: '#/parameters/bucketKey'}
-      - {$ref: '#/parameters/objectName'}
       consumes: [application/octet-stream]
       responses:
         '200': {$ref: '#/responses/put_object_resumable_OK'}
@@ -340,10 +340,10 @@ paths:
       operationId: get_objects
       description: List objects in a bucket. It is only available to the bucket creator.
       parameters:
+      - {$ref: '#/parameters/bucketKey'}
       - {$ref: '#/parameters/limit'}
       - {$ref: '#/parameters/beginsWith'}
       - {$ref: '#/parameters/startAt'}
-      - {$ref: '#/parameters/bucketKey'}
       responses:
         '200': {$ref: '#/responses/get_buckets_objects_OK'}
         '400': {$ref: '#/responses/BAD_REQUEST'}
@@ -364,10 +364,10 @@ paths:
       operationId: get_object_details
       description: Returns object details in JSON format.
       parameters:
-      - {$ref: '#/parameters/If-Modified-Since'}
-      - {$ref: '#/parameters/with'}
       - {$ref: '#/parameters/bucketKey'}
       - {$ref: '#/parameters/objectName'}
+      - {$ref: '#/parameters/If-Modified-Since'}
+      - {$ref: '#/parameters/with'}
       responses:
         '200': {$ref: '#/responses/get_object_details_OK'}
         '304': {$ref: '#/responses/NOT_MODIFIED'}
@@ -393,10 +393,10 @@ paths:
         then the signed URL will no longer be valid. A successful call to this endpoint
         requires bucket owner access.
       parameters:
-      - {$ref: '#/parameters/access'}
-      - {$ref: '#/parameters/post_buckets_signed'}
       - {$ref: '#/parameters/bucketKey'}
       - {$ref: '#/parameters/objectName'}
+      - {$ref: '#/parameters/access'}
+      - {$ref: '#/parameters/post_buckets_signed'}
       responses:
         '200': {$ref: '#/responses/post_object_signed_OK'}
         '400': {$ref: '#/responses/BAD_REQUEST'}
@@ -429,12 +429,12 @@ paths:
 
         '
       parameters:
+      - &id0003 {$ref: '#/parameters/id'}
       - {$ref: '#/parameters/Content-Length'}
       - {$ref: '#/parameters/Content-Disposition'}
       - {$ref: '#/parameters/x-ads-region'}
       - {$ref: '#/parameters/If-Match'}
       - {$ref: '#/parameters/bodyStream'}
-      - &id0003 {$ref: '#/parameters/id'}
       consumes: [application/octet-stream]
       responses:
         '200': {$ref: '#/responses/put_signedresources_OK'}
@@ -454,12 +454,12 @@ paths:
       operationId: get_signed_resource
       description: Download an object using a signed URL.
       parameters:
+      - *id0003
       - {$ref: '#/parameters/Range'}
       - {$ref: '#/parameters/If-None-Match'}
       - {$ref: '#/parameters/If-Modified-Since'}
       - {$ref: '#/parameters/Accept-Encoding'}
       - {$ref: '#/parameters/region'}
-      - *id0003
       produces: [application/octet-stream]
       responses:
         '200': {$ref: '#/responses/OK-Stream'}
@@ -479,8 +479,8 @@ paths:
       description: Delete a signed URL. A successful call to this endpoint requires
         bucket owner access.
       parameters:
-      - {$ref: '#/parameters/region'}
       - *id0003
+      - {$ref: '#/parameters/region'}
       responses:
         '200': {$ref: '#/responses/OK-Stream'}
         '400': {$ref: '#/responses/BAD_REQUEST'}
@@ -501,12 +501,12 @@ paths:
       operationId: upload_signed_resources_chunk
       description: Resumable upload for signed URLs.
       parameters:
+      - {$ref: '#/parameters/id'}
       - {$ref: '#/parameters/Content-Range'}
       - {$ref: '#/parameters/Content-Disposition'}
       - {$ref: '#/parameters/x-ads-region'}
       - {$ref: '#/parameters/Session-Id'}
       - {$ref: '#/parameters/bodyStream'}
-      - {$ref: '#/parameters/id'}
       consumes: [application/octet-stream]
       responses:
         '200': {$ref: '#/responses/put_signedresources_OK'}

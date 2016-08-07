@@ -268,6 +268,12 @@
         "description": "Upload an object. If the specified object name already exists in the bucket, the uploaded content will overwrite the existing content for the bucket name/object name combination.\n",
         "parameters": [
           {
+            "$ref": "#/parameters/bucketKey"
+          },
+          {
+            "$ref": "#/parameters/objectName"
+          },
+          {
             "$ref": "#/parameters/Content-Length"
           },
           {
@@ -278,12 +284,6 @@
           },
           {
             "$ref": "#/parameters/bodyStream"
-          },
-          {
-            "$ref": "#/parameters/bucketKey"
-          },
-          {
-            "$ref": "#/parameters/objectName"
           }
         ],
         "consumes": [
@@ -330,6 +330,12 @@
         "description": "Download an object.",
         "parameters": [
           {
+            "$ref": "#/parameters/bucketKey"
+          },
+          {
+            "$ref": "#/parameters/objectName"
+          },
+          {
             "$ref": "#/parameters/Range"
           },
           {
@@ -340,12 +346,6 @@
           },
           {
             "$ref": "#/parameters/Accept-Encoding"
-          },
-          {
-            "$ref": "#/parameters/bucketKey"
-          },
-          {
-            "$ref": "#/parameters/objectName"
           }
         ],
         "produces": [
@@ -442,6 +442,12 @@
         "description": "This endpoint allows resumable uploads for large files in chunks.",
         "parameters": [
           {
+            "$ref": "#/parameters/bucketKey"
+          },
+          {
+            "$ref": "#/parameters/objectName"
+          },
+          {
             "$ref": "#/parameters/Content-Length"
           },
           {
@@ -458,12 +464,6 @@
           },
           {
             "$ref": "#/parameters/bodyStream"
-          },
-          {
-            "$ref": "#/parameters/bucketKey"
-          },
-          {
-            "$ref": "#/parameters/objectName"
           }
         ],
         "consumes": [
@@ -576,6 +576,9 @@
         "description": "List objects in a bucket. It is only available to the bucket creator.",
         "parameters": [
           {
+            "$ref": "#/parameters/bucketKey"
+          },
+          {
             "$ref": "#/parameters/limit"
           },
           {
@@ -583,9 +586,6 @@
           },
           {
             "$ref": "#/parameters/startAt"
-          },
-          {
-            "$ref": "#/parameters/bucketKey"
           }
         ],
         "responses": {
@@ -629,16 +629,16 @@
         "description": "Returns object details in JSON format.",
         "parameters": [
           {
-            "$ref": "#/parameters/If-Modified-Since"
-          },
-          {
-            "$ref": "#/parameters/with"
-          },
-          {
             "$ref": "#/parameters/bucketKey"
           },
           {
             "$ref": "#/parameters/objectName"
+          },
+          {
+            "$ref": "#/parameters/If-Modified-Since"
+          },
+          {
+            "$ref": "#/parameters/with"
           }
         ],
         "responses": {
@@ -685,16 +685,16 @@
         "description": "This endpoint creates a signed URL that can be used to download an object within the specified expiration time. Be aware that if the object the signed URL points to is deleted or expires before the signed URL expires, then the signed URL will no longer be valid. A successful call to this endpoint requires bucket owner access.",
         "parameters": [
           {
-            "$ref": "#/parameters/access"
-          },
-          {
-            "$ref": "#/parameters/post_buckets_signed"
-          },
-          {
             "$ref": "#/parameters/bucketKey"
           },
           {
             "$ref": "#/parameters/objectName"
+          },
+          {
+            "$ref": "#/parameters/access"
+          },
+          {
+            "$ref": "#/parameters/post_buckets_signed"
           }
         ],
         "responses": {
@@ -738,6 +738,9 @@
         "description": "Overwrite a existing object using a signed URL.\n\nConditions to call this operation:\n\nObject is available\nExpiration period is valid\nSigned URL should be created with `write` or `readwrite`\n",
         "parameters": [
           {
+            "$ref": "#/parameters/id"
+          },
+          {
             "$ref": "#/parameters/Content-Length"
           },
           {
@@ -751,9 +754,6 @@
           },
           {
             "$ref": "#/parameters/bodyStream"
-          },
-          {
-            "$ref": "#/parameters/id"
           }
         ],
         "consumes": [
@@ -799,6 +799,9 @@
         "description": "Download an object using a signed URL.",
         "parameters": [
           {
+            "$ref": "#/parameters/id"
+          },
+          {
             "$ref": "#/parameters/Range"
           },
           {
@@ -812,9 +815,6 @@
           },
           {
             "$ref": "#/parameters/region"
-          },
-          {
-            "$ref": "#/parameters/id"
           }
         ],
         "produces": [
@@ -860,10 +860,10 @@
         "description": "Delete a signed URL. A successful call to this endpoint requires bucket owner access.",
         "parameters": [
           {
-            "$ref": "#/parameters/region"
+            "$ref": "#/parameters/id"
           },
           {
-            "$ref": "#/parameters/id"
+            "$ref": "#/parameters/region"
           }
         ],
         "responses": {
@@ -910,6 +910,9 @@
         "description": "Resumable upload for signed URLs.",
         "parameters": [
           {
+            "$ref": "#/parameters/id"
+          },
+          {
             "$ref": "#/parameters/Content-Range"
           },
           {
@@ -923,9 +926,6 @@
           },
           {
             "$ref": "#/parameters/bodyStream"
-          },
-          {
-            "$ref": "#/parameters/id"
           }
         ],
         "consumes": [

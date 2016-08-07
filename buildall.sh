@@ -63,6 +63,8 @@ for entry in ${_yamls[@]}; do
 	for lang in ${langs[@]}; do
 		echo "    ($lang) $filename ..."
 #		node yaml-tools.js sdk $lang output/${filename}.yaml "clients/${lang}-${filename}.zip"
+
+		rm -Rf "clients/${lang}-${filename}"
 		java -jar bin/swagger-codegen-cli.jar generate -i output/${filename}.yaml -l $lang -o "clients/${lang}-${filename}"
 	done
 done
