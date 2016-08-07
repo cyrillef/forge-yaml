@@ -2,8 +2,8 @@ swagger: '2.0'
 
 info:
   title: Forge-OSS
-  version: "2.0.0"
-  x-summary: Asynchronous Javascript/Node.js library for the Autodesk Forge OSS API
+  version: "2.0.3"
+  x-summary: Asynchronous Javascript/Node.js library for the Autodesk Forge OSS API.
   description: |
     The Data Management API provides a unified and consistent way to access data across A360, Fusion 360, and the Object Storage Service.
 
