@@ -50,7 +50,6 @@ program
     .action (function (yamlFile, options) {
         loadYaml (yamlFile, false)
             .then (function (results) {
-
                 for ( var ipath in results.resolved.paths ) {
                     var path =results.resolved.paths [ipath] ;
                     if ( !path.hasOwnProperty ('parameters') )
@@ -63,8 +62,8 @@ program
                         if ( !ep.hasOwnProperty ('parameters') )
                             ep.parameters =[] ;
                         for ( var param in rpaths )
-                            ep.parameters.unshift (rpaths [param]) ;
-
+                            //ep.parameters.unshift (rpaths [param]) ;
+                            ep.parameters.unshift (JSON.parse (JSON.stringify (rpaths [param]))) ;
                     }
                     delete path.parameters ;
                 }

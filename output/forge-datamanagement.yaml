@@ -397,8 +397,8 @@ paths:
         \ which contains the resources that are involved in the\n  relationship, which\
         \ is essentially the `GET projects/:project_id/folders/:folder_id/refs` endpoint.\n"
       parameters:
-      - &id0001 {$ref: '#/parameters/project_id'}
-      - &id0002 {$ref: '#/parameters/folder_id'}
+      - {$ref: '#/parameters/project_id'}
+      - {$ref: '#/parameters/folder_id'}
       - {$ref: '#/parameters/query_filter_type'}
       - {$ref: '#/parameters/query_filter_id'}
       - {$ref: '#/parameters/query_filter_refType'}
@@ -422,8 +422,8 @@ paths:
 
         '
       parameters:
-      - *id0001
-      - *id0002
+      - {$ref: '#/parameters/project_id'}
+      - {$ref: '#/parameters/folder_id'}
       - {$ref: '#/parameters/body_create_ref'}
       responses:
         '204': {$ref: '#/responses/ref_created'}
@@ -542,8 +542,8 @@ paths:
         \ which contains the resources that are involved in the\n  relationship, which\
         \ is essentially the `GET projects/:project_id/items/:item_id/refs` endpoint.\n"
       parameters:
-      - &id0003 {$ref: '#/parameters/project_id'}
-      - &id0004 {$ref: '#/parameters/item_id'}
+      - {$ref: '#/parameters/project_id'}
+      - {$ref: '#/parameters/item_id'}
       - {$ref: '#/parameters/query_filter_type'}
       - {$ref: '#/parameters/query_filter_id'}
       - {$ref: '#/parameters/query_filter_refType'}
@@ -567,8 +567,8 @@ paths:
 
         '
       parameters:
-      - *id0003
-      - *id0004
+      - {$ref: '#/parameters/project_id'}
+      - {$ref: '#/parameters/item_id'}
       - {$ref: '#/parameters/body_create_ref'}
       responses:
         '204': {$ref: '#/responses/ref_created'}
@@ -738,8 +738,8 @@ paths:
         \ is essentially the `GET projects/:project_id/versions/:version_id/refs`\
         \ endpoint.\n"
       parameters:
-      - &id0005 {$ref: '#/parameters/project_id'}
-      - &id0006 {$ref: '#/parameters/version_id'}
+      - {$ref: '#/parameters/project_id'}
+      - {$ref: '#/parameters/version_id'}
       - {$ref: '#/parameters/query_filter_type'}
       - {$ref: '#/parameters/query_filter_id'}
       - {$ref: '#/parameters/query_filter_refType'}
@@ -763,8 +763,8 @@ paths:
 
         '
       parameters:
-      - *id0005
-      - *id0006
+      - {$ref: '#/parameters/project_id'}
+      - {$ref: '#/parameters/version_id'}
       - {$ref: '#/parameters/body_create_ref'}
       responses:
         '204': {$ref: '#/responses/ref_created'}

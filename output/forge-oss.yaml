@@ -210,8 +210,8 @@ paths:
 
         '
       parameters:
-      - &id0001 {$ref: '#/parameters/bucketKey'}
-      - &id0002 {$ref: '#/parameters/objectName'}
+      - {$ref: '#/parameters/bucketKey'}
+      - {$ref: '#/parameters/objectName'}
       - {$ref: '#/parameters/Content-Length'}
       - {$ref: '#/parameters/Content-Disposition'}
       - {$ref: '#/parameters/If-Match'}
@@ -235,8 +235,8 @@ paths:
       operationId: get_object
       description: Download an object.
       parameters:
-      - *id0001
-      - *id0002
+      - {$ref: '#/parameters/bucketKey'}
+      - {$ref: '#/parameters/objectName'}
       - {$ref: '#/parameters/Range'}
       - {$ref: '#/parameters/If-None-Match'}
       - {$ref: '#/parameters/If-Modified-Since'}
@@ -274,8 +274,8 @@ paths:
         application/json;charset=UTF-8'''
       tags: [Objects]
       parameters:
-      - *id0001
-      - *id0002
+      - {$ref: '#/parameters/bucketKey'}
+      - {$ref: '#/parameters/objectName'}
   /oss/v2/buckets/{bucketKey}/objects/{objectName}/resumable:
     x-summary: Objects
     x-description: Objects related operations
@@ -429,7 +429,7 @@ paths:
 
         '
       parameters:
-      - &id0003 {$ref: '#/parameters/id'}
+      - {$ref: '#/parameters/id'}
       - {$ref: '#/parameters/Content-Length'}
       - {$ref: '#/parameters/Content-Disposition'}
       - {$ref: '#/parameters/x-ads-region'}
@@ -454,7 +454,7 @@ paths:
       operationId: get_signed_resource
       description: Download an object using a signed URL.
       parameters:
-      - *id0003
+      - {$ref: '#/parameters/id'}
       - {$ref: '#/parameters/Range'}
       - {$ref: '#/parameters/If-None-Match'}
       - {$ref: '#/parameters/If-Modified-Since'}
@@ -479,7 +479,7 @@ paths:
       description: Delete a signed URL. A successful call to this endpoint requires
         bucket owner access.
       parameters:
-      - *id0003
+      - {$ref: '#/parameters/id'}
       - {$ref: '#/parameters/region'}
       responses:
         '200': {$ref: '#/responses/OK-Stream'}
