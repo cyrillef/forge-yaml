@@ -175,11 +175,6 @@
     "/oss/v2/buckets/{bucketKey}": {
       "x-summary": "Buckets",
       "x-description": "Buckets related operations",
-      "parameters": [
-        {
-          "$ref": "#/parameters/bucketKey"
-        }
-      ],
       "delete": {
         "operationId": "delete_bucket",
         "description": "This endpoint will delete a bucket.\n",
@@ -213,17 +208,17 @@
         "x-ads_command_line_example": "curl -v \"https://developer.api.autodesk.com/oss/v2/buckets/\" -X DELETE -H \"Authorization: Bearer RhS6iEVMnEfl77MBSK3l2je06UHj\"",
         "tags": [
           "Buckets"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/bucketKey"
+          }
         ]
       }
     },
     "/oss/v2/buckets/{bucketKey}/details": {
       "x-summary": "Buckets",
       "x-description": "Buckets related operations",
-      "parameters": [
-        {
-          "$ref": "#/parameters/bucketKey"
-        }
-      ],
       "get": {
         "operationId": "get_bucket_details",
         "description": "This endpoint will return the buckets owned by the application. This endpoint supports pagination.",
@@ -257,20 +252,17 @@
         "x-ads_command_line_example": "curl -v \"https://developer.api.autodesk.com/oss/v2/buckets\" -X GET -H \"Authorization: Bearer RhS6iEVMnEfl77MBSK3l2je06UHj\"",
         "tags": [
           "Buckets"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/bucketKey"
+          }
         ]
       }
     },
     "/oss/v2/buckets/{bucketKey}/objects/{objectName}": {
       "x-summary": "Objects",
       "x-description": "Objects related operations",
-      "parameters": [
-        {
-          "$ref": "#/parameters/bucketKey"
-        },
-        {
-          "$ref": "#/parameters/objectName"
-        }
-      ],
       "put": {
         "operationId": "upload_object",
         "description": "Upload an object. If the specified object name already exists in the bucket, the uploaded content will overwrite the existing content for the bucket name/object name combination.\n",
@@ -286,6 +278,12 @@
           },
           {
             "$ref": "#/parameters/bodyStream"
+          },
+          {
+            "$ref": "#/parameters/bucketKey"
+          },
+          {
+            "$ref": "#/parameters/objectName"
           }
         ],
         "consumes": [
@@ -342,6 +340,12 @@
           },
           {
             "$ref": "#/parameters/Accept-Encoding"
+          },
+          {
+            "$ref": "#/parameters/bucketKey"
+          },
+          {
+            "$ref": "#/parameters/objectName"
           }
         ],
         "produces": [
@@ -419,20 +423,20 @@
         "x-ads_command_line_example": "curl -v 'https://developer.api.autodesk.com/oss/v2/buckets/bucketexamplekey/objects/objectKey' -X DELETE -H 'Authorization: Bearer kuhodzPEHSCrWH3Pm1WuBMBnxw39' -H 'Content-Type: application/json;charset=UTF-8'",
         "tags": [
           "Objects"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/bucketKey"
+          },
+          {
+            "$ref": "#/parameters/objectName"
+          }
         ]
       }
     },
     "/oss/v2/buckets/{bucketKey}/objects/{objectName}/resumable": {
       "x-summary": "Objects",
       "x-description": "Objects related operations",
-      "parameters": [
-        {
-          "$ref": "#/parameters/bucketKey"
-        },
-        {
-          "$ref": "#/parameters/objectName"
-        }
-      ],
       "put": {
         "operationId": "upload_chunk",
         "description": "This endpoint allows resumable uploads for large files in chunks.",
@@ -454,6 +458,12 @@
           },
           {
             "$ref": "#/parameters/bodyStream"
+          },
+          {
+            "$ref": "#/parameters/bucketKey"
+          },
+          {
+            "$ref": "#/parameters/objectName"
           }
         ],
         "consumes": [
@@ -505,17 +515,6 @@
     "/oss/v2/buckets/{bucketKey}/objects/{objectName}/status/{sessionId}": {
       "x-summary": "Objects",
       "x-description": "Objects related operations",
-      "parameters": [
-        {
-          "$ref": "#/parameters/bucketKey"
-        },
-        {
-          "$ref": "#/parameters/objectName"
-        },
-        {
-          "$ref": "#/parameters/sessionId"
-        }
-      ],
       "get": {
         "operationId": "get_sessionid",
         "description": "This endpoint returns status information about a resumable upload.",
@@ -555,17 +554,23 @@
         "x-ads_command_line_example": "curl -v 'https://developer.api.autodesk.com/oss/v2/buckets/apptestbucket/objects/resumabletest.txt/status/679a7ef0-7b26-4a36-a4d8-968e518a864d' -X GET -H 'Authorization: Bearer ShiAeQ67rdNSfmyEmtGW8Lnrcqto'",
         "tags": [
           "Objects"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/bucketKey"
+          },
+          {
+            "$ref": "#/parameters/objectName"
+          },
+          {
+            "$ref": "#/parameters/sessionId"
+          }
         ]
       }
     },
     "/oss/v2/buckets/{bucketKey}/objects": {
       "x-summary": "Objects",
       "x-description": "Objects related operations",
-      "parameters": [
-        {
-          "$ref": "#/parameters/bucketKey"
-        }
-      ],
       "get": {
         "operationId": "get_objects",
         "description": "List objects in a bucket. It is only available to the bucket creator.",
@@ -578,6 +583,9 @@
           },
           {
             "$ref": "#/parameters/startAt"
+          },
+          {
+            "$ref": "#/parameters/bucketKey"
           }
         ],
         "responses": {
@@ -616,14 +624,6 @@
     "/oss/v2/buckets/{bucketKey}/objects/{objectName}/details": {
       "x-summary": "Objects",
       "x-description": "Objects related operations",
-      "parameters": [
-        {
-          "$ref": "#/parameters/bucketKey"
-        },
-        {
-          "$ref": "#/parameters/objectName"
-        }
-      ],
       "get": {
         "operationId": "get_object_details",
         "description": "Returns object details in JSON format.",
@@ -633,6 +633,12 @@
           },
           {
             "$ref": "#/parameters/with"
+          },
+          {
+            "$ref": "#/parameters/bucketKey"
+          },
+          {
+            "$ref": "#/parameters/objectName"
           }
         ],
         "responses": {
@@ -674,14 +680,6 @@
     "/oss/v2/buckets/{bucketKey}/objects/{objectName}/signed": {
       "x-summary": "Objects",
       "x-description": "Objects related operations",
-      "parameters": [
-        {
-          "$ref": "#/parameters/bucketKey"
-        },
-        {
-          "$ref": "#/parameters/objectName"
-        }
-      ],
       "post": {
         "operationId": "create_signed_resource",
         "description": "This endpoint creates a signed URL that can be used to download an object within the specified expiration time. Be aware that if the object the signed URL points to is deleted or expires before the signed URL expires, then the signed URL will no longer be valid. A successful call to this endpoint requires bucket owner access.",
@@ -691,6 +689,12 @@
           },
           {
             "$ref": "#/parameters/post_buckets_signed"
+          },
+          {
+            "$ref": "#/parameters/bucketKey"
+          },
+          {
+            "$ref": "#/parameters/objectName"
           }
         ],
         "responses": {
@@ -729,11 +733,6 @@
     "/oss/v2/signedresources/{id}": {
       "x-summary": "Objects",
       "x-description": "Objects related operations",
-      "parameters": [
-        {
-          "$ref": "#/parameters/id"
-        }
-      ],
       "put": {
         "operationId": "upload_signed_resource",
         "description": "Overwrite a existing object using a signed URL.\n\nConditions to call this operation:\n\nObject is available\nExpiration period is valid\nSigned URL should be created with `write` or `readwrite`\n",
@@ -752,6 +751,9 @@
           },
           {
             "$ref": "#/parameters/bodyStream"
+          },
+          {
+            "$ref": "#/parameters/id"
           }
         ],
         "consumes": [
@@ -810,6 +812,9 @@
           },
           {
             "$ref": "#/parameters/region"
+          },
+          {
+            "$ref": "#/parameters/id"
           }
         ],
         "produces": [
@@ -856,6 +861,9 @@
         "parameters": [
           {
             "$ref": "#/parameters/region"
+          },
+          {
+            "$ref": "#/parameters/id"
           }
         ],
         "responses": {
@@ -897,11 +905,6 @@
     "/oss/v2/signedresources/{id}/resumable": {
       "x-summary": "Objects",
       "x-description": "Objects related operations",
-      "parameters": [
-        {
-          "$ref": "#/parameters/id"
-        }
-      ],
       "put": {
         "operationId": "upload_signed_resources_chunk",
         "description": "Resumable upload for signed URLs.",
@@ -920,6 +923,9 @@
           },
           {
             "$ref": "#/parameters/bodyStream"
+          },
+          {
+            "$ref": "#/parameters/id"
           }
         ],
         "consumes": [
@@ -970,17 +976,6 @@
     "/oss/v2/buckets/{bucketKey}/objects/{objectName}/copyTo/{newObjName}": {
       "x-summary": "Objects",
       "x-description": "Objects related operations",
-      "parameters": [
-        {
-          "$ref": "#/parameters/bucketKey"
-        },
-        {
-          "$ref": "#/parameters/objectName"
-        },
-        {
-          "$ref": "#/parameters/newObjName"
-        }
-      ],
       "put": {
         "operationId": "copyTo",
         "description": "Copies an object to another object name in the same bucket.",
@@ -1014,6 +1009,17 @@
         "x-ads_command_line_example": "curl -v 'https://developer.api.autodesk.com/oss/v2/buckets/bucketexamplekey/objects/testobject/copyto/copyoftestobject' -X PUT -H 'Authorization=Bearer 1B6FU8z9S2x1PrjADDfPCzSGrXmI'",
         "tags": [
           "Objects"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/bucketKey"
+          },
+          {
+            "$ref": "#/parameters/objectName"
+          },
+          {
+            "$ref": "#/parameters/newObjName"
+          }
         ]
       }
     }

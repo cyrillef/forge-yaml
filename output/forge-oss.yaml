@@ -159,8 +159,6 @@ paths:
   /oss/v2/buckets/{bucketKey}:
     x-summary: Buckets
     x-description: Buckets related operations
-    parameters:
-    - {$ref: '#/parameters/bucketKey'}
     delete:
       operationId: delete_bucket
       description: 'This endpoint will delete a bucket.
@@ -178,11 +176,11 @@ paths:
       x-ads_command_line_example: 'curl -v "https://developer.api.autodesk.com/oss/v2/buckets/"
         -X DELETE -H "Authorization: Bearer RhS6iEVMnEfl77MBSK3l2je06UHj"'
       tags: [Buckets]
+      parameters:
+      - {$ref: '#/parameters/bucketKey'}
   /oss/v2/buckets/{bucketKey}/details:
     x-summary: Buckets
     x-description: Buckets related operations
-    parameters:
-    - {$ref: '#/parameters/bucketKey'}
     get:
       operationId: get_bucket_details
       description: This endpoint will return the buckets owned by the application.
@@ -199,12 +197,11 @@ paths:
       x-ads_command_line_example: 'curl -v "https://developer.api.autodesk.com/oss/v2/buckets"
         -X GET -H "Authorization: Bearer RhS6iEVMnEfl77MBSK3l2je06UHj"'
       tags: [Buckets]
+      parameters:
+      - {$ref: '#/parameters/bucketKey'}
   /oss/v2/buckets/{bucketKey}/objects/{objectName}:
     x-summary: Objects
     x-description: Objects related operations
-    parameters:
-    - {$ref: '#/parameters/bucketKey'}
-    - {$ref: '#/parameters/objectName'}
     put:
       operationId: upload_object
       description: 'Upload an object. If the specified object name already exists
@@ -217,6 +214,8 @@ paths:
       - {$ref: '#/parameters/Content-Disposition'}
       - {$ref: '#/parameters/If-Match'}
       - {$ref: '#/parameters/bodyStream'}
+      - &id0001 {$ref: '#/parameters/bucketKey'}
+      - &id0002 {$ref: '#/parameters/objectName'}
       consumes: [application/octet-stream]
       responses:
         '200': {$ref: '#/responses/put_object_OK'}
@@ -240,6 +239,8 @@ paths:
       - {$ref: '#/parameters/If-None-Match'}
       - {$ref: '#/parameters/If-Modified-Since'}
       - {$ref: '#/parameters/Accept-Encoding'}
+      - *id0001
+      - *id0002
       produces: [application/octet-stream]
       responses:
         '200': {$ref: '#/responses/OK-Stream'}
@@ -272,12 +273,12 @@ paths:
         -X DELETE -H ''Authorization: Bearer kuhodzPEHSCrWH3Pm1WuBMBnxw39'' -H ''Content-Type:
         application/json;charset=UTF-8'''
       tags: [Objects]
+      parameters:
+      - *id0001
+      - *id0002
   /oss/v2/buckets/{bucketKey}/objects/{objectName}/resumable:
     x-summary: Objects
     x-description: Objects related operations
-    parameters:
-    - {$ref: '#/parameters/bucketKey'}
-    - {$ref: '#/parameters/objectName'}
     put:
       operationId: upload_chunk
       description: This endpoint allows resumable uploads for large files in chunks.
@@ -288,6 +289,8 @@ paths:
       - {$ref: '#/parameters/If-Match'}
       - {$ref: '#/parameters/Session-Id'}
       - {$ref: '#/parameters/bodyStream'}
+      - {$ref: '#/parameters/bucketKey'}
+      - {$ref: '#/parameters/objectName'}
       consumes: [application/octet-stream]
       responses:
         '200': {$ref: '#/responses/put_object_resumable_OK'}
@@ -309,10 +312,6 @@ paths:
   /oss/v2/buckets/{bucketKey}/objects/{objectName}/status/{sessionId}:
     x-summary: Objects
     x-description: Objects related operations
-    parameters:
-    - {$ref: '#/parameters/bucketKey'}
-    - {$ref: '#/parameters/objectName'}
-    - {$ref: '#/parameters/sessionId'}
     get:
       operationId: get_sessionid
       description: This endpoint returns status information about a resumable upload.
@@ -330,11 +329,13 @@ paths:
       x-ads_command_line_example: 'curl -v ''https://developer.api.autodesk.com/oss/v2/buckets/apptestbucket/objects/resumabletest.txt/status/679a7ef0-7b26-4a36-a4d8-968e518a864d''
         -X GET -H ''Authorization: Bearer ShiAeQ67rdNSfmyEmtGW8Lnrcqto'''
       tags: [Objects]
+      parameters:
+      - {$ref: '#/parameters/bucketKey'}
+      - {$ref: '#/parameters/objectName'}
+      - {$ref: '#/parameters/sessionId'}
   /oss/v2/buckets/{bucketKey}/objects:
     x-summary: Objects
     x-description: Objects related operations
-    parameters:
-    - {$ref: '#/parameters/bucketKey'}
     get:
       operationId: get_objects
       description: List objects in a bucket. It is only available to the bucket creator.
@@ -342,6 +343,7 @@ paths:
       - {$ref: '#/parameters/limit'}
       - {$ref: '#/parameters/beginsWith'}
       - {$ref: '#/parameters/startAt'}
+      - {$ref: '#/parameters/bucketKey'}
       responses:
         '200': {$ref: '#/responses/get_buckets_objects_OK'}
         '400': {$ref: '#/responses/BAD_REQUEST'}
@@ -358,15 +360,14 @@ paths:
   /oss/v2/buckets/{bucketKey}/objects/{objectName}/details:
     x-summary: Objects
     x-description: Objects related operations
-    parameters:
-    - {$ref: '#/parameters/bucketKey'}
-    - {$ref: '#/parameters/objectName'}
     get:
       operationId: get_object_details
       description: Returns object details in JSON format.
       parameters:
       - {$ref: '#/parameters/If-Modified-Since'}
       - {$ref: '#/parameters/with'}
+      - {$ref: '#/parameters/bucketKey'}
+      - {$ref: '#/parameters/objectName'}
       responses:
         '200': {$ref: '#/responses/get_object_details_OK'}
         '304': {$ref: '#/responses/NOT_MODIFIED'}
@@ -384,9 +385,6 @@ paths:
   /oss/v2/buckets/{bucketKey}/objects/{objectName}/signed:
     x-summary: Objects
     x-description: Objects related operations
-    parameters:
-    - {$ref: '#/parameters/bucketKey'}
-    - {$ref: '#/parameters/objectName'}
     post:
       operationId: create_signed_resource
       description: This endpoint creates a signed URL that can be used to download
@@ -397,6 +395,8 @@ paths:
       parameters:
       - {$ref: '#/parameters/access'}
       - {$ref: '#/parameters/post_buckets_signed'}
+      - {$ref: '#/parameters/bucketKey'}
+      - {$ref: '#/parameters/objectName'}
       responses:
         '200': {$ref: '#/responses/post_object_signed_OK'}
         '400': {$ref: '#/responses/BAD_REQUEST'}
@@ -413,8 +413,6 @@ paths:
   /oss/v2/signedresources/{id}:
     x-summary: Objects
     x-description: Objects related operations
-    parameters:
-    - {$ref: '#/parameters/id'}
     put:
       operationId: upload_signed_resource
       description: 'Overwrite a existing object using a signed URL.
@@ -436,6 +434,7 @@ paths:
       - {$ref: '#/parameters/x-ads-region'}
       - {$ref: '#/parameters/If-Match'}
       - {$ref: '#/parameters/bodyStream'}
+      - &id0003 {$ref: '#/parameters/id'}
       consumes: [application/octet-stream]
       responses:
         '200': {$ref: '#/responses/put_signedresources_OK'}
@@ -460,6 +459,7 @@ paths:
       - {$ref: '#/parameters/If-Modified-Since'}
       - {$ref: '#/parameters/Accept-Encoding'}
       - {$ref: '#/parameters/region'}
+      - *id0003
       produces: [application/octet-stream]
       responses:
         '200': {$ref: '#/responses/OK-Stream'}
@@ -480,6 +480,7 @@ paths:
         bucket owner access.
       parameters:
       - {$ref: '#/parameters/region'}
+      - *id0003
       responses:
         '200': {$ref: '#/responses/OK-Stream'}
         '400': {$ref: '#/responses/BAD_REQUEST'}
@@ -496,8 +497,6 @@ paths:
   /oss/v2/signedresources/{id}/resumable:
     x-summary: Objects
     x-description: Objects related operations
-    parameters:
-    - {$ref: '#/parameters/id'}
     put:
       operationId: upload_signed_resources_chunk
       description: Resumable upload for signed URLs.
@@ -507,6 +506,7 @@ paths:
       - {$ref: '#/parameters/x-ads-region'}
       - {$ref: '#/parameters/Session-Id'}
       - {$ref: '#/parameters/bodyStream'}
+      - {$ref: '#/parameters/id'}
       consumes: [application/octet-stream]
       responses:
         '200': {$ref: '#/responses/put_signedresources_OK'}
@@ -527,10 +527,6 @@ paths:
   /oss/v2/buckets/{bucketKey}/objects/{objectName}/copyTo/{newObjName}:
     x-summary: Objects
     x-description: Objects related operations
-    parameters:
-    - {$ref: '#/parameters/bucketKey'}
-    - {$ref: '#/parameters/objectName'}
-    - {$ref: '#/parameters/newObjName'}
     put:
       operationId: copyTo
       description: Copies an object to another object name in the same bucket.
@@ -546,6 +542,10 @@ paths:
       x-ads_command_line_example: curl -v 'https://developer.api.autodesk.com/oss/v2/buckets/bucketexamplekey/objects/testobject/copyto/copyoftestobject'
         -X PUT -H 'Authorization=Bearer 1B6FU8z9S2x1PrjADDfPCzSGrXmI'
       tags: [Objects]
+      parameters:
+      - {$ref: '#/parameters/bucketKey'}
+      - {$ref: '#/parameters/objectName'}
+      - {$ref: '#/parameters/newObjName'}
 parameters:
   bodyStream:
     name: body

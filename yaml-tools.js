@@ -33,6 +33,7 @@ var ejs =require ('ejs') ;
 var Resolve =require ('json-refs').resolveRefs ;
 //var yaml =require ('js-yaml') ;
 var yaml =require ('yaml-js') ;
+var chalk =require ('chalk') ;
 
 var fs =require ('fs') ;
 //var url =require ('url') ;
@@ -45,9 +46,28 @@ program
     .description ('validate command')
     .arguments ('<yamlFile>')
     .option ('-j, --json', 'output a json file')
+    .option ('-s, --shared', 'shared parameters copied to each endpoints')
     .action (function (yamlFile, options) {
         loadYaml (yamlFile, false)
             .then (function (results) {
+
+                for ( var ipath in results.resolved.paths ) {
+                    var path =results.resolved.paths [ipath] ;
+                    if ( !path.hasOwnProperty ('parameters') )
+                        continue ;
+                    for ( var iep in path ) {
+                        var ep =path [iep] ;
+                        if ( !ep.hasOwnProperty ('operationId') )
+                            continue ;
+                        if ( !ep.hasOwnProperty ('parameters') )
+                            ep.parameters =[] ;
+                        for ( var param in path.parameters )
+                            ep.parameters.push (path.parameters [param]) ;
+
+                    }
+                    delete path.parameters ;
+                }
+
                 if ( options && options.hasOwnProperty ('json') )
                     console.log (JSON.stringify (results.resolved, null, 2)) ;
                 else
@@ -81,7 +101,7 @@ program
                         //{ code: '3644ad53-1e6b-4feb-b335-d731d5fbeabc',
                         //  link: 'http://generator.swagger.io:80/api/gen/download/3644ad53-1e6b-4feb-b335-d731d5fbeabc' }
                         if ( body.link === undefined )
-                            return (console.error ('No SDK generated! ' + body.message)) ;
+                            return (console.error (chalk.red ('No SDK generated! ' + body.message))) ;
                         console.log ('Downloading your SDK... (' + body.link + ')') ;
                         request.get ({ url: body.link, rejectUnauthorized: false })
                             .pipe (fs.createWriteStream (outputFile).on ('finish', function () {
