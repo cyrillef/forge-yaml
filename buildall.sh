@@ -33,15 +33,15 @@ for entry in ${_yamls[@]}; do
 	node yaml-tools.js flattern --shared $entry --json > output/${filename}.json
 done
 
-echo "Generating SDKs..." # php, ruby, csharp, forgejs
-declare -a langs=("php" "ruby" "csharp")
-for entry in ${_yamls[@]}; do
-	filename="`([[ $entry =~ .*\/v([0-9]+)\/(.*)\.yaml ]] && echo ${BASH_REMATCH[2]})`"
-	for lang in ${langs[@]}; do
-		echo "    ($lang) $filename ..."
-		node yaml-tools.js sdk $lang output/${filename}.yaml "clients/${lang}-${filename}.zip"
-	done
-done
+#echo "Generating SDKs..." # php, ruby, csharp, forgejs
+#declare -a langs=("php" "ruby" "csharp")
+#for entry in ${_yamls[@]}; do
+#	filename="`([[ $entry =~ .*\/v([0-9]+)\/(.*)\.yaml ]] && echo ${BASH_REMATCH[2]})`"
+#	for lang in ${langs[@]}; do
+#		echo "    ($lang) $filename ..."
+#		node yaml-tools.js sdk $lang output/${filename}.yaml "clients/${lang}-${filename}.zip"
+#	done
+#done
 
 # node yaml-tools.js sdk php output/forge-datamanagement.yaml clients/php-forge-datamanagement.zip
 # node yaml-tools.js sdk ruby output/forge-datamanagement.yaml clients/ruby-forge-datamanagement.zip
@@ -55,3 +55,14 @@ done
 # node yaml-tools.js sdk php output/forge-oss.yaml clients/php-forge-oss.zip
 # node yaml-tools.js sdk ruby output/forge-oss.yaml clients/ruby-forge-oss.zip
 # node yaml-tools.js sdk csharp output/forge-oss.yaml clients/csharp-forge-oss.zip
+
+echo "Generating SDKs..." # php, ruby, csharp, forgejs
+declare -a langs=("php" "ruby" "csharp" "forgejs")
+for entry in ${_yamls[@]}; do
+	filename="`([[ $entry =~ .*\/v([0-9]+)\/(.*)\.yaml ]] && echo ${BASH_REMATCH[2]})`"
+	for lang in ${langs[@]}; do
+		echo "    ($lang) $filename ..."
+#		node yaml-tools.js sdk $lang output/${filename}.yaml "clients/${lang}-${filename}.zip"
+		java -jar bin/swagger-codegen-cli.jar generate -i output/${filename}.yaml -l $lang -o "clients/${lang}-${filename}"
+	done
+done
