@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 FORGE="`dirname \"$0\"`" # Relative
 export FORGE="`( cd \"$FORGE\" && pwd )`" # Absolutized and normalized
