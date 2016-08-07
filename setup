@@ -6,7 +6,7 @@ pushd $FORGE > /dev/null
 
 [[ ! -d node_modules ]] && npm install
 
-git clone https://github.com/Autodesk-Forge/forge.oauth2-js.git clients/_forge_oauth2-js
+git clone https://github.com/Autodesk-Forge/forge.oauth2-js.git clients/_forge.oauth2-js
 git clone https://github.com/Autodesk-Forge/forge.oss-js.git clients/_forge.oss-js
 git clone https://github.com/Autodesk-Forge/forge.data.management-js.git clients/_forge.data.management-js
 git clone https://github.com/Autodesk-Forge/forge.model.derivative-js.git clients/_forge.model.derivative-js
