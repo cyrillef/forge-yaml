@@ -718,7 +718,7 @@ definitions:
           '
         type: string
         enum: [transient, temporary, persistent]
-  buckets:
+  bucket:
     description: Bucket json response
     type: object
     required: [bucketKey, bucketOwner, createdDate, permissions, policyKey]
@@ -795,7 +795,7 @@ definitions:
 responses:
   post_buckets_OK:
     description: OK, Bucket successfully created.
-    schema: {$ref: '#/definitions/buckets'}
+    schema: {$ref: '#/definitions/bucket'}
   get_buckets_OK:
     description: OK, Success.
     schema:
@@ -820,7 +820,7 @@ responses:
         next: {description: Next possible request, type: string}
   get_buckets_details_OK:
     description: OK, Get bucket details was successful.
-    schema: {$ref: '#/definitions/buckets'}
+    schema: {$ref: '#/definitions/bucket'}
   put_object_OK:
     description: OK, Get bucket details was successful.
     schema: {$ref: '#/definitions/objectDetails'}

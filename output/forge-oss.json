@@ -1304,7 +1304,7 @@
         }
       }
     },
-    "buckets": {
+    "bucket": {
       "description": "Bucket json response",
       "type": "object",
       "required": [
@@ -1489,7 +1489,7 @@
     "post_buckets_OK": {
       "description": "OK, Bucket successfully created.",
       "schema": {
-        "$ref": "#/definitions/buckets"
+        "$ref": "#/definitions/bucket"
       }
     },
     "get_buckets_OK": {
@@ -1543,7 +1543,7 @@
     "get_buckets_details_OK": {
       "description": "OK, Get bucket details was successful.",
       "schema": {
-        "$ref": "#/definitions/buckets"
+        "$ref": "#/definitions/bucket"
       }
     },
     "put_object_OK": {

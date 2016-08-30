@@ -690,7 +690,7 @@ definitions:
           Acceptable values: `transient`, `temporary` or `persistent`
         type: string
         enum: [ transient, temporary, persistent ]
-  buckets:
+  bucket:
     description: Bucket json response
     #$schema: 'http://json-schema.org/draft-04/schema#'
     type: object
@@ -820,7 +820,7 @@ definitions:
 responses:
   post_buckets_OK:
     description: OK, Bucket successfully created.
-    schema: { $ref: "#/definitions/buckets" }
+    schema: { $ref: "#/definitions/bucket" }
   get_buckets_OK:
     description: OK, Success.
     schema:
@@ -852,7 +852,7 @@ responses:
           type: string
   get_buckets_details_OK:
     description: OK, Get bucket details was successful.
-    schema: { $ref: "#/definitions/buckets" }
+    schema: { $ref: "#/definitions/bucket" }
   put_object_OK:
     description: OK, Get bucket details was successful.
     schema: { $ref: "#/definitions/objectDetails" }
