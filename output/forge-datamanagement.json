@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "title": "Forge-Data-Management",
-    "version": "2.0.3",
+    "version": "2.0.4",
     "x-summary": "Asynchronous Javascript/Node.js library for the Autodesk Forge Data Management API.",
     "description": "The Data Management API provides a unified and consistent way to access data across A360, Fusion 360, and the Object Storage Service.\n\nWith this API, you can accomplish a number of workflows, including accessing a Fusion model in A360 and getting an ordered structure of items, IDs, and properties for generating a bill of materials in a 3rd-party process. Or, you might want to superimpose a Fusion model and a building model to use in the [Viewer](https://developer.autodesk.com/en/docs/viewer/v2).\n\nThe Data Management API is composed of the following services:\n\n|  |  |\n|-----|-----|\n| Project Service | Navigate to a project from an A360 Hub. The project acts as an “anchor” point for data available through the API. |\n| Data Service | Navigate and manage the A360 metadata in terms of folders, items, and versions, as well as the relationships between these entities. An item could be a file or a Fusion 360 design. Each item can have multiple versions. |\n| Schema Service | This allows your application to understand the structure and semantics of extended data types, like Fusion designs. |\n| Object Storage Service (OSS) | This allows your application to download and upload raw files (such as PDF, XLS, DWG, or RVT) that are managed by the Data Service. |\n\nYou may have any number of logically separated apps that utilize one or more of these functionalities, and any of these apps are interoperable with other APIs on the Forge Platform.\n\n![](https://developer.doc.autodesk.com/bPlouYTd/7/_images/dms_overview.png)\n",
     "contact": {
@@ -2983,27 +2983,276 @@
           }
         }
       ]
+    },
+    "health__response": {
+      "title": "health",
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_document"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "data": {
+              "$ref": "#/definitions/health"
+            }
+          }
+        }
+      ]
+    },
+    "hubs__response": {
+      "title": "hubs",
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_collection"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/hub"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "hub__response": {
+      "title": "hub",
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_document"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "data": {
+              "$ref": "#/definitions/hub"
+            }
+          }
+        }
+      ]
+    },
+    "projects__response": {
+      "title": "projects",
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_collection"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/project"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "project__response": {
+      "title": "project",
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_document"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "data": {
+              "$ref": "#/definitions/project"
+            }
+          }
+        }
+      ]
+    },
+    "folder__response": {
+      "title": "folder",
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_document"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "data": {
+              "$ref": "#/definitions/folder"
+            }
+          }
+        }
+      ]
+    },
+    "item__response": {
+      "title": "item",
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_document"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "data": {
+              "$ref": "#/definitions/item"
+            }
+          }
+        }
+      ]
+    },
+    "refs__response": {
+      "title": "refs",
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_collection"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/rel_ref"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "version__response": {
+      "title": "version",
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_document"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "data": {
+              "$ref": "#/definitions/version"
+            }
+          }
+        }
+      ]
+    },
+    "versions__response": {
+      "title": "versions",
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_collection"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/version"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "storage_created__response": {
+      "title": "item",
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_document_base"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "data": {
+              "$ref": "#/definitions/storage"
+            }
+          }
+        }
+      ]
+    },
+    "item_created__response": {
+      "title": "item",
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_document"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "data": {
+              "$ref": "#/definitions/item"
+            }
+          }
+        }
+      ]
+    },
+    "version_created__response": {
+      "title": "version",
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_document"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "data": {
+              "$ref": "#/definitions/version"
+            }
+          }
+        }
+      ]
+    },
+    "bad_input__response": {
+      "title": "bad input",
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_error"
+        }
+      ]
+    },
+    "forbidden__response": {
+      "title": "forbidden",
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_error"
+        }
+      ]
+    },
+    "not_found__response": {
+      "title": "not found",
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_error"
+        }
+      ]
+    },
+    "conflict__response": {
+      "title": "conflict",
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/json_api_error"
+        }
+      ]
     }
   },
   "responses": {
     "health": {
       "description": "Successful response",
-      "schema": {
-        "title": "health",
-        "allOf": [
-          {
-            "$ref": "#/definitions/json_api_document"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "data": {
-                "$ref": "#/definitions/health"
-              }
-            }
-          }
-        ]
-      },
       "examples": {
         "application/vnd.api+json": {
           "data": {
@@ -3019,30 +3268,13 @@
             }
           }
         }
+      },
+      "schema": {
+        "$ref": "#/definitions/health__response"
       }
     },
     "hubs": {
       "description": "Successful response",
-      "schema": {
-        "title": "hubs",
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/definitions/json_api_collection"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "data": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/definitions/hub"
-                }
-              }
-            }
-          }
-        ]
-      },
       "examples": {
         "application/vnd.api+json": {
           "data": [
@@ -3082,26 +3314,13 @@
             }
           }
         }
+      },
+      "schema": {
+        "$ref": "#/definitions/hubs__response"
       }
     },
     "hub": {
       "description": "Successful response",
-      "schema": {
-        "title": "hub",
-        "allOf": [
-          {
-            "$ref": "#/definitions/json_api_document"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "data": {
-                "$ref": "#/definitions/hub"
-              }
-            }
-          }
-        ]
-      },
       "examples": {
         "application/vnd.api+json": {
           "jsonapi": {
@@ -3142,30 +3361,13 @@
             }
           }
         }
+      },
+      "schema": {
+        "$ref": "#/definitions/hub__response"
       }
     },
     "projects": {
       "description": "Successful response",
-      "schema": {
-        "title": "projects",
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/definitions/json_api_collection"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "data": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/definitions/project"
-                }
-              }
-            }
-          }
-        ]
-      },
       "examples": {
         "application/vnd.api+json": {
           "data": [
@@ -3220,26 +3422,13 @@
             }
           }
         }
+      },
+      "schema": {
+        "$ref": "#/definitions/projects__response"
       }
     },
     "project": {
       "description": "Successful response",
-      "schema": {
-        "title": "project",
-        "allOf": [
-          {
-            "$ref": "#/definitions/json_api_document"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "data": {
-                "$ref": "#/definitions/project"
-              }
-            }
-          }
-        ]
-      },
       "examples": {
         "application/vnd.api+json": {
           "jsonapi": {
@@ -3295,26 +3484,13 @@
             }
           }
         }
+      },
+      "schema": {
+        "$ref": "#/definitions/project__response"
       }
     },
     "folder": {
       "description": "Successful response",
-      "schema": {
-        "title": "folder",
-        "allOf": [
-          {
-            "$ref": "#/definitions/json_api_document"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "data": {
-                "$ref": "#/definitions/folder"
-              }
-            }
-          }
-        ]
-      },
       "examples": {
         "application/vnd.api+json": {
           "jsonapi": {
@@ -3393,27 +3569,13 @@
             }
           }
         }
+      },
+      "schema": {
+        "$ref": "#/definitions/folder__response"
       }
     },
     "item": {
       "description": "Successful response",
-      "schema": {
-        "title": "item",
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/definitions/json_api_document"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "data": {
-                "$ref": "#/definitions/item"
-              }
-            }
-          }
-        ]
-      },
       "examples": {
         "application/vnd.api+json": {
           "jsonapi": {
@@ -3490,30 +3652,13 @@
             }
           }
         }
+      },
+      "schema": {
+        "$ref": "#/definitions/item__response"
       }
     },
     "refs": {
       "description": "Successful response",
-      "schema": {
-        "title": "refs",
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/definitions/json_api_collection"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "data": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/definitions/rel_ref"
-                }
-              }
-            }
-          }
-        ]
-      },
       "examples": {
         "application/vnd.api+json": {
           "links": {
@@ -3577,27 +3722,13 @@
             }
           ]
         }
+      },
+      "schema": {
+        "$ref": "#/definitions/refs__response"
       }
     },
     "version": {
       "description": "Successful response",
-      "schema": {
-        "title": "version",
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/definitions/json_api_document"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "data": {
-                "$ref": "#/definitions/version"
-              }
-            }
-          }
-        ]
-      },
       "examples": {
         "application/vnd.api+json": {
           "jsonapi": {
@@ -3697,30 +3828,13 @@
             }
           }
         }
+      },
+      "schema": {
+        "$ref": "#/definitions/version__response"
       }
     },
     "versions": {
       "description": "Successful response",
-      "schema": {
-        "title": "versions",
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/definitions/json_api_collection"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "data": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/definitions/version"
-                }
-              }
-            }
-          }
-        ]
-      },
       "examples": {
         "application/vnd.api+json": {
           "jsonapi": {
@@ -3855,6 +3969,9 @@
             }
           ]
         }
+      },
+      "schema": {
+        "$ref": "#/definitions/versions__response"
       }
     },
     "contents": {
@@ -4265,23 +4382,6 @@
     },
     "storage_created": {
       "description": "Storage created response",
-      "schema": {
-        "title": "item",
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/definitions/json_api_document_base"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "data": {
-                "$ref": "#/definitions/storage"
-              }
-            }
-          }
-        ]
-      },
       "headers": {
         "location": {
           "type": "string",
@@ -4311,27 +4411,13 @@
             }
           }
         }
+      },
+      "schema": {
+        "$ref": "#/definitions/storage_created__response"
       }
     },
     "item_created": {
       "description": "Item created response",
-      "schema": {
-        "title": "item",
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/definitions/json_api_document"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "data": {
-                "$ref": "#/definitions/item"
-              }
-            }
-          }
-        ]
-      },
       "headers": {
         "location": {
           "type": "string",
@@ -4372,27 +4458,13 @@
             }
           ]
         }
+      },
+      "schema": {
+        "$ref": "#/definitions/item_created__response"
       }
     },
     "version_created": {
       "description": "Version created response",
-      "schema": {
-        "title": "version",
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/definitions/json_api_document"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "data": {
-                "$ref": "#/definitions/version"
-              }
-            }
-          }
-        ]
-      },
       "headers": {
         "location": {
           "type": "string",
@@ -4413,6 +4485,9 @@
             "relationships": {}
           }
         }
+      },
+      "schema": {
+        "$ref": "#/definitions/version_created__response"
       }
     },
     "ref_created": {
@@ -4420,15 +4495,6 @@
     },
     "bad_input": {
       "description": "Bad input response",
-      "schema": {
-        "title": "bad input",
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/definitions/json_api_error"
-          }
-        ]
-      },
       "examples": {
         "application/vnd.api+json": {
           "jsonapi": {
@@ -4444,6 +4510,9 @@
             }
           ]
         }
+      },
+      "schema": {
+        "$ref": "#/definitions/bad_input__response"
       }
     },
     "unauthorized": {
@@ -4451,15 +4520,6 @@
     },
     "forbidden": {
       "description": "Forbidden response",
-      "schema": {
-        "title": "forbidden",
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/definitions/json_api_error"
-          }
-        ]
-      },
       "examples": {
         "application/vnd.api+json": {
           "jsonapi": {
@@ -4474,19 +4534,13 @@
             }
           ]
         }
+      },
+      "schema": {
+        "$ref": "#/definitions/forbidden__response"
       }
     },
     "not_found": {
       "description": "Not found response",
-      "schema": {
-        "title": "not found",
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/definitions/json_api_error"
-          }
-        ]
-      },
       "examples": {
         "application/vnd.api+json": {
           "jsonapi": {
@@ -4501,19 +4555,13 @@
             }
           ]
         }
+      },
+      "schema": {
+        "$ref": "#/definitions/not_found__response"
       }
     },
     "conflict": {
       "description": "Conflict response",
-      "schema": {
-        "title": "conflict",
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/definitions/json_api_error"
-          }
-        ]
-      },
       "examples": {
         "application/vnd.api+json": {
           "jsonapi": {
@@ -4528,6 +4576,9 @@
             }
           ]
         }
+      },
+      "schema": {
+        "$ref": "#/definitions/conflict__response"
       }
     }
   }

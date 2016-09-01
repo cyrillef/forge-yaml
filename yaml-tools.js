@@ -68,6 +68,15 @@ program
                     delete path.parameters ;
                 }
 
+				for ( var iresp in results.resolved.responses ) {
+					var resp =results.resolved.responses [iresp] ;
+					if ( !resp.hasOwnProperty ('schema') || !resp.schema.hasOwnProperty ('allOf') )
+						continue ;
+					results.resolved.definitions [iresp + '__response'] =resp.schema ;
+					delete resp.schema ;
+					resp.schema ={ '$ref': ('#/definitions/' + iresp + '__response') }
+				}
+
                 if ( options && options.hasOwnProperty ('json') )
                     console.log (JSON.stringify (results.resolved, null, 2)) ;
                 else

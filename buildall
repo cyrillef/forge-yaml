@@ -29,6 +29,7 @@ done
 echo "Flattering definitions (yaml & json)..."
 for entry in ${_yamls[@]}; do
 	filename="`([[ $entry =~ .*\/v([0-9]+)\/(.*)\.yaml ]] && echo ${BASH_REMATCH[2]})`"
+	echo $entry
 	[[ -f output/${filename}.yaml ]] && rm output/${filename}.yaml
 	node yaml-tools.js flattern --shared $entry > output/${filename}.yaml
 	[[ -f output/${filename}.json ]] && rm output/${filename}.json
