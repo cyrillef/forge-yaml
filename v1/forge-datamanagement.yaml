@@ -2,7 +2,7 @@ swagger: '2.0'
 
 info:
   title: Forge-Data-Management
-  version: "2.0.4"
+  version: "2.0.5"
   x-summary: Asynchronous Javascript/Node.js library for the Autodesk Forge Data Management API.
   description: |
     The Data Management API provides a unified and consistent way to access data across A360, Fusion 360, and the Object Storage Service.
@@ -992,6 +992,8 @@ definitions:
   json_api_links:
     type: object
     description: 'resource specific links'
+    properties:
+      self: { $ref: '#/definitions/json_api_link' }
 
   json_api_link:
     type: object

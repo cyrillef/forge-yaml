@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   title: Forge-oauth2
-  version: 1.0.3
+  version: 1.0.4
   x-summary: Asynchronous Node.js library for the Autodesk Forge oAuth2 implementation.
   description: 'OAuth, specifically OAuth2, is the open standard used across the Forge
     Platform for token-based authentication and authorization.

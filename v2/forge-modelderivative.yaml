@@ -2,7 +2,7 @@ swagger: '2.0'
 
 info:
   title: Forge-Model-Derivative
-  version: "2.0.3"
+  version: "2.0.4"
   x-summary: Asynchronous Javascript/Node.js library for the Autodesk Forge Model Derivative API.
   description: |
     The Model Derivative API enables users to represent and share their designs in different formats, as well as to extract valuable metadata. (Its translation functionality was previously bundled as part of the “View and Data API”.)

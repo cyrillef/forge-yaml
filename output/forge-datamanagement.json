@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "title": "Forge-Data-Management",
-    "version": "2.0.4",
+    "version": "2.0.5",
     "x-summary": "Asynchronous Javascript/Node.js library for the Autodesk Forge Data Management API.",
     "description": "The Data Management API provides a unified and consistent way to access data across A360, Fusion 360, and the Object Storage Service.\n\nWith this API, you can accomplish a number of workflows, including accessing a Fusion model in A360 and getting an ordered structure of items, IDs, and properties for generating a bill of materials in a 3rd-party process. Or, you might want to superimpose a Fusion model and a building model to use in the [Viewer](https://developer.autodesk.com/en/docs/viewer/v2).\n\nThe Data Management API is composed of the following services:\n\n|  |  |\n|-----|-----|\n| Project Service | Navigate to a project from an A360 Hub. The project acts as an “anchor” point for data available through the API. |\n| Data Service | Navigate and manage the A360 metadata in terms of folders, items, and versions, as well as the relationships between these entities. An item could be a file or a Fusion 360 design. Each item can have multiple versions. |\n| Schema Service | This allows your application to understand the structure and semantics of extended data types, like Fusion designs. |\n| Object Storage Service (OSS) | This allows your application to download and upload raw files (such as PDF, XLS, DWG, or RVT) that are managed by the Data Service. |\n\nYou may have any number of logically separated apps that utilize one or more of these functionalities, and any of these apps are interoperable with other APIs on the Forge Platform.\n\n![](https://developer.doc.autodesk.com/bPlouYTd/7/_images/dms_overview.png)\n",
     "contact": {
@@ -1758,7 +1758,12 @@
     },
     "json_api_links": {
       "type": "object",
-      "description": "resource specific links"
+      "description": "resource specific links",
+      "properties": {
+        "self": {
+          "$ref": "#/definitions/json_api_link"
+        }
+      }
     },
     "json_api_link": {
       "type": "object",
